@@ -64,7 +64,7 @@ def update_practice(practice_id):
     page = int(request.args.get("page"))
     query = request.args.get("query")
     solr.add([request.form.to_dict(flat=False)], commit=False, softCommit=True)
-    return redirect(url_for("list_practices", page=page, query=query))
+    return redirect("/practice/{}?page={}&query={}".format(practice_id, page, query))
 
 
 if __name__ == "__main__":
