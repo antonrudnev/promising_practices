@@ -34,7 +34,9 @@ def get_practice(practice_id):
     query = request.args.get("query")
     if request.method == "GET":
         doc = solr.search("id:{}".format(practice_id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
-        return render_template("get_practice.html", practice=doc, page=page, query=query)
+        return render_template("get_practice.html", practice=doc, page=page, query=query, states=STATES,
+                               intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
+                               program_components=PROGRAM_COMPONENTS, populations=POPULATIONS)
     elif request.method == "POST":
         if request.form["status"] in ["DRAFT", "REVOKED"]:
             new_status = "APPROVED"

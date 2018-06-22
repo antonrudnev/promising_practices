@@ -77,7 +77,7 @@
                         <th scope="row">State</th>
                         <td>
                             {% for state in practice.state %}
-                                <span class="badge badge-secondary">{{ state }}</span>
+                                <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
                             {% endfor %}
                         </td>
                     </tr>
@@ -89,7 +89,7 @@
                         <th scope="row">Intervention Goal</th>
                         <td>
                             {% for goal in practice.intervention_goal %}
-                                <span class="badge badge-secondary">{{ goal }}</span>
+                                <span class="badge {% if goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ goal }}</span>
                             {% endfor %}
                         </td>
                     </tr>
@@ -97,7 +97,7 @@
                         <th scope="row">Implementers</th>
                         <td>
                             {% for implementer in practice.implementers %}
-                                <span class="badge badge-secondary">{{ implementer }}</span>
+                                <span class="badge {% if implementer in implementers %}badge-info{% else %}badge-danger{% endif %}">{{ implementer }}</span>
                             {% endfor %}
                         </td>
                     </tr>
@@ -113,7 +113,7 @@
                         <th scope="row">Program Components</th>
                         <td>
                             {% for component in practice.program_components %}
-                                <span class="badge badge-secondary">{{ component }}</span>
+                                <span class="badge {% if component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ component }}</span>
                             {% endfor %}
                         </td>
                     </tr>
@@ -121,7 +121,7 @@
                         <th scope="row">Population</th>
                         <td>
                             {% for population in practice.population %}
-                                <span class="badge badge-secondary">{{ population }}</span>
+                                <span class="badge {% if population in populations %}badge-info{% else %}badge-danger{% endif %}">{{ population }}</span>
                             {% endfor %}
                         </td>
                     </tr>
