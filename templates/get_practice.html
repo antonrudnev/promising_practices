@@ -17,13 +17,14 @@
                 <div class="form-inline">
                     <input type="hidden" name="status" value="{{ practice.status }}">
                     <a class="btn btn-secondary" style="width: 80px;" href="/?page={{ page }}&query={{ query }}">Back</a>
-                    <a class="btn btn-primary ml-sm-2" style="width: 70px;" href="/practice/edit/{{ practice.id }}?page={{ page }}&query={{ query }}">Edit</a>
-                    {% if practice.status == "APPROVED" %}
-                        <button class="btn btn-outline-danger ml-sm-4" style="width: 90px;" type="submit">Revoke</button>
-                    {% else %}
-                        <button class="btn btn-success ml-sm-4" style="width: 90px;" type="submit">Approve</button>
-                    {% endif %}
+                    <a class="btn btn-primary ml-sm-2" style="width: 80px;" href="/practice/edit/{{ practice.id }}?page={{ page }}&query={{ query }}">Edit</a>
+
                 </div>
+                {% if practice.status == "APPROVED" %}
+                        <button class="btn btn-outline-warning ml-sm-4" style="width: 90px;" type="submit">Revoke</button>
+                    {% else %}
+                        <button class="btn btn-outline-success ml-sm-4" style="width: 90px;" type="submit">Approve</button>
+                    {% endif %}
             </nav>
             <table class="table">
                 <thead class="thead-light">
