@@ -87,6 +87,9 @@
                                 {% for state in states %}
                                     <option {% if state in practice.state %}selected{% else %}{% endif %} value="{{ state }}">{{ state }}</option>
                                 {% endfor %}
+                                {% for state in (practice.state | reject('in', states)) %}
+                                    <option class="text-danger" selected value="{{ state }}">{{ state }}</option>
+                                {% endfor %}
                             </select>
                         </td>
                     </tr>
@@ -103,6 +106,9 @@
                                 {% for goal in intervention_goals %}
                                     <option {% if goal in practice.intervention_goal %}selected{% else %}{% endif %} value="{{ goal }}">{{ goal }}</option>
                                 {% endfor %}
+                                {% for goal in (practice.intervention_goal | reject('in', intervention_goals)) %}
+                                    <option class="text-danger" selected value="{{ goal }}">{{ goal }}</option>
+                                {% endfor %}
                             </select>
                         </td>
                     </tr>
@@ -112,6 +118,9 @@
                             <select class="custom-select" multiple name="implementers">
                                 {% for implementer in implementers %}
                                     <option {% if implementer in practice.implementers %}selected{% else %}{% endif %} value="{{ implementer }}">{{ implementer }}</option>
+                                {% endfor %}
+                                {% for implementer in (practice.implementers | reject('in', implementers)) %}
+                                    <option class="text-danger" selected value="{{ implementer }}">{{ implementer }}</option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -135,6 +144,9 @@
                                 {% for component in program_components %}
                                     <option {% if component in practice.program_components %}selected{% else %}{% endif %} value="{{ component }}">{{ component }}</option>
                                 {% endfor %}
+                                {% for component in (practice.program_components | reject('in', program_components)) %}
+                                    <option class="text-danger" selected value="{{ component }}">{{ component }}</option>
+                                {% endfor %}
                             </select>
                         </td>
                     </tr>
@@ -144,6 +156,9 @@
                             <select class="custom-select" multiple name="population">
                                 {% for population in populations %}
                                     <option {% if population in practice.population %}selected{% else %}{% endif %} value="{{ population }}">{{ population }}</option>
+                                {% endfor %}
+                                {% for population in (practice.population | reject('in', populations)) %}
+                                    <option class="text-danger" selected value="{{ population }}">{{ population }}</option>
                                 {% endfor %}
                             </select>
                         </td>

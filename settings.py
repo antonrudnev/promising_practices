@@ -8,11 +8,11 @@ STATES = ["RI", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA"
 
 INTERVENTION_GOALS = ["Harm Reduction", "Prevention", "Recovery", "Treatment"]
 
-IMPLEMENTERS = ["Community", "County", "Faith_Communities", "Health Care", "National",  "Police", "Prisons/Jails",
+IMPLEMENTERS = ["Community", "County", "Faith Communities", "Health Care", "National",  "Police", "Prisons/Jails",
                 "Schools", "State"]
 
-PROGRAM_COMPONENTS = ["Behavioral", "Communication", "Lock_In", "MAT", "Mental_Health", "Monitoring", "Naloxone",
-                      "Opioid_Disposal", "Opioid_Storage", "PDMP", "Policy", "Recovery_Program", "Remote",
-                      "Supervised_Consumption_Sites", "Syringe_Services", "Training"]
+PROGRAM_COMPONENTS = ["Behavioral", "Communication", "Lock In", "MAT", "Mental Health", "Monitoring", "Naloxone",
+                      "Opioid Disposal", "Opioid Storage", "PDMP", "Policy", "Recovery Program", "Remote",
+                      "Supervised Consumption Sites", "Syringe Services", "Training"]
 
-POPULATIONS = ["Adults", "General", "Neonates", "Pregnant_Women", "Youth"]
+POPULATIONS = ["Adults", "General", "Neonates", "Pregnant Women", "Youth"]
