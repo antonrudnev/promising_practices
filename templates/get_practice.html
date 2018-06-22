@@ -11,123 +11,123 @@
     <title>Promising Practice #{{ practice.id }}</title>
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar navbar-light bg-light">
-            <div class="form-inline">
-                <a class="btn btn-secondary" style="width: 80px;" href="/?page={{ page }}&query={{ query }}">Back</a>
-                <a class="btn btn-primary ml-sm-2" style="width: 70px;" href="/practice/edit/{{ practice.id }}?page={{ page }}&query={{ query }}">Edit</a>
-                <form method="post">
+    <form method="post">
+        <div class="container">
+            <nav class="navbar navbar-light bg-light">
+                <div class="form-inline">
                     <input type="hidden" name="status" value="{{ practice.status }}">
+                    <a class="btn btn-secondary" style="width: 80px;" href="/?page={{ page }}&query={{ query }}">Back</a>
+                    <a class="btn btn-primary ml-sm-2" style="width: 70px;" href="/practice/edit/{{ practice.id }}?page={{ page }}&query={{ query }}">Edit</a>
                     {% if practice.status == "APPROVED" %}
                         <button class="btn btn-outline-danger ml-sm-4" style="width: 90px;" type="submit">Revoke</button>
                     {% else %}
                         <button class="btn btn-success ml-sm-4" style="width: 90px;" type="submit">Approve</button>
                     {% endif %}
-                </form>
-            </div>
-        </nav>
-        <table class="table">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col" style="width: 10%">Field</th>
-                    <th scope="col" style="width: 90%">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">ID</th>
-                    <td>{{ practice.id }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Status</th>
-                    {% if practice.status == "APPROVED" %}
-                        {% set status_badge = "badge-success" %}
-                    {% elif practice.status == "REVOKED" %}
-                        {% set status_badge = "badge-warning" %}
-                    {% else %}
-                        {% set status_badge = "badge-secondary" %}
-                    {% endif %}
-                    <td><h5><span class="badge {{ status_badge }}">{{ practice.status|capitalize }}</span></h5></td>
-                </tr>
-                <tr >
-                    <th scope="row">Title</th>
-                    <td>{{ practice.title }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Name of Intervention</th>
-                    <td>{{ practice.name_of_intervention }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Summary</th>
-                    <td>{{ practice.summary }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Target Population</th>
-                    <td>{{ practice.target_population }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Location</th>
-                    <td>{{ practice.location }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Evaluation</th>
-                    <td>{{ practice.evaluation }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">State</th>
-                    <td>
-                        {% for state in practice.state %}
-                            <span class="badge badge-secondary">{{ state }}</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Citation</th>
-                    <td>{{ practice.citation }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Intervention Goal</th>
-                    <td>
-                        {% for goal in practice.intervention_goal %}
-                            <span class="badge badge-secondary">{{ goal }}</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Implementers</th>
-                    <td>
-                        {% for implementer in practice.implementers %}
-                            <span class="badge badge-secondary">{{ implementer }}</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">County</th>
-                    <td>{{ practice.county }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">FIPS</th>
-                    <td>{{ practice.fips }}</td>
-                </tr>
-                <tr >
-                    <th scope="row">Program Components</th>
-                    <td>
-                        {% for component in practice.program_components %}
-                            <span class="badge badge-secondary">{{ component }}</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Population</th>
-                    <td>
-                        {% for population in practice.population %}
-                            <span class="badge badge-secondary">{{ population }}</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                </div>
+            </nav>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width: 10%">Field</th>
+                        <th scope="col" style="width: 90%">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">ID</th>
+                        <td>{{ practice.id }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Status</th>
+                        {% if practice.status == "APPROVED" %}
+                            {% set status_badge = "badge-success" %}
+                        {% elif practice.status == "REVOKED" %}
+                            {% set status_badge = "badge-warning" %}
+                        {% else %}
+                            {% set status_badge = "badge-secondary" %}
+                        {% endif %}
+                        <td><h5><span class="badge {{ status_badge }}">{{ practice.status|capitalize }}</span></h5></td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Title</th>
+                        <td>{{ practice.title }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Name of Intervention</th>
+                        <td>{{ practice.name_of_intervention }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Summary</th>
+                        <td>{{ practice.summary }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Target Population</th>
+                        <td>{{ practice.target_population }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Location</th>
+                        <td>{{ practice.location }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Evaluation</th>
+                        <td>{{ practice.evaluation }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">State</th>
+                        <td>
+                            {% for state in practice.state %}
+                                <span class="badge badge-secondary">{{ state }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Citation</th>
+                        <td>{{ practice.citation }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Intervention Goal</th>
+                        <td>
+                            {% for goal in practice.intervention_goal %}
+                                <span class="badge badge-secondary">{{ goal }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Implementers</th>
+                        <td>
+                            {% for implementer in practice.implementers %}
+                                <span class="badge badge-secondary">{{ implementer }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr >
+                        <th scope="row">County</th>
+                        <td>{{ practice.county }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">FIPS</th>
+                        <td>{{ practice.fips }}</td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Program Components</th>
+                        <td>
+                            {% for component in practice.program_components %}
+                                <span class="badge badge-secondary">{{ component }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr >
+                        <th scope="row">Population</th>
+                        <td>
+                            {% for population in practice.population %}
+                                <span class="badge badge-secondary">{{ population }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

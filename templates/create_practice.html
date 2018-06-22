@@ -8,17 +8,15 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
-    <title>Promising Practice #{{ practice.id }}</title>
+    <title>Create New Practice</title>
 </head>
 <body>
     <form method="post">
         <div class="container">
-            <input type="hidden" name="id" value="{{ practice.id }}">
-            <input type="hidden" name="status" value="{{ practice.status }}">
             <nav class="navbar navbar-light bg-light">
                 <div class="form-inline">
-                    <a class="btn btn-secondary" style="width: 80px;" href="/practice/{{ practice.id }}?page={{ page }}&query={{ query }}">Cancel</a>
-                    <button class="btn btn-danger ml-sm-2" style="width: 70px;" type="submit">Save</button>
+                    <a class="btn btn-secondary" style="width: 80px;" href="/?page={{ page }}&query={{ query }}">Cancel</a>
+                    <button class="btn btn-success ml-sm-2" style="width: 70px;" type="submit">Create</button>
                 </div>
             </nav>
             <table class="table">
@@ -31,53 +29,46 @@
                 <tbody>
                     <tr>
                         <th scope="row">ID</th>
-                        <td>{{ practice.id }}</td>
+                        <td>_new_</td>
                     </tr>
                     <tr>
                         <th scope="row">Status</th>
-                        {% if practice.status == "APPROVED" %}
-                            {% set status_badge = "badge-success" %}
-                        {% elif practice.status == "REVOKED" %}
-                            {% set status_badge = "badge-warning" %}
-                        {% else %}
-                            {% set status_badge = "badge-secondary" %}
-                        {% endif %}
-                        <td><h5><span class="badge {{ status_badge }}">{{ practice.status|capitalize }}</span></h5></td>
+                        <td><h5><span class="badge badge-secondary">Draft</span></h5></td>
                     </tr>
                     <tr >
                         <th scope="row">Title</th>
                         <td>
-                            <textarea class="form-control" name="title">{{ practice.title }}</textarea>
+                            <textarea class="form-control" name="title"></textarea>
                         </td>
                     </tr>
                     <tr >
                         <th scope="row">Name of Intervention</th>
                         <td>
-                            <textarea class="form-control" name="name_of_intervention">{{ practice.name_of_intervention }}</textarea>
+                            <textarea class="form-control" name="name_of_intervention"></textarea>
                         </td>
                     </tr>
                     <tr >
                         <th scope="row">Summary</th>
                         <td>
-                            <textarea class="form-control" rows="5" name="summary">{{ practice.summary }}</textarea>
+                            <textarea class="form-control" rows="5" name="summary"></textarea>
                         </td>
                     </tr>
                     <tr >
                         <th scope="row">Target Population</th>
                         <td>
-                            <textarea class="form-control" name="target_population">{{ practice.target_population }}</textarea>
+                            <textarea class="form-control" name="target_population"></textarea>
                         </td>
                     </tr>
                     <tr >
                         <th scope="row">Location</th>
                         <td>
-                            <textarea class="form-control" rows="1" name="location">{{ practice.location }}</textarea>
+                            <textarea class="form-control" rows="1" name="location"></textarea>
                         </td>
                     </tr>
                     <tr >
                         <th scope="row">Evaluation</th>
                         <td>
-                            <textarea class="form-control" rows="5" name="evaluation">{{ practice.evaluation }}</textarea>
+                            <textarea class="form-control" rows="5" name="evaluation"></textarea>
                         </td>
                     </tr>
                     <tr >
@@ -85,7 +76,7 @@
                         <td>
                             <select class="custom-select" multiple name="state">
                                 {% for state in states %}
-                                    <option {% if state in practice.state %}selected{% else %}{% endif %} value="{{ state }}">{{ state }}</option>
+                                    <option value="{{ state }}">{{ state }}</option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -93,7 +84,7 @@
                     <tr >
                         <th scope="row">Citation</th>
                         <td>
-                            <textarea class="form-control" name="citation">{{ practice.citation }}</textarea>
+                            <textarea class="form-control" name="citation"></textarea>
                         </td>
                     </tr>
                     <tr >
@@ -101,7 +92,7 @@
                         <td>
                             <select class="custom-select" multiple name="intervention_goal">
                                 {% for goal in intervention_goals %}
-                                    <option {% if goal in practice.intervention_goal %}selected{% else %}{% endif %} value="{{ goal }}">{{ goal }}</option>
+                                    <option value="{{ goal }}">{{ goal }}</option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -111,7 +102,7 @@
                         <td>
                             <select class="custom-select" multiple name="implementers">
                                 {% for implementer in implementers %}
-                                    <option {% if implementer in practice.implementers %}selected{% else %}{% endif %} value="{{ implementer }}">{{ implementer }}</option>
+                                    <option value="{{ implementer }}">{{ implementer }}</option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -119,13 +110,13 @@
                     <tr >
                         <th scope="row">County</th>
                         <td>
-                            <textarea class="form-control" rows="1" name="county">{{ practice.county }}</textarea>
+                            <textarea class="form-control" rows="1" name="county"></textarea>
                         </td>
                     </tr>
                     <tr >
                         <th scope="row">FIPS</th>
                         <td>
-                            <textarea class="form-control" rows="1" name="fips">{{ practice.fips }}</textarea>
+                            <textarea class="form-control" rows="1" name="fips"></textarea>
                         </td>
                     </tr>
                     <tr >
@@ -133,7 +124,7 @@
                         <td>
                             <select class="custom-select" multiple name="program_components">
                                 {% for component in program_components %}
-                                    <option {% if component in practice.program_components %}selected{% else %}{% endif %} value="{{ component }}">{{ component }}</option>
+                                    <option value="{{ component }}">{{ component }}</option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -143,7 +134,7 @@
                         <td>
                             <select class="custom-select" multiple name="population">
                                 {% for population in populations %}
-                                    <option {% if population in practice.population %}selected{% else %}{% endif %} value="{{ population }}">{{ population }}</option>
+                                    <option value="{{ population }}">{{ population }}</option>
                                 {% endfor %}
                             </select>
                         </td>
