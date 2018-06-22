@@ -18,7 +18,7 @@
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{% if query != "*:*" %}{{ query }}{% else %}{% endif %}">
                 <button class="btn btn-outline-info" type="submit"><i class="fas fa-search"></i></button>
             </form>
-            <a class="btn btn-outline-primary" href="/practice/create?page={{ page }}&query={{ query }}&last={{ pager[-1] }}">Create</a>
+            <a class="btn btn-primary" href="/practice/create?page={{ page }}&query={{ query }}&last={{ pager[-1] }}"><i class="fas fa-plus"></i></a>
         </nav>
         <table class="table">
             <thead class="thead-light">
@@ -26,7 +26,7 @@
                     <th class="align-middle" scope="col">ID</th>
                     <th class="align-middle" scope="col" style="width: 60%">Title</th>
                     <th class="align-middle" scope="col" style="width: 40%">Intervention</th>
-                    <th class="align-middle" scope="col"></th>
+                    <th class="align-middle justify-content-center" scope="col"></th>
                 </tr>
             </thead>
             <tbody>
