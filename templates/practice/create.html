@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Create New Practice{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <table class="table my-2">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 10%">Field</th>
+                    <th scope="col" style="width: 90%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">ID</th>
+                    <td>_new_</td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td><h5><span class="badge badge-secondary">Draft</span></h5></td>
+                </tr>
+                <tr >
+                    <th scope="row">Title</th>
+                    <td>
+                        <textarea class="form-control" name="title"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Name of Intervention</th>
+                    <td>
+                        <textarea class="form-control" name="name_of_intervention"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Summary</th>
+                    <td>
+                        <textarea class="form-control" rows="5" name="summary"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Target Population</th>
+                    <td>
+                        <textarea class="form-control" name="target_population"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Location</th>
+                    <td>
+                        <textarea class="form-control" rows="1" name="location"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Evaluation</th>
+                    <td>
+                        <textarea class="form-control" rows="5" name="evaluation"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">State</th>
+                    <td>
+                        <select class="custom-select" multiple name="state">
+                            {% for state in states %}
+                                <option value="{{ state }}">{{ state }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Citation</th>
+                    <td>
+                        <textarea class="form-control" name="citation"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Intervention Goal</th>
+                    <td>
+                        <select class="custom-select" multiple name="intervention_goal">
+                            {% for goal in intervention_goals %}
+                                <option value="{{ goal }}">{{ goal }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Implementers</th>
+                    <td>
+                        <select class="custom-select" multiple name="implementers">
+                            {% for implementer in implementers %}
+                                <option value="{{ implementer }}">{{ implementer }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">County</th>
+                    <td>
+                        <textarea class="form-control" rows="1" name="county"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">FIPS</th>
+                    <td>
+                        <textarea class="form-control" rows="1" name="fips"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Program Components</th>
+                    <td>
+                        <select class="custom-select" multiple name="program_components">
+                            {% for component in program_components %}
+                                <option value="{{ component }}">{{ component }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Population</th>
+                    <td>
+                        <select class="custom-select" multiple name="population">
+                            {% for population in populations %}
+                                <option value="{{ population }}">{{ population }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="btn-toolbar justify-content-between my-4" role="toolbar">
+            <div role="group">
+                <a class="btn btn-secondary mr-2" style="width: 90px;" href="/?page={{ page }}&query={{ query }}">Cancel</a>
+                <button class="btn btn-success" style="width: 80px;" type="submit">Create</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
