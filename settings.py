@@ -1,4 +1,5 @@
 SOLR = "http://54.173.176.161:8983/solr/promising_practices2"
+DIRECTORY_DATABASE = "directory.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
