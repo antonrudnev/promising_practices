@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <div class="card my-2">
+            <div class="card-header">
+                Create a New Account
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input class="form-control" name="username" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input class="form-control" name="fullname" id="fullname" placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
