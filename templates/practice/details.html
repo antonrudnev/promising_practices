@@ -122,6 +122,6 @@
             <a class="btn btn-secondary mr-2" style="width: 90px;" href="/?page={{ page }}&query={{ query }}">Back</a>
             <a class="btn btn-primary" style="width: 80px;" href="/practice/{{ practice.id }}/edit?page={{ page }}&query={{ query }}">Edit</a>
         </div>
-        <a class="d-inline btn btn-outline-danger" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
+        <a class="btn btn-outline-danger d-inline float-right" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
     </div>
 {% endblock %}
