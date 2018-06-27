@@ -9,7 +9,7 @@ STATES = ["RI", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA"
 
 INTERVENTION_GOALS = ["Harm Reduction", "Prevention", "Recovery", "Treatment"]
 
-IMPLEMENTERS = ["Community", "County", "Faith Communities", "Health Care", "National",  "Police", "Prisons/Jails",
+IMPLEMENTERS = ["Community", "County", "Faith Communities", "Health Care", "National", "Police", "Prisons/Jails",
                 "Schools", "State"]
 
 PROGRAM_COMPONENTS = ["Behavioral", "Communication", "Lock In", "MAT", "Mental Health", "Monitoring", "Naloxone",
@@ -17,3 +17,28 @@ PROGRAM_COMPONENTS = ["Behavioral", "Communication", "Lock In", "MAT", "Mental H
                       "Supervised Consumption Sites", "Syringe Services", "Training"]
 
 POPULATIONS = ["Adults", "General", "Neonates", "Pregnant Women", "Youth"]
+
+WORKFLOW = [{"current": "DRAFT", "next": "SUBMITTED", "action": "SUBMIT"},
+            {"current": "SUBMITTED", "next": "REJECTED", "action": "REJECT"},
+            {"current": "SUBMITTED", "next": "APPROVED", "action": "APPROVE"},
+            {"current": "REJECTED", "next": "SUBMITTED", "action": "SUBMIT"},
+            {"current": "APPROVED", "next": "REVOKED", "action": "REVOKE"},
+            {"current": "REVOKED", "next": "REJECTED", "action": "REJECT"},
+            {"current": "REVOKED", "next": "APPROVED", "action": "APPROVE"}]
+
+ACTION_STYLE = {"SUBMIT": "btn-outline-primary",
+                "REJECT": "btn-outline-secondary",
+                "APPROVE": "btn-outline-success",
+                "REVOKE": "btn-outline-warning"}
+
+STATUS_STYLE_DETAILS = {"DRAFT": "badge-secondary",
+                        "SUBMITTED": "badge-primary",
+                        "REJECTED": "badge-secondary",
+                        "APPROVED": "badge-success",
+                        "REVOKED": "badge-warning"}
+
+STATUS_STYLE_INDEX = {"DRAFT": "btn-outline-secondary",
+                      "SUBMITTED": "btn-primary",
+                      "REJECTED": "btn-secondary",
+                      "APPROVED": "btn-outline-success",
+                      "REVOKED": "btn-warning"}

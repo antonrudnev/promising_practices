@@ -9,7 +9,13 @@
             <th class="align-middle" scope="col">ID</th>
             <th class="align-middle" scope="col" style="width: 60%">Title</th>
             <th class="align-middle" scope="col" style="width: 40%">Intervention</th>
-            <th class="align-middle" scope="col"><a class="btn btn-success" href="{{ url_for('practice.create', page=page, query=query) }}" style="width: 100px;">Create</a></th>
+            <th class="align-middle" scope="col">
+                {% if "CREATE" in g.permissions %}
+                    <a class="btn btn-success" href="{{ url_for('practice.create', page=page, query=query) }}" style="width: 100px;">Create</a>
+                {% else %}
+                    Status
+                {% endif %}
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -19,14 +25,7 @@
                 <td>{{ practice.title }}</td>
                 <td>{{ practice.name_of_intervention }}</td>
                 <td>
-                    {% if practice.status == "APPROVED" %}
-                        {% set status_btn = "btn-outline-success" %}
-                    {% elif practice.status == "REVOKED" %}
-                        {% set status_btn = "btn-warning" %}
-                    {% else %}
-                        {% set status_btn = "btn-secondary" %}
-                    {% endif %}
-                    <a class="btn {{ status_btn }}" href="/practice/{{ practice.id }}?page={{ page }}&query={{ query }}" style="width: 100px;">{{ practice.status|capitalize }}</a>
+                    <a class="btn {{ styles[practice.status] }}" href="{{ url_for("practice.details", id=practice.id, page=page, query=query) }}" style="width: 100px;">{{ practice.status|capitalize }}</a>
                 </td>
             </tr>
         {% endfor %}

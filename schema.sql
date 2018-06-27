@@ -39,16 +39,17 @@ CREATE TABLE user_role (
 );
 
 INSERT INTO user (id, user_name, full_name, password) VALUES
-(1, "admin", "Administrator", "admin"),
-(2, "data", "Data Operator", "data"),
-(3, "qa", "QA Engineer", "qa");
+(0, "admin", "Administrator", "admin"),
+(1, "data", "Data Operator", "data"),
+(2, "qa", "Validation Engineer", "qa");
 
 INSERT INTO permission(id, permission_name) VALUES
-(1, "VIEW_DRAFT"),
-(2, "VIEW_SUBMITTED"),
-(3, "VIEW_APPROVED"),
-(4, "VIEW_REJECTED"),
-(5, "VIEW_REVOKED"),
+(0, "ADMIN"),
+(1, "DRAFT"),
+(2, "SUBMITTED"),
+(3, "APPROVED"),
+(4, "REJECTED"),
+(5, "REVOKED"),
 (6, "EDIT_DRAFT"),
 (7, "EDIT_SUBMITTED"),
 (8, "EDIT_APPROVED"),
@@ -66,50 +67,51 @@ INSERT INTO permission(id, permission_name) VALUES
 (20, "REVOKE");
 
 INSERT INTO role(id, role_name) VALUES
-(1, "ADMINISTRATOR"),
-(2, "DATA_ENTRY"),
-(3, "DATA_VALIDATION");
+(0, "ADMINISTRATOR"),
+(1, "DATA_ENTRY"),
+(2, "DATA_VALIDATION");
 
 INSERT INTO role_permission(role_id, permission_id) VALUES
+(0, 0),
+(0, 1),
+(0, 2),
+(0, 3),
+(0, 4),
+(0, 5),
+(0, 6),
+(0, 7),
+(0, 8),
+(0, 9),
+(0, 10),
+(0, 11),
+(0, 12),
+(0, 13),
+(0, 14),
+(0, 15),
+(0, 16),
+(0, 17),
+(0, 18),
+(0, 19),
+(0, 20),
 (1, 1),
-(1, 2),
-(1, 3),
 (1, 4),
-(1, 5),
 (1, 6),
-(1, 7),
-(1, 8),
 (1, 9),
-(1, 10),
 (1, 11),
-(1, 12),
-(1, 13),
-(1, 14),
-(1, 15),
 (1, 16),
 (1, 17),
-(1, 18),
-(1, 19),
-(1, 20),
-(2, 1),
-(2, 4),
-(2, 6),
-(2, 9),
-(2, 11),
-(2, 16),
-(2, 17),
-(3, 2),
-(3, 3),
-(3, 5),
-(3, 7),
-(3, 10),
-(3, 12),
-(3, 15),
-(3, 18),
-(3, 19),
-(3, 20);
+(2, 2),
+(2, 3),
+(2, 5),
+(2, 7),
+(2, 10),
+(2, 12),
+(2, 15),
+(2, 18),
+(2, 19),
+(2, 20);
 
 INSERT INTO user_role(user_id, role_id) VALUES
+(0, 0),
 (1, 1),
-(2, 2),
-(3, 4);
+(2, 2);

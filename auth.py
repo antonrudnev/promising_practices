@@ -24,6 +24,11 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
+        permissions = get_db().execute("SELECT DISTINCT permission_name FROM user_role "
+                                       "JOIN role_permission ON user_role.role_id = role_permission.role_id "
+                                       "JOIN permission ON role_permission.permission_id = permission.id "
+                                       "WHERE user_role.user_id = ?", (user_id,)).fetchall()
+        g.permissions = [p["permission_name"] for p in permissions]
 
 
 @bp.route("/register", methods=("GET", "POST"))

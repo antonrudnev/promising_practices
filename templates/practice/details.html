@@ -16,24 +16,16 @@
                 <td>{{ practice.id }}</td>
             </tr>
             <tr>
-                {% if practice.status == "APPROVED" %}
-                    {% set status_badge = "badge-success" %}
-                {% elif practice.status == "REVOKED" %}
-                    {% set status_badge = "badge-warning" %}
-                {% else %}
-                    {% set status_badge = "badge-secondary" %}
-                {% endif %}
                 <th class="align-middle" scope="row">Status</th>
                 <th class="align-middle" scope="row">
                     <div class="btn-toolbar justify-content-between">
-                        <h5 class="mt-1"><span class="mt-1 badge {{ status_badge }}">{{ practice.status|capitalize }}</span></h5>
-                        <form method="post">
-                            <input type="hidden" name="status" value="{{ practice.status }}">
-                            {% if practice.status == "APPROVED" %}
-                                <button class="btn btn-outline-warning" style="width: 90px;" type="submit">Revoke</button>
-                            {% else %}
-                                <button class="btn btn-outline-success" style="width: 90px;" type="submit">Approve</button>
+                        <h5 class="mt-1"><span class="mt-1 badge {{ styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
+                        <form action="{{ url_for("practice.action", id=practice.id, query=query, page=page) }}" method="post">
+                        {% for action in actions %}
+                            {% if action["action"] in g.permissions %}
+                                <input class="btn {{ styles[action["action"]] }}" style="width: 90px;" name="action" type="submit" value="{{ action["action"]|capitalize }}"/>
                             {% endif %}
+                        {% endfor %}
                         </form>
                     </div>
                 </th>
@@ -65,9 +57,9 @@
             <tr>
                 <th scope="row">State</th>
                 <td>
-                    {% for state in practice.state %}
-                        <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
-                    {% endfor %}
+                {% for state in practice.state %}
+                    <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
+                {% endfor %}
                 </td>
             </tr>
             <tr>
@@ -77,17 +69,17 @@
             <tr>
                 <th scope="row">Intervention Goal</th>
                 <td>
-                    {% for goal in practice.intervention_goal %}
-                        <span class="badge {% if goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ goal }}</span>
-                    {% endfor %}
+                {% for goal in practice.intervention_goal %}
+                    <span class="badge {% if goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ goal }}</span>
+                {% endfor %}
                 </td>
             </tr>
             <tr>
                 <th scope="row">Implementers</th>
                 <td>
-                    {% for implementer in practice.implementers %}
-                        <span class="badge {% if implementer in implementers %}badge-info{% else %}badge-danger{% endif %}">{{ implementer }}</span>
-                    {% endfor %}
+                {% for implementer in practice.implementers %}
+                    <span class="badge {% if implementer in implementers %}badge-info{% else %}badge-danger{% endif %}">{{ implementer }}</span>
+                {% endfor %}
                 </td>
             </tr>
             <tr>
@@ -101,17 +93,17 @@
             <tr>
                 <th scope="row">Program Components</th>
                 <td>
-                    {% for component in practice.program_components %}
-                        <span class="badge {% if component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ component }}</span>
-                    {% endfor %}
+                {% for component in practice.program_components %}
+                    <span class="badge {% if component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ component }}</span>
+                {% endfor %}
                 </td>
             </tr>
             <tr>
                 <th scope="row">Population</th>
                 <td>
-                    {% for population in practice.population %}
-                        <span class="badge {% if population in populations %}badge-info{% else %}badge-danger{% endif %}">{{ population }}</span>
-                    {% endfor %}
+                {% for population in practice.population %}
+                    <span class="badge {% if population in populations %}badge-info{% else %}badge-danger{% endif %}">{{ population }}</span>
+                {% endfor %}
                 </td>
             </tr>
         </tbody>
@@ -119,9 +111,13 @@
 
     <div class="btn-toolbar justify-content-between my-4" role="toolbar">
         <div class="d-inline" role="group">
-            <a class="btn btn-secondary mr-2" style="width: 90px;" href="/?page={{ page }}&query={{ query }}">Back</a>
-            <a class="btn btn-primary" style="width: 80px;" href="/practice/{{ practice.id }}/edit?page={{ page }}&query={{ query }}">Edit</a>
+            <a class="btn btn-secondary mr-2" style="width: 90px;" href="{{ url_for("practice.index", page=page, query=query) }}">Back</a>
+            {% if "EDIT_" + practice.status in g.permissions %}
+                <a class="btn btn-primary" style="width: 80px;" href="{{ url_for("practice.edit", id=practice.id, page=page, query=query) }}">Edit</a>
+            {% endif %}
         </div>
-        <a class="btn btn-outline-danger d-inline float-right" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
+        {% if "DELETE_" + practice.status in g.permissions %}
+            <a class="btn btn-outline-danger d-inline float-right" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
+        {% endif %}
     </div>
 {% endblock %}
