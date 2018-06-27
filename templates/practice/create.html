@@ -128,7 +128,7 @@
         </table>
         <div class="btn-toolbar justify-content-between my-4" role="toolbar">
             <div role="group">
-                <a class="btn btn-secondary mr-2" style="width: 90px;" href="/?page={{ page }}&query={{ query }}">Cancel</a>
+                <a class="btn btn-secondary mr-2" style="width: 90px;" href="{{ url_for("practice.index", page=page, query=query) }}">Cancel</a>
                 <button class="btn btn-success" style="width: 80px;" type="submit">Create</button>
             </div>
         </div>

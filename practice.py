@@ -26,7 +26,7 @@ def index():
     if request.args.get("go_to_last_page", False):
         page = max_page
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
-                                         "sort": "id_int asc", "wt": "json"}).raw_response
+                                         "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
     pager = [p for p in range(page - PAGER_RANGE, page + PAGER_RANGE + 1) if 0 <= p <= max_page]
     if pager[0] > 1:
         pager.insert(0, "...")
