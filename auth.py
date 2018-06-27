@@ -36,13 +36,13 @@ def register():
         error = None
 
         if not username:
-            error = "Username is required."
-        if not fullname:
-            error = "Full name is required."
+            error = "Username is required"
+        elif not fullname:
+            error = "Full name is required"
         elif not password:
-            error = "Password is required."
+            error = "Password is required"
         elif db.execute("SELECT id FROM user WHERE user_name = ?", (username,)).fetchone() is not None:
-            error = "User {0} is already registered.".format(username)
+            error = "User {0} is already registered".format(username)
 
         if error is None:
             db.execute("INSERT INTO user (user_name, full_name, password) VALUES (?, ?, ?)",
@@ -67,9 +67,9 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = "Incorrect username."
+            error = "Incorrect username"
         elif not check_password_hash(user["password"], password):
-            error = "Incorrect password."
+            error = "Incorrect password"
 
         if error is None:
             # store the user id in a new session and return to the index

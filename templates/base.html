@@ -13,9 +13,9 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand ml-2" href="http://www.air.org"><img src="../static/air.png" alt="AIR" height="30"></a>
+        <a class="navbar-brand ml-2" href="http://www.air.org"><img src="{{ url_for('static', filename='air.png') }}" alt="AIR" height="30"></a>
         {% if g.user %}
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" action="{{ url_for('practice.index', query=query) }}">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{% if query != "*:*" %}{{ query }}{% else %}{% endif %}">
             <button class="btn btn-outline-info d-none d-sm-block" type="submit"><i class="fas fa-search"></i></button>
         </form>
@@ -37,12 +37,34 @@
         </div>
         {% endif %}
     </nav>
-
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endfor %}
     <div class="container">{% block content %}{% endblock %}</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script>
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+    </script>
 </body>
 </html>
