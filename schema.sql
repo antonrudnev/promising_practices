@@ -40,27 +40,35 @@ CREATE TABLE user_role (
 
 INSERT INTO user (id, user_name, full_name, password) VALUES
 (1, "admin", "Administrator", "admin"),
-(2, "user", "User", "user");
+(2, "data", "Data Operator", "data"),
+(3, "qa", "QA Engineer", "qa");
 
 INSERT INTO permission(id, permission_name) VALUES
-(1, "EDIT_DRAFT"),
-(2, "EDIT_SUBMITTED"),
-(3, "EDIT_APPROVED"),
-(4, "EDIT_REJECTED"),
-(5, "EDIT_REVOKED"),
-(6, "DELETE_DRAFT"),
-(7, "DELETE_SUBMITTED"),
-(8, "DELETE_APPROVED"),
-(9, "DELETE_REJECTED"),
-(10, "DELETE_REVOKED"),
-(11, "SUBMIT"),
-(12, "APPROVE"),
-(13, "REJECT"),
-(14, "REVOKE");
+(1, "VIEW_DRAFT"),
+(2, "VIEW_SUBMITTED"),
+(3, "VIEW_APPROVED"),
+(4, "VIEW_REJECTED"),
+(5, "VIEW_REVOKED"),
+(6, "EDIT_DRAFT"),
+(7, "EDIT_SUBMITTED"),
+(8, "EDIT_APPROVED"),
+(9, "EDIT_REJECTED"),
+(10, "EDIT_REVOKED"),
+(11, "DELETE_DRAFT"),
+(12, "DELETE_SUBMITTED"),
+(13, "DELETE_APPROVED"),
+(14, "DELETE_REJECTED"),
+(15, "DELETE_REVOKED"),
+(16, "CREATE"),
+(17, "SUBMIT"),
+(18, "APPROVE"),
+(19, "REJECT"),
+(20, "REVOKE");
 
 INSERT INTO role(id, role_name) VALUES
-(1, "ADMIN"),
-(2, "USER");
+(1, "ADMINISTRATOR"),
+(2, "DATA_ENTRY"),
+(3, "DATA_VALIDATION");
 
 INSERT INTO role_permission(role_id, permission_id) VALUES
 (1, 1),
@@ -77,12 +85,31 @@ INSERT INTO role_permission(role_id, permission_id) VALUES
 (1, 12),
 (1, 13),
 (1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
 (2, 1),
 (2, 4),
 (2, 6),
 (2, 9),
-(2, 11);
+(2, 11),
+(2, 16),
+(2, 17),
+(3, 2),
+(3, 3),
+(3, 5),
+(3, 7),
+(3, 10),
+(3, 12),
+(3, 15),
+(3, 18),
+(3, 19),
+(3, 20);
 
 INSERT INTO user_role(user_id, role_id) VALUES
 (1, 1),
-(2, 2);
+(2, 2),
+(3, 4);

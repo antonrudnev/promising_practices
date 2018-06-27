@@ -12,16 +12,33 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-        <a class="btn btn-outline-secondary" href="http://54.173.176.161:8983/solr/banana/promising_practices_tst/index.html"><i class="far fa-chart-bar"></i> Promising Practices Dashboard</a>
-        <form class="form-inline" action="/practice/" method="get">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="http://www.air.org"><img src="../static/air.png" alt="AIR" height="30"></a>
+        {% if g.user %}
+        <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{% if query != "*:*" %}{{ query }}{% else %}{% endif %}">
             <button class="btn btn-outline-info" type="submit"><i class="fas fa-search"></i></button>
         </form>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav mr-auto"></div>
+            <a class="nav-link" href="http://54.173.176.161:8983/solr/banana/promising_practices_tst/index.html"><i class="far fa-chart-bar"></i> Dashboard</a>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ g.user["full_name"] }}</a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+{#                    <a class="dropdown-item" href="#">Action</a>#}
+{#                    <a class="dropdown-item" href="#">Another action</a>#}
+{#                    <div class="dropdown-divider"></div>#}
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log Out</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </nav>
-    <div class="container">
-    {% block content %}{% endblock %}
-    </div>
+
+    <div class="container">{% block content %}{% endblock %}</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

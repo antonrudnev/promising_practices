@@ -1,3 +1,4 @@
+from auth import login_required
 from flask import Blueprint, redirect, render_template, request, url_for
 from math import ceil
 import pysolr
@@ -9,6 +10,7 @@ solr = pysolr.Solr(SOLR)
 
 
 @bp.route("/")
+@login_required
 def index():
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
@@ -34,6 +36,7 @@ def index():
 
 
 @bp.route("/create", methods=["GET", "POST"])
+@login_required
 def create():
     page = int(request.args.get("page"))
     query = request.args.get("query")
@@ -52,6 +55,7 @@ def create():
 
 
 @bp.route("/<int:id>", methods=["GET", "POST"])
+@login_required
 def details(id):
     page = int(request.args.get("page"))
     query = request.args.get("query")
@@ -71,6 +75,7 @@ def details(id):
 
 
 @bp.route("/<int:id>/edit", methods=["GET", "POST"])
+@login_required
 def edit(id):
     page = int(request.args.get("page"))
     query = request.args.get("query")
@@ -85,6 +90,7 @@ def edit(id):
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])
+@login_required
 def delete(id):
     page = int(request.args.get("page"))
     query = request.args.get("query")
