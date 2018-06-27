@@ -118,10 +118,10 @@
     </table>
 
     <div class="btn-toolbar justify-content-between my-4" role="toolbar">
-        <div role="group">
+        <div class="d-inline" role="group">
             <a class="btn btn-secondary mr-2" style="width: 90px;" href="/?page={{ page }}&query={{ query }}">Back</a>
             <a class="btn btn-primary" style="width: 80px;" href="/practice/{{ practice.id }}/edit?page={{ page }}&query={{ query }}">Edit</a>
         </div>
-        <a class="btn btn-outline-danger" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
+        <a class="d-inline btn btn-outline-danger" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
     </div>
 {% endblock %}
