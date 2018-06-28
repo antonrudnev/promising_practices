@@ -20,19 +20,20 @@ def users():
                                  "full_name, "
                                  "enabled, "
                                  "role_name FROM user "
-                                 "JOIN user_role ON user.id = user_role.user_id "
-                                 "JOIN role ON user_role.role_id = role.id) "
+                                 "LEFT JOIN user_role ON user.id = user_role.user_id "
+                                 "LEFT JOIN role ON user_role.role_id = role.id) "
 
                                  "SELECT user_name, "
                                  "full_name, "
                                  "enabled, "
                                  "GROUP_CONCAT(role_name) AS roles "
-                                 "FROM T GROUP BY user_name, full_name, enabled").fetchall()
+                                 "FROM T GROUP BY user_name, full_name, enabled "
+                                 "ORDER BY user_name").fetchall()
 
     users = [{"user_name": user["user_name"],
               "full_name": user["full_name"],
               "enabled": user["enabled"],
-              "roles": user["roles"].split(",")} for user in users_tbl]
+              "roles": user["roles"].split(",") if user["roles"] else []} for user in users_tbl]
 
     return render_template("admin/users.html", users=users)
 

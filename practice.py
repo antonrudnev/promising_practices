@@ -19,7 +19,8 @@ def index():
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-    fq = "status:({})".format(" OR ".join(p[5:] for p in g.permissions if p.startswith("VIEW_"))) if g.permissions else "status:none"
+    view_permissions = [p[5:] for p in g.permissions if p.startswith("VIEW_")]
+    fq = "status:({})".format(" OR ".join(view_permissions)) if view_permissions else "status:none"
     response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
                                      "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
     max_page = max(int(ceil(response["response"]["numFound"] / ITEMS_PER_PAGE) - 1), 0)
