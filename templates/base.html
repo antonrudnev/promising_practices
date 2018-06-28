@@ -30,13 +30,16 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url_for('admin.workflow') }}">Workflow</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log Out</a>
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sign out</a>
                 </div>
             </div>
         </div>
-        {% elif url_for(request.endpoint) != url_for("auth.register") %}
+        {% elif url_for(request.endpoint) == url_for("auth.login") %}
             <div class="navbar-nav mr-auto"></div>
             <a class="btn btn-outline-primary mr-2" href="{{ url_for('auth.register') }}">Register</a>
+        {% elif url_for(request.endpoint) == url_for("auth.register") %}
+            <div class="navbar-nav mr-auto"></div>
+            <a class="btn btn-outline-primary mr-2" href="{{ url_for('auth.login') }}">Sign in</a>
         {% endif %}
     </nav>
     {% for message in get_flashed_messages() %}
