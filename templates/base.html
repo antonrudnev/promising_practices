@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand d-inline ml-2"><img src="{{ url_for('static', filename='air.png') }}" alt="AIR" height="30"></a>
+        <a class="navbar-brand ml-2"><img src="{{ url_for('static', filename='air.png') }}" alt="AIR" height="30"></a>
         {% if g.user %}
         <form class="form-inline my-2 my-lg-0" action="{{ url_for('practice.index', query=query) }}">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{% if query != "*:*" %}{{ query }}{% else %}{% endif %}">
@@ -36,10 +36,10 @@
         </div>
         {% elif url_for(request.endpoint) == url_for("auth.login") %}
             <div class="navbar-nav mr-auto"></div>
-            <a class="btn btn-outline-primary d-inline float-right mr-2" href="{{ url_for('auth.register') }}">Register</a>
+            <a class="btn btn-outline-primary float-right mr-2" href="{{ url_for('auth.register') }}">Register</a>
         {% elif url_for(request.endpoint) == url_for("auth.register") %}
             <div class="navbar-nav mr-auto"></div>
-            <a class="btn btn-outline-primary d-inline float-right mr-2" href="{{ url_for('auth.login') }}">Sign in</a>
+            <a class="btn btn-outline-primary float-right mr-2" href="{{ url_for('auth.login') }}">Sign in</a>
         {% endif %}
     </nav>
     {% for message in get_flashed_messages() %}
