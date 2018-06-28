@@ -15,16 +15,16 @@ def workflow():
 @login_required
 @permission_required("SECURITY_ADMIN")
 def users():
-    users_tbl = get_db().execute("SELECT T.user_name, "
-                                 "T.full_name, "
-                                 "T.enabled, "
+    users_tbl = get_db().execute("SELECT user_name, "
+                                 "full_name, "
+                                 "enabled, "
                                  "IFNULL(GROUP_CONCAT(role_name), '') AS roles "
                                  "FROM (SELECT user_name, "
                                  "full_name, "
                                  "enabled, "
                                  "role_name FROM user "
                                  "LEFT JOIN user_role ON user.id = user_role.user_id "
-                                 "LEFT JOIN role ON user_role.role_id = role.id) AS T "
+                                 "LEFT JOIN role ON user_role.role_id = role.id) "
                                  "GROUP BY user_name, full_name, enabled "
                                  "ORDER BY user_name").fetchall()
 
@@ -40,7 +40,7 @@ def users():
 @login_required
 @permission_required("SECURITY_ADMIN")
 def roles():
-    roles_tbl = get_db().execute("SELECT T.role_name, "
+    roles_tbl = get_db().execute("SELECT role_name, "
                                  "IFNULL(GROUP_CONCAT(permission_name), '') AS permissions, "
                                  "IFNULL(GROUP_CONCAT(enabled), '') AS enabled_list "
                                  "FROM (SELECT role_name,"
@@ -49,7 +49,7 @@ def roles():
                                  "FROM role CROSS JOIN permission "
                                  "LEFT JOIN role_permission ON role.id = role_permission.role_id "
                                  "AND permission.id = role_permission.permission_id "
-                                 "ORDER BY role_name, permission_name) AS T GROUP BY role_name").fetchall()
+                                 "ORDER BY role_name, permission_name) GROUP BY role_name").fetchall()
 
     roles = [{"role_name": role["role_name"],
               "permissions": role["permissions"].split(","),
