@@ -15,19 +15,17 @@ def workflow():
 @login_required
 @permission_required("SECURITY_ADMIN")
 def users():
-    users_tbl = get_db().execute("WITH T AS ("
-                                 "SELECT user_name, "
+    users_tbl = get_db().execute("SELECT T.user_name, "
+                                 "T.full_name, "
+                                 "T.enabled, "
+                                 "GROUP_CONCAT(role_name) AS roles "
+                                 "FROM (SELECT user_name, "
                                  "full_name, "
                                  "enabled, "
                                  "role_name FROM user "
                                  "LEFT JOIN user_role ON user.id = user_role.user_id "
-                                 "LEFT JOIN role ON user_role.role_id = role.id) "
-
-                                 "SELECT user_name, "
-                                 "full_name, "
-                                 "enabled, "
-                                 "GROUP_CONCAT(role_name) AS roles "
-                                 "FROM T GROUP BY user_name, full_name, enabled "
+                                 "LEFT JOIN role ON user_role.role_id = role.id) AS T "
+                                 "GROUP BY user_name, full_name, enabled "
                                  "ORDER BY user_name").fetchall()
 
     users = [{"user_name": user["user_name"],
