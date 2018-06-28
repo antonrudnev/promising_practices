@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Users and Roles{% endblock %}
+
+{% block content %}
+    <table class="table my-2">
+        <thead class="thead-light">
+            <tr>
+                <th class="align-middle" scope="col">User</th>
+                <th class="align-middle" scope="col">Full Name</th>
+                <th class="align-middle text-center" scope="col">Enabled</th>
+                <th class="align-middle" scope="col">Roles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <th scope="row">{{ user.user_name }}</th>
+                    <td>{{ user.full_name }}</td>
+                    <td class="text-center"><input type="checkbox" disabled {{ "checked" if user.enabled == 1}}></td>
+                    <td>
+                        {% for role in user.roles %}
+                            <div>{{ role }}</div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+

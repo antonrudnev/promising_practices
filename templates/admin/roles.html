@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Roles and Permissions{% endblock %}
+
+{% block content %}
+    <table class="table my-2">
+        <thead class="thead-light">
+            <tr>
+                <th class="align-middle" scope="col">Role</th>
+                <th class="align-middle" scope="col">Permission</th>
+                <th class="align-middle text-center" scope="col">Enabled</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for role in roles %}
+                <tr>
+                    <th scope="row">{{ role.role_name }}</th>
+                    <td>
+                        {% for permission in role.permissions %}
+                            <div>{{ permission }}</div>
+                        {% endfor %}
+                    </td>
+                    <td class="text-center">
+                        {% for enabled in role.enabled_list %}
+                            <div><input type="checkbox" disabled {{ "checked" if enabled == "1" }}></div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+

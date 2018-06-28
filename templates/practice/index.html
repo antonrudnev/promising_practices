@@ -10,7 +10,7 @@
             <th class="align-middle" scope="col" style="width: 60%">Title</th>
             <th class="align-middle" scope="col" style="width: 40%">Intervention</th>
             <th class="align-middle" scope="col">
-                {% if "CREATE" in g.permissions %}
+                {% if "ACTION_CREATE" in g.permissions %}
                     <a class="btn btn-success" href="{{ url_for('practice.create', page=page, query=query) }}" style="width: 100px;">Create</a>
                 {% else %}
                     Status

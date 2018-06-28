@@ -22,7 +22,7 @@
                         <h5 class="mt-1"><span class="mt-1 badge {{ styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
                         <form action="{{ url_for("practice.action", id=practice.id, query=query, page=page) }}" method="post">
                         {% for action in actions %}
-                            {% if action["action"] in g.permissions %}
+                            {% if "ACTION_" + action["action"] in g.permissions %}
                                 <input class="btn {{ styles[action["action"]] }}" style="width: 90px;" name="action" type="submit" value="{{ action["action"]|capitalize }}"/>
                             {% endif %}
                         {% endfor %}

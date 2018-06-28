@@ -1,7 +1,10 @@
 import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
-from werkzeug.security import check_password_hash, generate_password_hash
 from db import get_db
+import pysolr
+from settings import SOLR
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -11,10 +14,28 @@ def login_required(view):
     def wrapped_view(**kwargs):
         if g.user is None:
             return redirect(url_for("auth.login"))
-
         return view(**kwargs)
-
     return wrapped_view
+
+
+def permission_required(permission, status_based=False):
+    def security_decorator(view):
+        @functools.wraps(view)
+        def wrapped_view(**kwargs):
+            if status_based:
+                doc_id = kwargs['id']
+                p = permission + "_" + pysolr.Solr(SOLR).search(
+                    "id:{}".format(doc_id),
+                    **{"fl": "status", "rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]["status"]
+            else:
+                p = permission
+            if p not in g.permissions:
+                flash({"status": "alert-danger", "text": "You don't have permission to perform this operation. "
+                                                         "Access is denied."})
+                return redirect(url_for("practice.index"))
+            return view(**kwargs)
+        return wrapped_view
+    return security_decorator
 
 
 @bp.before_app_request
@@ -41,19 +62,19 @@ def register():
         error = None
 
         if not username:
-            error = "Username is required"
+            error = "Username is required."
         elif not fullname:
-            error = "Full name is required"
+            error = "Full name is required."
         elif not password:
-            error = "Password is required"
+            error = "Password is required."
         elif db.execute("SELECT id FROM user WHERE user_name = ?", (username,)).fetchone() is not None:
-            error = "User {0} is already registered".format(username)
+            error = "User {0} is already registered.".format(username)
 
         if error is None:
             db.execute("INSERT INTO user (user_name, full_name, password) VALUES (?, ?, ?)",
                        (username, fullname, generate_password_hash(password)))
             db.commit()
-            flash({"status": "alert-success", "text": "You have successfully registered"})
+            flash({"status": "alert-success", "text": "You have successfully registered."})
             return redirect(url_for("auth.login"))
 
         flash({"status": "alert-danger", "text": error})
@@ -68,14 +89,14 @@ def login():
         password = request.form["password"]
         db = get_db()
         error = None
-        user = db.execute(
-            "SELECT * FROM user WHERE user_name = ?", (username,)
-        ).fetchone()
+        user = db.execute("SELECT * FROM user WHERE user_name = ?", (username,)).fetchone()
 
         if user is None:
-            error = "Incorrect username"
+            error = "Incorrect username."
         elif not check_password_hash(user["password"], password):
-            error = "Incorrect password"
+            error = "Incorrect password."
+        elif not user["enabled"]:
+            error = "You account is disabled."
 
         if error is None:
             session.clear()

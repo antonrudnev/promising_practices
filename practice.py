@@ -1,4 +1,4 @@
-from auth import login_required
+from auth import login_required, permission_required
 from flask import Blueprint, g, redirect, render_template, request, url_for
 from math import ceil
 import pysolr
@@ -19,7 +19,7 @@ def index():
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-    fq = "status:({})".format(" OR ".join(g.permissions)) if g.permissions else "status:none"
+    fq = "status:({})".format(" OR ".join(p[5:] for p in g.permissions if p.startswith("VIEW_"))) if g.permissions else "status:none"
     response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
                                      "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
     max_page = max(int(ceil(response["response"]["numFound"] / ITEMS_PER_PAGE) - 1), 0)
@@ -42,9 +42,11 @@ def index():
 
 @bp.route("/create", methods=["GET", "POST"])
 @login_required
+@permission_required("ACTION_CREATE")
 def create():
-    page = int(request.args.get("page"))
-    query = request.args.get("query")
+    page = int(request.args.get("page", 0))
+    query = request.args.get("query", "").strip()
+    query = query if query else "*:*"
 
     if request.method == "POST":
         max_id = solr.search("*:*", **{"sort": "id_int desc", "rows": 1,
@@ -61,9 +63,12 @@ def create():
 
 @bp.route("/<int:id>", methods=["GET"])
 @login_required
+@permission_required("VIEW", status_based=True)
 def details(id):
-    page = int(request.args.get("page"))
-    query = request.args.get("query")
+    page = int(request.args.get("page", 0))
+    query = request.args.get("query", "").strip()
+    query = query if query else "*:*"
+
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     return render_template("practice/details.html", practice=doc, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
@@ -73,9 +78,12 @@ def details(id):
 
 @bp.route("/<int:id>", methods=["POST"])
 @login_required
+@permission_required("ACTION", status_based=True)
 def action(id):
-    page = int(request.args.get("page"))
-    query = request.args.get("query")
+    page = int(request.args.get("page", 0))
+    query = request.args.get("query", "").strip()
+    query = query if query else "*:*"
+
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     next_status = get_next_state(doc["status"], request.form["action"].upper())[0]["next"]
     solr.add([{"id": str(id), "status": next_status}], fieldUpdates={"status": "set"}, commit=False, softCommit=True)
@@ -84,9 +92,12 @@ def action(id):
 
 @bp.route("/<int:id>/edit", methods=["GET", "POST"])
 @login_required
+@permission_required("EDIT", status_based=True)
 def edit(id):
-    page = int(request.args.get("page"))
-    query = request.args.get("query")
+    page = int(request.args.get("page", 0))
+    query = request.args.get("query", "").strip()
+    query = query if query else "*:*"
+
     if request.method == "POST":
         solr.add([request.form.to_dict(flat=False)], commit=False, softCommit=True)
         return redirect(url_for("practice.details", id=id, page=page, query=query))
@@ -99,9 +110,12 @@ def edit(id):
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])
 @login_required
+@permission_required("DELETE", status_based=True)
 def delete(id):
-    page = int(request.args.get("page"))
-    query = request.args.get("query")
+    page = int(request.args.get("page", 0))
+    query = request.args.get("query", "").strip()
+    query = query if query else "*:*"
+
     if request.method == "POST":
         solr.delete(id, commit=False, softCommit=True)
         return redirect(url_for("practice.index", page=page, query=query))
