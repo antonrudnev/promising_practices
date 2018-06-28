@@ -34,7 +34,7 @@ def load_logged_in_user():
 @bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form.get("username", "").strip().lower()
         fullname = request.form["fullname"]
         password = request.form["password"]
         db = get_db()
@@ -53,9 +53,10 @@ def register():
             db.execute("INSERT INTO user (user_name, full_name, password) VALUES (?, ?, ?)",
                        (username, fullname, generate_password_hash(password)))
             db.commit()
+            flash({"status": "alert-success", "text": "You have successfully registered"})
             return redirect(url_for("auth.login"))
 
-        flash(error)
+        flash({"status": "alert-danger", "text": error})
 
     return render_template("auth/register.html")
 
@@ -63,7 +64,7 @@ def register():
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form.get("username", "").strip().lower()
         password = request.form["password"]
         db = get_db()
         error = None
@@ -77,12 +78,11 @@ def login():
             error = "Incorrect password"
 
         if error is None:
-            # store the user id in a new session and return to the index
             session.clear()
             session["user_id"] = user["id"]
             return redirect(url_for("practice.index"))
 
-        flash(error)
+        flash({"status": "alert-danger", "text": error})
 
     return render_template("auth/login.html")
 
