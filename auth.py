@@ -18,15 +18,18 @@ def login_required(view):
     return wrapped_view
 
 
-def permission_required(permission, status_based=False):
+def permission_required(permission, rule=None):
     def security_decorator(view):
         @functools.wraps(view)
         def wrapped_view(**kwargs):
-            if status_based:
-                doc_id = kwargs['id']
+            if rule == "status_based":
+                doc_id = kwargs["id"]
                 p = permission + "_" + pysolr.Solr(SOLR).search(
                     "id:{}".format(doc_id),
                     **{"fl": "status", "rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]["status"]
+            elif rule == "action_based":
+                action = request.form["action"].upper()
+                p = permission + "_" + action
             else:
                 p = permission
             if p not in g.permissions:

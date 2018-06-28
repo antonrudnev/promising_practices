@@ -8,7 +8,7 @@
             <tr>
                 <th class="align-middle" scope="col">Role</th>
                 <th class="align-middle" scope="col">Permission</th>
-                <th class="align-middle text-center" scope="col">Enabled</th>
+                <th class="align-middle text-center" scope="col">Assigned</th>
             </tr>
         </thead>
         <tbody>
@@ -21,14 +21,17 @@
                         {% endfor %}
                     </td>
                     <td class="text-center">
-                        {% for enabled in role.enabled_list %}
-                            <div><input type="checkbox" disabled {{ "checked" if enabled == "1" }}></div>
+                        {% for assigned in role.assigned %}
+                            <div><input type="checkbox" disabled {{ "checked" if assigned == "1" }}></div>
                         {% endfor %}
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <div class="btn-toolbar my-4" role="toolbar">
+            <a class="btn btn-secondary" style="width: 90px;" href="{{ url_for("practice.index") }}">Back</a>
+    </div>
 {% endblock %}
 
 

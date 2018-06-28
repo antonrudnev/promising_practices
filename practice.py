@@ -1,5 +1,5 @@
 from auth import login_required, permission_required
-from flask import Blueprint, g, redirect, render_template, request, url_for
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 from math import ceil
 import pysolr
 from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_STYLE_DETAILS, STATUS_STYLE_INDEX
@@ -55,6 +55,7 @@ def create():
         doc = request.form.to_dict(flat=False)
         doc["id"] = max_id + 1
         solr.add([doc], commit=False, softCommit=True)
+        flash({"status": "alert-success", "text": "New item has been successfully created."})
         return redirect(url_for("practice.index", go_to_last_page=True))
 
     return render_template("practice/create.html", page=page, query=query,
@@ -64,12 +65,11 @@ def create():
 
 @bp.route("/<int:id>", methods=["GET"])
 @login_required
-@permission_required("VIEW", status_based=True)
+@permission_required("VIEW", rule="status_based")
 def details(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     return render_template("practice/details.html", practice=doc, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
@@ -79,21 +79,22 @@ def details(id):
 
 @bp.route("/<int:id>", methods=["POST"])
 @login_required
-@permission_required("ACTION", status_based=True)
+@permission_required("ACTION", rule="action_based")
 def action(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     next_status = get_next_state(doc["status"], request.form["action"].upper())[0]["next"]
     solr.add([{"id": str(id), "status": next_status}], fieldUpdates={"status": "set"}, commit=False, softCommit=True)
+    flash({"status": "alert-success",
+           "text": "Item {} has successfully changed the status from {} to {}.".format(id, doc["status"], next_status)})
     return redirect(url_for("practice.index", page=page, query=query))
 
 
 @bp.route("/<int:id>/edit", methods=["GET", "POST"])
 @login_required
-@permission_required("EDIT", status_based=True)
+@permission_required("EDIT", rule="status_based")
 def edit(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
@@ -101,6 +102,7 @@ def edit(id):
 
     if request.method == "POST":
         solr.add([request.form.to_dict(flat=False)], commit=False, softCommit=True)
+        flash({"status": "alert-success", "text": "Item {} has been successfully updated.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
@@ -111,7 +113,7 @@ def edit(id):
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])
 @login_required
-@permission_required("DELETE", status_based=True)
+@permission_required("DELETE", rule="status_based")
 def delete(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
@@ -119,6 +121,8 @@ def delete(id):
 
     if request.method == "POST":
         solr.delete(id, commit=False, softCommit=True)
+        flash({"status": "alert-success", "text": "Item {} has been successfully deleted.".format(id)})
         return redirect(url_for("practice.index", page=page, query=query))
+
     title = request.args.get("title")
     return render_template("practice/delete.html", id=id, title=title, page=page, query=query)

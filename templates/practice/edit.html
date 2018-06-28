@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Edit Practice # {{ practice.id }}{% endblock %}
+{% block title %}Edit Practice {{ practice.id }}{% endblock %}
 
 {% block content %}
     <form method="post">
@@ -144,7 +144,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="btn-toolbar justify-content-between my-4" role="toolbar">
+        <div class="btn-toolbar my-4" role="toolbar">
             <div role="group">
                 <a class="btn btn-secondary mr-2" style="width: 90px;" href="{{ url_for("practice.details", id=practice.id, page=page, query=query) }}">Cancel</a>
                 <button class="btn btn-danger" style="width: 80px;" type="submit">Save</button>
