@@ -2,7 +2,7 @@ from auth import login_required, permission_required
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 from math import ceil
 import pysolr
-from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_STYLE_DETAILS, STATUS_STYLE_INDEX
+from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_BADGE_STYLE, STATUS_STYLE_INDEX
 from settings import IMPLEMENTERS, INTERVENTION_GOALS, POPULATIONS, PROGRAM_COMPONENTS, STATES
 
 bp = Blueprint('practice', __name__, url_prefix="/practice")
@@ -74,7 +74,7 @@ def details(id):
     return render_template("practice/details.html", practice=doc, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
                            program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
-                           actions=get_next_state(doc["status"]), styles={**ACTION_STYLE, **STATUS_STYLE_DETAILS})
+                           actions=get_next_state(doc["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
 
 
 @bp.route("/<int:id>", methods=["POST"])
@@ -87,8 +87,8 @@ def action(id):
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     next_status = get_next_state(doc["status"], request.form["action"].upper())[0]["next"]
     solr.add([{"id": str(id), "status": next_status}], fieldUpdates={"status": "set"}, commit=False, softCommit=True)
-    flash({"status": "alert-success",
-           "text": "Item {} has successfully changed the status from {} to {}.".format(id, doc["status"], next_status)})
+    flash({"status": "alert-{}".format(STATUS_BADGE_STYLE[next_status]),
+           "text": "Item {} has been successfully {}.".format(id, next_status)})
     return redirect(url_for("practice.index", page=page, query=query))
 
 
@@ -108,7 +108,7 @@ def edit(id):
     doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     return render_template("practice/edit.html", practice=doc, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS, styles=STATUS_STYLE_DETAILS)
+                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS, styles=STATUS_BADGE_STYLE)
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])

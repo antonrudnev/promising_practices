@@ -31,11 +31,11 @@ ACTION_STYLE = {"SUBMIT": "btn-outline-primary",
                 "APPROVE": "btn-outline-success",
                 "REVOKE": "btn-outline-warning"}
 
-STATUS_STYLE_DETAILS = {"DRAFT": "badge-secondary",
-                        "SUBMITTED": "badge-primary",
-                        "REJECTED": "badge-secondary",
-                        "APPROVED": "badge-success",
-                        "REVOKED": "badge-warning"}
+STATUS_BADGE_STYLE = {"DRAFT": "secondary",
+                      "SUBMITTED": "primary",
+                      "REJECTED": "secondary",
+                      "APPROVED": "success",
+                      "REVOKED": "warning"}
 
 STATUS_STYLE_INDEX = {"DRAFT": "btn-outline-secondary",
                       "SUBMITTED": "btn-primary",

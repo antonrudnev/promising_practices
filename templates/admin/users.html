@@ -23,13 +23,13 @@
                         <td>{{ user.full_name }}</td>
                         <td class="text-center"><input type="checkbox" disabled {{ "checked" if user.enabled == 1}}></td>
                         <td>
-                            {% for role in user.roles %}
-                                <div>{{ role }}</div>
+                            {% for _, role_name, _ in user.roles %}
+                                <div>{{ role_name }}</div>
                             {% endfor %}
                         </td>
                         <td class="text-center">
-                            {% for role_id, assigned in user.assigned %}
-                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
+                            {% for role_id, role_name, assigned in user.roles %}
+                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "ADMINISTRATOR"}} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
                             {% endfor %}
                         </td>
                     </tr>

@@ -19,7 +19,7 @@
                 <th class="align-middle" scope="row">Status</th>
                 <th class="align-middle" scope="row">
                     <div class="btn-toolbar justify-content-between">
-                        <h5 class="mt-1"><span class="mt-1 badge {{ styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
+                        <h5 class="mt-1"><span class="mt-1 badge {{ "badge-" + styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
                         <form action="{{ url_for("practice.action", id=practice.id, query=query, page=page) }}" method="post">
                         {% for action in actions %}
                             {% if "ACTION_" + action["action"] in g.permissions %}

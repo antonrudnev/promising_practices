@@ -17,9 +17,12 @@ def workflow():
 def users():
     if request.method == "POST":
         assigned = request.form.getlist("assigned")
-        print(assigned)
         db = get_db()
         db.execute("DELETE FROM user_role")
+        db.execute("INSERT INTO user_role (user_id, role_id) "
+                   "SELECT user.id, role.id FROM user "
+                   "JOIN role ON user_name='admin' "
+                   "AND role_name='ADMINISTRATOR'")
         for a in assigned:
             user_role = a.split(",")
             db.execute("INSERT INTO user_role (user_id, role_id) VALUES (?, ?)", (user_role[0], user_role[1]))
@@ -51,8 +54,9 @@ def users():
               "user_name": user["user_name"],
               "full_name": user["full_name"],
               "enabled": user["enabled"],
-              "roles": user["roles"].split(","),
-              "assigned": zip(user["role_ids"].split(","), user["assigned"].split(","))} for user in users_tbl]
+              "roles": list(zip(user["role_ids"].split(","),
+                                user["roles"].split(","),
+                                user["assigned"].split(",")))} for user in users_tbl]
 
     return render_template("admin/users.html", users=users)
 
