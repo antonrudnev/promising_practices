@@ -39,7 +39,7 @@ CREATE TABLE user_role (
 );
 
 INSERT INTO user (id, user_name, full_name, password) VALUES
-(0, "admin", "Superuser", "admin"),
+(0, "admin", "Adminisrator", "admin"),
 (1, "data", "Data Operator", "data"),
 (2, "qa", "Validation Engineer", "qa");
 
