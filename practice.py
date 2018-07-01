@@ -41,7 +41,7 @@ def index():
         return render_template("practice/index.html", practices=response["response"]["docs"],
                                page=page, pager=pager, query=query, styles=STATUS_STYLE_INDEX)
     except Exception as e:
-        flash({"status": "alert-danger", "text": "Invalid query string. Check Solr query syntax reference."})
+        flash({"status": "alert-danger", "text": "Invalid query string. Check the Solr query syntax reference guide."})
         return redirect(url_for("practice.index", page=0, query="*:*"))
 
 
