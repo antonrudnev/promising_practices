@@ -16,29 +16,33 @@ def get_next_state(current, action=None):
 @bp.route("/")
 @login_required
 def index():
-    page = int(request.args.get("page", 0))
-    query = request.args.get("query", "").strip()
-    query = query if query else "*:*"
-    view_permissions = [p[5:] for p in g.permissions if p.startswith("VIEW_")]
-    fq = "status:({})".format(" OR ".join(view_permissions)) if view_permissions else "status:none"
-    response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
-                                     "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
-    max_page = max(int(ceil(response["response"]["numFound"] / ITEMS_PER_PAGE) - 1), 0)
-    if request.args.get("go_to_last_page", False):
-        page = max_page
+    try:
+        page = int(request.args.get("page", 0))
+        query = request.args.get("query", "").strip()
+        query = query if query else "*:*"
+        view_permissions = [p[5:] for p in g.permissions if p.startswith("VIEW_")]
+        fq = "status:({})".format(" OR ".join(view_permissions)) if view_permissions else "status:none"
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
                                          "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
-    pager = [p for p in range(page - PAGER_RANGE, page + PAGER_RANGE + 1) if 0 <= p <= max_page]
-    if pager[0] > 1:
-        pager.insert(0, "...")
-    if pager[0] != 0:
-        pager.insert(0, 0)
-    if pager[-1] < max_page - 1:
-        pager.append("...")
-    if pager[-1] != max_page:
-        pager.append(max_page)
-    return render_template("practice/index.html", practices=response["response"]["docs"],
-                           page=page, pager=pager, query=query, styles=STATUS_STYLE_INDEX)
+        max_page = max(int(ceil(response["response"]["numFound"] / ITEMS_PER_PAGE) - 1), 0)
+        if request.args.get("go_to_last_page", False):
+            page = max_page
+            response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
+                                             "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
+        pager = [p for p in range(page - PAGER_RANGE, page + PAGER_RANGE + 1) if 0 <= p <= max_page]
+        if pager[0] > 1:
+            pager.insert(0, "...")
+        if pager[0] != 0:
+            pager.insert(0, 0)
+        if pager[-1] < max_page - 1:
+            pager.append("...")
+        if pager[-1] != max_page:
+            pager.append(max_page)
+        return render_template("practice/index.html", practices=response["response"]["docs"],
+                               page=page, pager=pager, query=query, styles=STATUS_STYLE_INDEX)
+    except Exception as e:
+        flash({"status": "alert-danger", "text": "Invalid query string. Check Solr query syntax reference."})
+        return redirect(url_for("practice.index", page=0, query="*:*"))
 
 
 @bp.route("/create", methods=["GET", "POST"])
