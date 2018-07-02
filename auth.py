@@ -24,9 +24,13 @@ def permission_required(permission, rule=None):
         def wrapped_view(**kwargs):
             if rule == "status_based":
                 doc_id = kwargs["id"]
-                p = permission + "_" + pysolr.Solr(SOLR).search(
+                docs = pysolr.Solr(SOLR).search(
                     "id:{}".format(doc_id),
-                    **{"fl": "status", "rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]["status"]
+                    **{"fl": "status", "rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+                if len(docs) > 0:
+                    p = permission + "_" + docs[0]["status"]
+                else:
+                    return view(**kwargs)
             elif rule == "action_based":
                 action = request.form["action"].upper()
                 p = permission + "_" + action

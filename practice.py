@@ -46,7 +46,6 @@ def index():
                            page=page, pager=pager, query=query, styles=STATUS_STYLE_INDEX)
 
 
-
 @bp.route("/create", methods=["GET", "POST"])
 @login_required
 @permission_required("ACTION_CREATE")
@@ -56,8 +55,9 @@ def create():
     query = query if query else "*:*"
 
     if request.method == "POST":
-        max_id = solr.search("*:*", **{"sort": "id_int desc", "rows": 1,
-                                       "fl": "id_int", "wt": "json"}).raw_response["response"]["docs"][0]["id_int"]
+        docs = solr.search("*:*", **{"sort": "id_int desc", "rows": 1,
+                                     "fl": "id_int", "wt": "json"}).raw_response["response"]["docs"]
+        max_id = docs[0]["id_int"] if len(docs) > 0 else 1
         doc = request.form.to_dict(flat=False)
         doc["id"] = max_id + 1
         solr.add([doc], commit=False, softCommit=True)
@@ -76,11 +76,18 @@ def details(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-    doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
-    return render_template("practice/details.html", practice=doc, page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
-                           actions=get_next_state(doc["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
+
+    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+
+    if len(docs) > 0:
+        doc = docs[0]
+        return render_template("practice/details.html", practice=doc, page=page, query=query,
+                               states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
+                               program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
+                               actions=get_next_state(doc["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
+    else:
+        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
+        return redirect(url_for("practice.index", query=query, page=page))
 
 
 @bp.route("/<int:id>", methods=["POST"])
@@ -90,16 +97,26 @@ def action(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-    doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
+
+    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+
+    if len(docs) > 0:
+        doc = docs[0]
+    else:
+        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
+        return redirect(url_for("practice.index", query=query, page=page))
+
     next_states = get_next_state(doc["status"], request.form["action"].upper())
+
     if len(next_states) != 0:
         next_status = next_states[0]["next"]
-        solr.add([{"id": str(id), "status": next_status}], fieldUpdates={"status": "set"}, commit=False, softCommit=True)
+        solr.add([{"id": str(id), "status": next_status}], fieldUpdates={"status": "set"}, commit=False,
+                 softCommit=True)
         flash({"status": "alert-{}".format(STATUS_BADGE_STYLE[next_status]),
                "text": "Item {} has been successfully {}.".format(id, next_status)})
     else:
-        flash({"status": "alert-danger", "text": "Item {} status update failure.".format(id)})
-        return redirect(url_for("practice.details", id=id,  page=page, query=query))
+        flash({"status": "alert-danger", "text": "Item {} status update failure due to version conflict.".format(id)})
+        return redirect(url_for("practice.details", id=id, page=page, query=query))
 
     return redirect(url_for("practice.index", page=page, query=query))
 
@@ -112,6 +129,14 @@ def edit(id):
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
 
+    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+
+    if len(docs) > 0:
+        doc = docs[0]
+    else:
+        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
+        return redirect(url_for("practice.index", query=query, page=page))
+
     if request.method == "POST":
         try:
             solr.add([request.form.to_dict(flat=False)], commit=False, softCommit=True)
@@ -120,7 +145,6 @@ def edit(id):
             flash({"status": "alert-danger", "text": "Item {} update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
-    doc = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"][0]
     return render_template("practice/edit.html", practice=doc, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
                            program_components=PROGRAM_COMPONENTS, populations=POPULATIONS, styles=STATUS_BADGE_STYLE)
@@ -133,6 +157,12 @@ def delete(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
+
+    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+
+    if len(docs) == 0:
+        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
+        return redirect(url_for("practice.index", query=query, page=page))
 
     if request.method == "POST":
         solr.delete(id, commit=False, softCommit=True)
