@@ -1,5 +1,6 @@
 from auth import login_required, permission_required
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+import functools
 from math import ceil
 from pysolr import Solr, SolrError
 from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_BADGE_STYLE, STATUS_STYLE_INDEX
@@ -11,6 +12,19 @@ solr = Solr(SOLR)
 
 def get_next_state(current, action=None):
     return [i for i in WORKFLOW if i["current"] == current and (not action or i["action"] == action)]
+
+
+def exists_check(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        id = kwargs["id"]
+        docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+        if len(docs) == 0:
+            flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
+            return redirect(url_for("practice.index"))
+        g.document = docs[0]
+        return view(**kwargs)
+    return wrapped_view
 
 
 @bp.route("/")
@@ -71,42 +85,27 @@ def create():
 
 @bp.route("/<int:id>", methods=["GET"])
 @login_required
+@exists_check
 @permission_required("VIEW", rule="status_based")
 def details(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
-    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
-
-    if len(docs) > 0:
-        doc = docs[0]
-        return render_template("practice/details.html", practice=doc, page=page, query=query,
-                               states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                               program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
-                               actions=get_next_state(doc["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
-    else:
-        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
-        return redirect(url_for("practice.index", query=query, page=page))
+    return render_template("practice/details.html", practice=g.document, page=page, query=query,
+                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
+                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
+                           actions=get_next_state(g.document["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
 
 
 @bp.route("/<int:id>", methods=["POST"])
 @login_required
+@exists_check
 @permission_required("ACTION", rule="action_based")
 def action(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
-    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
-
-    if len(docs) > 0:
-        doc = docs[0]
-    else:
-        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
-        return redirect(url_for("practice.index", query=query, page=page))
-
-    next_states = get_next_state(doc["status"], request.form["action"].upper())
+    next_states = get_next_state(g.document["status"], request.form["action"].upper())
 
     if len(next_states) != 0:
         next_status = next_states[0]["next"]
@@ -123,19 +122,12 @@ def action(id):
 
 @bp.route("/<int:id>/edit", methods=["GET", "POST"])
 @login_required
+@exists_check
 @permission_required("EDIT", rule="status_based")
 def edit(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
-    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
-
-    if len(docs) > 0:
-        doc = docs[0]
-    else:
-        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
-        return redirect(url_for("practice.index", query=query, page=page))
 
     if request.method == "POST":
         try:
@@ -145,24 +137,19 @@ def edit(id):
             flash({"status": "alert-danger", "text": "Item {} update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
-    return render_template("practice/edit.html", practice=doc, page=page, query=query,
+    return render_template("practice/edit.html", practice=g.document, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
                            program_components=PROGRAM_COMPONENTS, populations=POPULATIONS, styles=STATUS_BADGE_STYLE)
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])
 @login_required
+@exists_check
 @permission_required("DELETE", rule="status_based")
 def delete(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
-    docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
-
-    if len(docs) == 0:
-        flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
-        return redirect(url_for("practice.index", query=query, page=page))
 
     if request.method == "POST":
         solr.delete(id, commit=False, softCommit=True)
