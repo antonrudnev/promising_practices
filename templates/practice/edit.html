@@ -5,7 +5,7 @@
 {% block content %}
     <form method="post">
         <input type="hidden" name="id" value="{{ practice.id }}">
-
+        <input type="hidden" name="_version_" value="{{ practice._version_ }}">
         <table class="table my-2">
             <thead class="thead-light">
                 <tr>
@@ -15,13 +15,17 @@
             </thead>
             <tbody>
                 <tr>
+                    <th scope="row">_version_</th>
+                    <td>{{ practice._version_ }}</td>
+                </tr>
+                <tr>
                     <th scope="row">ID</th>
                     <td>{{ practice.id }}</td>
                 </tr>
                 <tr>
                     <input type="hidden" name="status" value="{{ practice.status }}">
                     <th scope="row">Status</th>
-                    <td><h5><span class="badge {{ styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5></td>
+                    <td><h5><span class="badge {{ "badge-" + styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5></td>
                 </tr>
                 <tr >
                     <th scope="row">Title</th>
