@@ -8,18 +8,17 @@
             <thead class="thead-light">
                 <tr>
                     <th class="align-middle" scope="col">User</th>
-                    <th class="align-middle" scope="col">Full Name</th>
+                    <th class="align-middle" scope="col">Full name</th>
                     <th class="align-middle text-center" scope="col">Enabled</th>
                     <th class="align-middle" scope="col">Roles</th>
                     <th class="align-middle text-center" scope="col">Assigned</th>
+                    <th class="align-middle" scope="col">Last activity</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                     <tr>
-                        <th scope="row">
-                            {{ user.user_name }}
-                        </th>
+                        <th scope="row">{{ user.user_name }}</th>
                         <td>{{ user.full_name }}</td>
                         <td class="text-center"><input type="checkbox" disabled {{ "checked" if user.enabled == 1}}></td>
                         <td>
@@ -32,6 +31,7 @@
                                 <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "ADMINISTRATOR"}} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
                             {% endfor %}
                         </td>
+                        <td>{{ user.last_login }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

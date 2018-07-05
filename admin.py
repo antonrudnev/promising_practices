@@ -28,10 +28,13 @@ def users():
             db.execute("INSERT INTO user_role (user_id, role_id) VALUES (?, ?)", (user_role[0], user_role[1]))
         db.commit()
         flash({"status": "alert-success", "text": "Security changes have been successfully applied."})
+
     users_tbl = get_db().execute("SELECT user_id, "
                                  "user_name, "
                                  "full_name, "
                                  "enabled, "
+                                 "datetime(created_on, 'localtime') AS created_on, "
+                                 "datetime(last_login, 'localtime') AS last_login, "
                                  "IFNULL(GROUP_CONCAT(role_id), '') AS role_ids ,"
                                  "IFNULL(GROUP_CONCAT(role_name), '') AS roles ,"
                                  "IFNULL(GROUP_CONCAT(assigned), '') AS assigned "
@@ -39,6 +42,8 @@ def users():
                                  "user_name, "
                                  "full_name, "
                                  "enabled, "
+                                 "created_on, "
+                                 "last_login, "
                                  "role.id AS role_id, "
                                  "role_name, "
                                  "CASE WHEN role_id ISNULL THEN 0 ELSE 1 END AS assigned "
@@ -47,13 +52,15 @@ def users():
                                  "LEFT JOIN user_role ON user.id = user_role.user_id "
                                  "AND role.id = user_role.role_id "
                                  "ORDER BY user_name, role_name)"
-                                 "GROUP BY user_id, user_name, full_name, enabled "
+                                 "GROUP BY user_id, user_name, full_name, enabled, created_on, last_login "
                                  "ORDER BY user_name").fetchall()
 
     users = [{"user_id": str(user["user_id"]),
               "user_name": user["user_name"],
               "full_name": user["full_name"],
               "enabled": user["enabled"],
+              "created_on": user["created_on"],
+              "last_login": user["last_login"],
               "roles": list(zip(user["role_ids"].split(","),
                                 user["roles"].split(","),
                                 user["assigned"].split(",")))} for user in users_tbl]

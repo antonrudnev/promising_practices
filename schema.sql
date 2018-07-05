@@ -4,12 +4,17 @@ DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS role_permission;
 DROP TABLE IF EXISTS user_role;
 
+DROP TABLE IF EXISTS user_comment;
+DROP TABLE IF EXISTS user_mention;
+
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_name TEXT UNIQUE NOT NULL,
   full_name TEXT NOT NULL,
   password TEXT NOT NULL,
-  enabled INTEGER DEFAULT 1
+  enabled INTEGER DEFAULT 1,
+  last_login TIMESTAMP,
+  created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE permission (
@@ -38,8 +43,28 @@ CREATE TABLE user_role (
   PRIMARY KEY (user_id, role_id)
 );
 
+CREATE TABLE user_comment (
+  id INTEGER PRIMARY KEY,
+  document_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  comment TEXT NOT NULL,
+  created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE user_mention (
+  user_id INTEGER NOT NULL,
+  user_comment_id INTEGER NOT NULL,
+  was_read INTEGER DEFAULT 0,
+  was_deleted INTEGER DEFAULT 0,
+  created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (user_comment_id) REFERENCES role (id),
+  PRIMARY KEY (user_id, user_comment_id)
+);
+
 INSERT INTO user (id, user_name, full_name, password) VALUES
-(0, "admin", "Adminisrator", "admin"),
+(0, "admin", "Administrator", "admin"),
 (1, "data", "Data Operator", "data"),
 (2, "qa", "Validation Engineer", "qa");
 

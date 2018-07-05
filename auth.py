@@ -1,8 +1,6 @@
 import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from db import get_db
-import pysolr
-from settings import SOLR
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -14,6 +12,9 @@ def login_required(view):
     def wrapped_view(**kwargs):
         if g.user is None:
             return redirect(url_for("auth.login"))
+        db = get_db()
+        db.execute("UPDATE user SET last_login = CURRENT_TIMESTAMP WHERE id = ?", (g.user["id"],))
+        db.commit()
         return view(**kwargs)
     return wrapped_view
 

@@ -1,4 +1,5 @@
 from auth import login_required, permission_required
+from db import get_db
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 import functools
 from math import ceil
@@ -91,13 +92,22 @@ def details(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-    return render_template("practice/details.html", practice=g.document, page=page, query=query,
+    db = get_db()
+    comments = db.execute("SELECT user_comment.id, "
+                          "user.full_name, "
+                          "user_comment.comment, "
+                          "datetime(user_comment.created_on, 'localtime') AS created_on "
+                          "FROM user_comment "
+                          "JOIN user ON user.id = user_comment.user_id "
+                          "WHERE document_id = ? "
+                          "ORDER BY user_comment.created_on", (id,)).fetchall()
+    return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
                            program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
                            actions=get_next_state(g.document["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
 
 
-@bp.route("/<int:id>", methods=["POST"])
+@bp.route("/<int:id>/action", methods=["POST"])
 @login_required
 @exists_check
 @permission_required("ACTION", rule="action_based")
@@ -118,6 +128,22 @@ def action(id):
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
     return redirect(url_for("practice.index", page=page, query=query))
+
+
+@bp.route("/<int:id>/comment", methods=["POST"])
+@login_required
+@exists_check
+def comment(id):
+    page = int(request.args.get("page", 0))
+    query = request.args.get("query", "").strip()
+    query = query if query else "*:*"
+
+    db = get_db()
+    db.execute("INSERT INTO user_comment (document_id, user_id, comment) VALUES (?, ?, ?)",
+               (id, g.user["id"], request.form["comment"]))
+    db.commit()
+
+    return redirect(url_for("practice.details", id=id, page=page, query=query))
 
 
 @bp.route("/<int:id>/edit", methods=["GET", "POST"])
