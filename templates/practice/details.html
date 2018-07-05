@@ -121,8 +121,14 @@
         {% endif %}
     </div>
     <hr class="my-4"/>
+    <h6 class="mb-4">What did happen here:</h6>
+    {% if comments|length == 0 %}
+    <div class="mb-4 mx-4 text-muted">
+        No comments were posted so far
+    </div>
+    {% endif %}
     {% for comment in comments %}
-        <div class="my-2 mx-4">
+        <div class="mb-4 mx-4">
             <div class="d-flex justify-content-between text-muted">
                 <div><small><strong>{{ comment.full_name }}</strong></small></div>
                 <div><small>{{ comment.created_on }}</small></div>
@@ -130,9 +136,8 @@
             <div>{{ comment.comment }}</div>
         </div>
     {% endfor %}
-    <hr class="my-4"/>
-    <form action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
-        <textarea class="form-control" rows="3" name="comment" placeholder="Type your comments here"></textarea>
+    <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
+        <textarea class="form-control" rows="3" name="comment" placeholder="Type your comment here"></textarea>
         <input class="btn btn-light my-4" type="submit" value="Comment"/>
     </form>
 {% endblock %}
