@@ -45,7 +45,8 @@ def get_comments(document_id):
 
 def delete_comments(document_id):
     db = get_db()
-    db.execute("DELETE FROM user_mention WHERE user_comment_id in (SELECT id FROM user_comment WHERE document_id = ?)", (document_id,))
+    db.execute("DELETE FROM user_mention "
+               "WHERE user_comment_id in (SELECT id FROM user_comment WHERE document_id = ?)", (document_id,))
     db.execute("DELETE FROM user_comment "
                "WHERE document_id = ? ", (document_id,))
     db.commit()

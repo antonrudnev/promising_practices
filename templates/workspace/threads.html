@@ -13,8 +13,8 @@
         {% for mention in mentions %}
             <div class="row m-2 {{ "font-weight-bold" if not mention.was_read else "text-muted"}}">
                 <div class="col">{{ mention.comment|safe }}</div>
-                <div class="col-3">{{ mention.full_name }}<br/><small>on {{ mention.created_on }}</small></div>
-                <div class="col-2">
+                <div class="col-3 text-nowrap">{{ mention.full_name }}<br/><small>on {{ mention.created_on }}</small></div>
+                <div class="col-2 text-nowrap">
                     <a class="{{ "text-muted" if mention.was_read }}" href="{{ url_for("practice.details", id=mention.document_id) }}">Go to {{ mention.document_id }}</a>
                 </div>
             </div>

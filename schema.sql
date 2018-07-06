@@ -91,10 +91,10 @@ INSERT INTO permission(id, permission_name) VALUES
 (20, "SECURITY_ADMIN");
 
 INSERT INTO role(id, role_name) VALUES
-(0, "Administrator"),
-(1, "Data entry operator"),
-(2, "Data publisher"),
-(3, "Supervisor");
+(0, "ADMINISTRATOR"),
+(1, "DATA_ENTRY"),
+(2, "DATA_VALIDATION"),
+(3, "SUPERVISOR");
 
 INSERT INTO role_permission(role_id, permission_id) VALUES
 (0, 20),
