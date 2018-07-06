@@ -121,19 +121,19 @@
         {% endif %}
     </div>
     <hr class="my-4"/>
-    <h6 class="mb-4">What did happen here:</h6>
+    <h6 class="mb-4">Changelog:</h6>
     {% if comments|length == 0 %}
     <div class="mb-4 mx-4 text-muted">
-        No comments were posted so far
+        Nothing did happen here so far
     </div>
     {% endif %}
     {% for comment in comments %}
         <div class="mb-4 mx-4">
-            <div class="d-flex justify-content-between text-muted">
+            <div class="d-flex justify-content-between text-muted mb-2">
                 <div><small><strong>{{ comment.full_name }}</strong></small></div>
                 <div><small>{{ comment.created_on }}</small></div>
             </div>
-            <div>{{ comment.comment }}</div>
+            <div class="bg-light">{{ comment.comment|safe }}</div>
         </div>
     {% endfor %}
     <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">

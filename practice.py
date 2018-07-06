@@ -1,5 +1,5 @@
 from auth import login_required, permission_required
-from db import get_db
+from db import get_comments, get_mentions, insert_comment
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 import functools
 from math import ceil
@@ -28,8 +28,19 @@ def exists_check(view):
     return wrapped_view
 
 
+def push_mentions(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        cnt = get_mentions(g.user["id"])
+        if cnt > 0:
+            flash({"status": "alert-info", "text": "You have been mentioned in {} thread(s) recently.".format(cnt)})
+        return view(**kwargs)
+    return wrapped_view
+
+
 @bp.route("/")
 @login_required
+@push_mentions
 def index():
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
@@ -92,15 +103,7 @@ def details(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-    db = get_db()
-    comments = db.execute("SELECT user_comment.id, "
-                          "user.full_name, "
-                          "user_comment.comment, "
-                          "datetime(user_comment.created_on, 'localtime') AS created_on "
-                          "FROM user_comment "
-                          "JOIN user ON user.id = user_comment.user_id "
-                          "WHERE document_id = ? "
-                          "ORDER BY user_comment.created_on", (id,)).fetchall()
+    comments = get_comments(id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
                            program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
@@ -123,6 +126,7 @@ def action(id):
                  softCommit=True)
         flash({"status": "alert-{}".format(STATUS_BADGE_STYLE[next_status]),
                "text": "Item {} has been successfully {}.".format(id, next_status)})
+        insert_comment(id, g.user["id"], "Document has been <mark>{}</mark>.".format(next_status.capitalize()))
     else:
         flash({"status": "alert-danger", "text": "Item {} status update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
@@ -137,12 +141,7 @@ def comment(id):
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
-
-    db = get_db()
-    db.execute("INSERT INTO user_comment (document_id, user_id, comment) VALUES (?, ?, ?)",
-               (id, g.user["id"], request.form["comment"]))
-    db.commit()
-
+    insert_comment(id, g.user["id"], request.form["comment"])
     return redirect(url_for("practice.details", id=id, page=page, query=query))
 
 

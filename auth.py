@@ -57,7 +57,7 @@ def load_logged_in_user():
 def register():
     if request.method == "POST":
         username = request.form.get("username", "").strip().lower()
-        fullname = request.form["fullname"]
+        fullname = request.form["fullname"].strip()
         password = request.form["password"]
         db = get_db()
         error = None
