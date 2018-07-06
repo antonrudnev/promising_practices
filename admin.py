@@ -5,12 +5,6 @@ from flask import Blueprint, flash, render_template, request
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
-@bp.route("/workflow", methods=["GET"])
-@login_required
-def workflow():
-    return render_template("admin/workflow.html")
-
-
 @bp.route("/users", methods=["GET", "POST"])
 @login_required
 @permission_required("SECURITY_ADMIN")

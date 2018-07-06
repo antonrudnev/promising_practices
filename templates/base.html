@@ -28,7 +28,8 @@
             <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle mr-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ g.user["full_name"] }}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url_for('admin.workflow') }}">Workflow</a>
+                    <a class="dropdown-item" href="{{ url_for('workspace.threads') }}">My threads</a>
+                    <a class="dropdown-item" href="{{ url_for('workspace.workflow') }}">Workflow</a>
                     <div class="dropdown-divider"></div>
                     {% if "SECURITY_ADMIN" in g.permissions %}
                         <a class="dropdown-item" href="{{ url_for('admin.users') }}">Users</a>

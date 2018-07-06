@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}My threads{% endblock %}
+
+{% block content %}
+    <div class="my-4">
+        <h5 class="mb-4">My threads:</h5>
+        {% if mentions|length == 0 %}
+            <div class="ml-4 text-muted">
+                There aren't any threads associated with you right now
+            </div>
+        {% endif %}
+        {% for mention in mentions %}
+            <div class="row m-2 {{ "font-weight-bold" if not mention.was_read else "text-muted"}}">
+                <div class="col">{{ mention.comment|safe }}</div>
+                <div class="col-3">{{ mention.full_name }}<br/><small>on {{ mention.created_on }}</small></div>
+                <div class="col-2">
+                    <a class="{{ "text-muted" if mention.was_read }}" href="{{ url_for("practice.details", id=mention.document_id) }}">Go to {{ mention.document_id }}</a>
+                </div>
+            </div>
+            {{ "<hr/>"|safe if not loop.last }}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+

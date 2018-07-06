@@ -1,11 +1,12 @@
 from auth import login_required, permission_required
-from db import get_comments, get_mentions, insert_comment
+from db import get_comments, delete_comments, read_mention, insert_comment
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 import functools
 from math import ceil
 from pysolr import Solr, SolrError
 from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_BADGE_STYLE, STATUS_STYLE_INDEX
 from settings import IMPLEMENTERS, INTERVENTION_GOALS, POPULATIONS, PROGRAM_COMPONENTS, STATES
+from workspace import push_mentions
 
 bp = Blueprint('practice', __name__, url_prefix="/practice")
 solr = Solr(SOLR)
@@ -24,16 +25,6 @@ def exists_check(view):
             flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
             return redirect(url_for("practice.index"))
         g.document = docs[0]
-        return view(**kwargs)
-    return wrapped_view
-
-
-def push_mentions(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        cnt = get_mentions(g.user["id"])
-        if cnt > 0:
-            flash({"status": "alert-info", "text": "You have been mentioned in {} thread(s) recently.".format(cnt)})
         return view(**kwargs)
     return wrapped_view
 
@@ -88,6 +79,7 @@ def create():
         doc["id"] = max_id + 1
         solr.add([doc], commit=False, softCommit=True)
         flash({"status": "alert-success", "text": "New item has been successfully created."})
+        insert_comment(doc["id"], g.user["id"], "Document has been <mark>created</mark>.")
         return redirect(url_for("practice.index", go_to_last_page=True))
 
     return render_template("practice/create.html", page=page, query=query,
@@ -104,6 +96,7 @@ def details(id):
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
     comments = get_comments(id)
+    read_mention(g.user["id"], id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
                            states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
                            program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
@@ -126,7 +119,7 @@ def action(id):
                  softCommit=True)
         flash({"status": "alert-{}".format(STATUS_BADGE_STYLE[next_status]),
                "text": "Item {} has been successfully {}.".format(id, next_status)})
-        insert_comment(id, g.user["id"], "Document has been <mark>{}</mark>.".format(next_status.capitalize()))
+        insert_comment(id, g.user["id"], "Document has been <mark>{}</mark>.".format(next_status.lower()))
     else:
         flash({"status": "alert-danger", "text": "Item {} status update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
@@ -179,6 +172,7 @@ def delete(id):
     if request.method == "POST":
         solr.delete(id, commit=False, softCommit=True)
         flash({"status": "alert-success", "text": "Item {} has been successfully deleted.".format(id)})
+        delete_comments(id)
         return redirect(url_for("practice.index", page=page, query=query))
 
     title = request.args.get("title")

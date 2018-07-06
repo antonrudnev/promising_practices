@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Practice # {{ practice.id }}{% endblock %}
+{% block title %}Review practice {{ practice.id }}{% endblock %}
 
 {% block content %}
     <table class="table my-2">
@@ -109,6 +109,30 @@
         </tbody>
     </table>
 
+    <hr class="my-4"/>
+
+    <h6>Changelog:</h6>
+    {% if comments|length == 0 %}
+    <div class="mx-4 text-muted">
+        Nothing did happen here so far
+    </div>
+    {% endif %}
+    {% for comment in comments %}
+        <div class="mb-4 mx-4">
+            <div class="d-flex justify-content-between text-muted">
+                <div class="font-weight-bold small {{ "text-danger" if comment["user_id"] == g.user["id"] }}">{{ comment.full_name }}</div>
+                <div><small>{{ comment.created_on }}</small></div>
+            </div>
+            <div class="bg-light">{{ comment.comment|safe }}</div>
+        </div>
+    {% endfor %}
+    <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
+        <textarea class="form-control" rows="3" name="comment" placeholder="Type your comments here"></textarea>
+        <input class="btn btn-outline-info mt-4 mx-2" type="submit" value="Comment"/>
+    </form>
+
+    <hr class="my-4"/>
+
     <div class="btn-toolbar justify-content-between my-4" role="toolbar">
         <div class="d-inline" role="group">
             <a class="btn btn-secondary mr-2" style="width: 90px;" href="{{ url_for("practice.index", page=page, query=query) }}">Back</a>
@@ -120,24 +144,4 @@
             <a class="btn btn-outline-danger d-inline float-right" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
         {% endif %}
     </div>
-    <hr class="my-4"/>
-    <h6 class="mb-4">Changelog:</h6>
-    {% if comments|length == 0 %}
-    <div class="mb-4 mx-4 text-muted">
-        Nothing did happen here so far
-    </div>
-    {% endif %}
-    {% for comment in comments %}
-        <div class="mb-4 mx-4">
-            <div class="d-flex justify-content-between text-muted mb-2">
-                <div><small><strong>{{ comment.full_name }}</strong></small></div>
-                <div><small>{{ comment.created_on }}</small></div>
-            </div>
-            <div class="bg-light">{{ comment.comment|safe }}</div>
-        </div>
-    {% endfor %}
-    <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
-        <textarea class="form-control" rows="3" name="comment" placeholder="Type your comment here"></textarea>
-        <input class="btn btn-light my-4" type="submit" value="Comment"/>
-    </form>
 {% endblock %}
