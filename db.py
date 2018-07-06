@@ -53,24 +53,22 @@ def delete_comments(document_id):
 
 def get_mentions(user_id):
     db = get_db()
-    return db.execute("WITH T AS ("
-                          "SELECT user_comment.document_id, "
-                          "MAX(user_mention.user_comment_id) AS user_comment_id "
-                          "FROM user_mention "
-                          "JOIN user_comment on user_mention.user_comment_id = user_comment.id "
-                          "WHERE user_mention.user_id = ? AND NOT user_mention.was_deleted "
-                          "GROUP BY user_comment.document_id) "
-                          "SELECT user_comment.document_id, "
-                          "user_comment.comment, "
-                          "user_comment.created_on, "
-                          "user_mention.was_read, "
-                          "user.full_name "
-                          "FROM user_comment "
-                          "JOIN T ON T.user_comment_id = user_comment.id "
-                          "JOIN user ON user.id = user_comment.user_id "
-                          "JOIN user_mention ON user_mention.user_id = ? "
-                          "AND user_mention.user_comment_id = user_comment.id "
-                          "ORDER BY user_mention.was_read, user_comment.created_on DESC", (user_id, user_id)).fetchall()
+    return db.execute("SELECT user_comment.document_id, "
+                      "user_comment.comment, "
+                      "user_comment.created_on, "
+                      "user_mention.was_read, "
+                      "user.full_name "
+                      "FROM user_comment "
+                      "JOIN (SELECT user_comment.document_id, "
+                      "MAX(user_mention.user_comment_id) AS user_comment_id "
+                      "FROM user_mention "
+                      "JOIN user_comment on user_mention.user_comment_id = user_comment.id "
+                      "WHERE user_mention.user_id = ? AND NOT user_mention.was_deleted "
+                      "GROUP BY user_comment.document_id) AS T ON T.user_comment_id = user_comment.id "
+                      "JOIN user ON user.id = user_comment.user_id "
+                      "JOIN user_mention ON user_mention.user_id = ? "
+                      "AND user_mention.user_comment_id = user_comment.id "
+                      "ORDER BY user_mention.was_read, user_comment.created_on DESC", (user_id, user_id)).fetchall()
 
 
 def read_mention(user_id, document_id):
