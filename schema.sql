@@ -12,7 +12,7 @@ CREATE TABLE user (
   user_name TEXT UNIQUE NOT NULL,
   full_name TEXT NOT NULL,
   password TEXT NOT NULL,
-  enabled INTEGER DEFAULT 1,
+  is_enabled INTEGER DEFAULT 1,
   last_login TIMESTAMP,
   created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -91,10 +91,10 @@ INSERT INTO permission(id, permission_name) VALUES
 (20, "SECURITY_ADMIN");
 
 INSERT INTO role(id, role_name) VALUES
-(0, "ADMINISTRATOR"),
-(1, "DATA_ENTRY"),
-(2, "DATA_VALIDATION"),
-(3, "SUPERVISOR");
+(0, "administrator"),
+(1, "data_entry"),
+(2, "data_validation"),
+(3, "supervisor");
 
 INSERT INTO role_permission(role_id, permission_id) VALUES
 (0, 20),

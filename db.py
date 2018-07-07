@@ -34,6 +34,7 @@ def get_comments(document_id):
     db = get_db()
     return db.execute("SELECT user_comment.id, "
                       "user_comment.user_id, "
+                      "user.user_name, "
                       "user.full_name, "
                       "user_comment.comment, "
                       "datetime(user_comment.created_on, 'localtime') AS created_on "
@@ -82,6 +83,16 @@ def read_mention(user_id, document_id):
     db.commit()
 
 
+def delete_mention(user_id, document_id):
+    db = get_db()
+    db.execute("UPDATE user_mention "
+               "SET was_deleted = 1 "
+               "WHERE user_id = ? AND EXISTS(SELECT * FROM user_comment "
+               "WHERE user_comment.id = user_mention.user_comment_id AND user_comment.document_id = ?)",
+               (user_id, document_id))
+    db.commit()
+
+
 def insert_comment(document_id, user_id, comment):
     if not comment.strip():
         return
@@ -103,6 +114,66 @@ def insert_comment(document_id, user_id, comment):
         cur.execute("INSERT INTO user_mention (user_id, user_comment_id, was_read) VALUES (?, ?, ?)",
                     (user_id, comment_id, user_id == g.user["id"]))
     db.commit()
+
+
+def get_users():
+    db = get_db()
+    users_tbl = db.execute("SELECT user_id, "
+                           "user_name, "
+                           "full_name, "
+                           "is_enabled, "
+                           "datetime(created_on, 'localtime') AS created_on, "
+                           "datetime(last_login, 'localtime') AS last_login, "
+                           "IFNULL(GROUP_CONCAT(role_id), '') AS role_ids ,"
+                           "IFNULL(GROUP_CONCAT(role_name), '') AS roles ,"
+                           "IFNULL(GROUP_CONCAT(assigned), '') AS assigned "
+                           "FROM (SELECT user.id AS user_id, "
+                           "user_name, "
+                           "full_name, "
+                           "is_enabled, "
+                           "created_on, "
+                           "last_login, "
+                           "role.id AS role_id, "
+                           "role_name, "
+                           "CASE WHEN role_id ISNULL THEN 0 ELSE 1 END AS assigned "
+                           "FROM user "
+                           "CROSS JOIN role "
+                           "LEFT JOIN user_role ON user.id = user_role.user_id "
+                           "AND role.id = user_role.role_id "
+                           "ORDER BY user_name, role_name)"
+                           "GROUP BY user_id, user_name, full_name, is_enabled, created_on, last_login "
+                           "ORDER BY user_name").fetchall()
+
+    return [{"user_id": str(user["user_id"]),
+             "user_name": user["user_name"],
+             "full_name": user["full_name"],
+             "is_enabled": user["is_enabled"],
+             "created_on": user["created_on"],
+             "last_login": user["last_login"],
+             "roles": list(zip(user["role_ids"].split(","),
+                               user["roles"].split(","),
+                               user["assigned"].split(",")))} for user in users_tbl]
+
+
+def get_roles():
+    db = get_db()
+    roles_tbl = db.execute("SELECT role_name, "
+                           "IFNULL(GROUP_CONCAT(permission_name), '') AS permissions, "
+                           "IFNULL(GROUP_CONCAT(assigned), '') AS assigned "
+                           "FROM (SELECT role_name,"
+                           "permission_name,"
+                           "CASE WHEN role_id ISNULL THEN 0 ELSE 1 END AS assigned "
+                           "FROM role "
+                           "CROSS JOIN permission "
+                           "LEFT JOIN role_permission ON role.id = role_permission.role_id "
+                           "AND permission.id = role_permission.permission_id "
+                           "ORDER BY role_name, permission_name) "
+                           "GROUP BY role_name "
+                           "ORDER BY role_name, permission_name").fetchall()
+
+    return [{"role_name": role["role_name"],
+             "permissions": role["permissions"].split(","),
+             "assigned": role["assigned"].split(",")} for role in roles_tbl]
 
 
 if __name__ == "__main__":

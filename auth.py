@@ -96,8 +96,8 @@ def login():
             error = "Incorrect username."
         elif not check_password_hash(user["password"], password):
             error = "Incorrect password."
-        elif not user["enabled"]:
-            error = "You account is disabled."
+        elif not user["is_enabled"]:
+            error = "Your account is disabled."
 
         if error is None:
             session.clear()

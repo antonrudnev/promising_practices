@@ -1,6 +1,6 @@
 from auth import login_required
-from db import get_mentions
-from flask import Blueprint, flash, g, render_template
+from db import get_mentions, get_users, delete_mention
+from flask import Blueprint, flash, g, redirect, render_template, url_for
 import functools
 
 bp = Blueprint("workspace", __name__, url_prefix="/workspace")
@@ -22,8 +22,22 @@ def workflow():
     return render_template("workspace/workflow.html")
 
 
+@bp.route("/team", methods=["GET"])
+@login_required
+def team():
+    users = get_users()
+    return render_template("workspace/team.html", users=users)
+
+
 @bp.route("/threads", methods=["GET"])
 @login_required
 def threads():
     mentions = get_mentions(g.user["id"])
     return render_template("workspace/threads.html", mentions=mentions)
+
+
+@bp.route("/dismiss/<int:id>", methods=["GET"])
+@login_required
+def dismiss(id):
+    delete_mention(g.user["id"], id)
+    return redirect(url_for("workspace.threads"))

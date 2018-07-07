@@ -120,7 +120,10 @@
     {% for comment in comments %}
         <div class="mb-4 mx-4">
             <div class="d-flex justify-content-between text-muted">
-                <div class="font-weight-bold small {{ "text-info" if comment["user_id"] == g.user["id"] }}">{{ comment.full_name }}</div>
+                <div class="d-flex justify-content-start">
+                    <div class="font-weight-bold small {{ "text-info" if comment["user_id"] == g.user["id"] }}">{{ comment.full_name }}</div>
+                    <div class="font-weight-bold small ml-2">(@{{ comment.user_name }})</div>
+                </div>
                 <div><small>{{ comment.created_on }}</small></div>
             </div>
             <div class="bg-light">{{ comment.comment|safe }}</div>
@@ -128,7 +131,7 @@
     {% endfor %}
     <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
         <textarea class="form-control" rows="3" name="comment" placeholder="Type your comments here"></textarea>
-        <input class="btn btn-outline-info mt-4 mx-2" type="submit" value="Comment"/>
+        <input class="btn btn-outline-info mt-4" type="submit" value="Comment"/>
     </form>
 
     <hr class="my-4"/>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}My team{% endblock %}
+
+{% block content %}
+    <h5 class="my-4">My team:</h5>
+    <table class="table my-2">
+        <thead class="thead-light">
+            <tr>
+                <th class="align-middle" scope="col">User</th>
+                <th class="align-middle" scope="col">Full name</th>
+                <th class="align-middle" scope="col">Roles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                {% if user["is_enabled"] == 1 %}
+                    <tr>
+                        <th scope="row">{{ user.user_name }}</th>
+                        <td>{{ user.full_name }}</td>
+                        <td>
+                            {% for _, role_name, assigned in user.roles %}
+                                {% if assigned == "1" %}
+                                    <div>{{ role_name }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="btn-toolbar my-4" role="toolbar">
+        <a class="btn btn-secondary mr-2" href="{{ url_for("practice.index") }}">Close</a>
+    </div>
+{% endblock %}

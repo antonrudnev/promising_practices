@@ -12,14 +12,21 @@
         {% endif %}
         {% for mention in mentions %}
             <div class="row m-2 {{ "font-weight-bold" if not mention.was_read else "text-muted"}}">
-                <div class="col">{{ mention.comment|safe }}</div>
+                <div class="col-0">{{ '<i class="far fa-envelope"></i>'|safe if not mention.was_read else '<i class="far fa-envelope-open"></i>'|safe }}</div>
+                <div class="col">{{ mention.comment|safe }}<br/><small>Document #{{ mention.document_id }}</small></div>
                 <div class="col-3 text-nowrap">{{ mention.full_name }}<br/><small>on {{ mention.created_on }}</small></div>
-                <div class="col-2 text-nowrap">
-                    <a class="{{ "text-muted" if mention.was_read }}" href="{{ url_for("practice.details", id=mention.document_id) }}">Go to {{ mention.document_id }}</a>
+                <div class="col-1 text-nowrap">
+                    <a class="{{ "text-muted" if mention.was_read }}" href="{{ url_for("practice.details", id=mention.document_id) }}">Details</a>
+                </div>
+                <div class="col-1 text-nowrap">
+                    <a class="{{ "text-muted" if mention.was_read }}" href="{{ url_for("workspace.dismiss", id=mention.document_id) }}">Dismiss</a>
                 </div>
             </div>
             {{ "<hr/>"|safe if not loop.last }}
         {% endfor %}
+    </div>
+    <div class="btn-toolbar my-4" role="toolbar">
+        <a class="btn btn-secondary mr-2" href="{{ url_for("practice.index") }}">Close</a>
     </div>
 {% endblock %}
 

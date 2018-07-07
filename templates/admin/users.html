@@ -20,7 +20,9 @@
                     <tr>
                         <th scope="row">{{ user.user_name }}</th>
                         <td>{{ user.full_name }}</td>
-                        <td class="text-center"><input type="checkbox" disabled {{ "checked" if user.enabled == 1}}></td>
+                        <td class="text-center">
+                            <input type="checkbox" name="enabled" {{ "disabled" if user.user_name == "admin" }} {{ "checked" if user.is_enabled == 1 }} value="{{ user.user_id }}"/>
+                        </td>
                         <td>
                             {% for _, role_name, _ in user.roles %}
                                 <div>{{ role_name }}</div>
@@ -28,7 +30,7 @@
                         </td>
                         <td class="text-center">
                             {% for role_id, role_name, assigned in user.roles %}
-                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "ADMINISTRATOR"}} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
+                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "administrator"}} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
                             {% endfor %}
                         </td>
                         <td>{{ user.last_login }}</td>
@@ -38,8 +40,8 @@
         </table>
         <div class="btn-toolbar my-4" role="toolbar">
             <div role="group">
-                <a class="btn btn-secondary mr-2" style="width: 90px;" href="{{ url_for("practice.index") }}">Close</a>
-                <button class="btn btn-danger" style="width: 80px;" type="submit">Apply</button>
+                <a class="btn btn-secondary mr-2" href="{{ url_for("practice.index") }}">Close</a>
+                <button class="btn btn-danger" type="submit">Apply</button>
             </div>
         </div>
     </form>
