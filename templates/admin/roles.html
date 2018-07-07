@@ -3,35 +3,40 @@
 {% block title %}Roles and permissions{% endblock %}
 
 {% block content %}
-    <table class="table my-2">
-        <thead class="thead-light">
-            <tr>
-                <th class="align-middle" scope="col">Role</th>
-                <th class="align-middle" scope="col">Permissions</th>
-                <th class="align-middle text-center" scope="col">Assigned</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for role in roles %}
+    <form method="post">
+        <table class="table my-2">
+            <thead class="thead-light">
                 <tr>
-                    <th scope="row">{{ role.role_name }}</th>
-                    <td>
-                        {% for permission in role.permissions %}
-                            <div>{{ permission }}</div>
-                        {% endfor %}
-                    </td>
-                    <td class="text-center">
-                        {% for assigned in role.assigned %}
-                            <div><input type="checkbox" disabled {{ "checked" if assigned == "1" }}></div>
-                        {% endfor %}
-                    </td>
+                    <th class="align-middle" scope="col">Role</th>
+                    <th class="align-middle" scope="col">Permissions</th>
+                    <th class="align-middle text-center" scope="col">Assigned</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="btn-toolbar my-4" role="toolbar">
-            <a class="btn btn-secondary" href="{{ url_for("practice.index") }}">Close</a>
-    </div>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                    <tr>
+                        <th scope="row">{{ role.role_name }}</th>
+                        <td>
+                            {% for _, permission, _ in role.permissions %}
+                                <div>{{ permission }}</div>
+                            {% endfor %}
+                        </td>
+                        <td class="text-center">
+                            {% for permission_id, permission_name, assigned in role.permissions %}
+                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if role.role_name == "administrator" and permission_name.endswith("_ADMIN") }} value="{{ ",".join([role.role_id, permission_id]) }}"></div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="btn-toolbar my-4" role="toolbar">
+            <div role="group">
+                <a class="btn btn-secondary mr-2" href="{{ url_for("practice.index") }}">Close</a>
+                <button class="btn btn-danger" type="submit">Apply</button>
+            </div>
+        </div>
+    </form>
 {% endblock %}
 
 

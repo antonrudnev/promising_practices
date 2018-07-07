@@ -30,7 +30,7 @@
                         </td>
                         <td class="text-center">
                             {% for role_id, role_name, assigned in user.roles %}
-                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "administrator"}} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
+                                <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "administrator" }} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
                             {% endfor %}
                         </td>
                         <td>{{ user.last_login }}</td>

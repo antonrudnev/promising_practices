@@ -128,19 +128,19 @@ def get_users():
                            "IFNULL(GROUP_CONCAT(role_name), '') AS roles ,"
                            "IFNULL(GROUP_CONCAT(assigned), '') AS assigned "
                            "FROM (SELECT user.id AS user_id, "
-                           "user_name, "
-                           "full_name, "
-                           "is_enabled, "
-                           "created_on, "
-                           "last_login, "
+                           "user.user_name, "
+                           "user.full_name, "
+                           "user.is_enabled, "
+                           "user.created_on, "
+                           "user.last_login, "
                            "role.id AS role_id, "
-                           "role_name, "
+                           "role.role_name, "
                            "CASE WHEN role_id ISNULL THEN 0 ELSE 1 END AS assigned "
                            "FROM user "
                            "CROSS JOIN role "
                            "LEFT JOIN user_role ON user.id = user_role.user_id "
                            "AND role.id = user_role.role_id "
-                           "ORDER BY user_name, role_name)"
+                           "ORDER BY user.user_name, role.role_name)"
                            "GROUP BY user_id, user_name, full_name, is_enabled, created_on, last_login "
                            "ORDER BY user_name").fetchall()
 
@@ -155,25 +155,61 @@ def get_users():
                                user["assigned"].split(",")))} for user in users_tbl]
 
 
+def update_users_roles(assigned, enabled):
+    db = get_db()
+    db.execute("DELETE FROM user_role")
+    db.execute("INSERT INTO user_role (user_id, role_id) "
+               "SELECT user.id, role.id FROM user "
+               "JOIN role ON user_name = 'admin' "
+               "AND role_name = 'administrator'")
+    db.execute("UPDATE user SET is_enabled = 0 WHERE user_name != 'admin'")
+    for a in assigned:
+        user_role = a.split(",")
+        db.execute("INSERT INTO user_role (user_id, role_id) VALUES (?, ?)", (user_role[0], user_role[1]))
+    for e in enabled:
+        db.execute("UPDATE user SET is_enabled = 1 WHERE id = ?", (e,))
+    db.commit()
+
+
+def update_roles_permissions(assigned):
+    db = get_db()
+    db.execute("DELETE FROM role_permission")
+    db.execute("INSERT INTO role_permission (role_id, permission_id) "
+               "SELECT role.id, permission.id FROM role "
+               "JOIN permission ON role_name = 'administrator' "
+               "AND permission_name LIKE '%_ADMIN'")
+    for a in assigned:
+        role_permission = a.split(",")
+        db.execute("INSERT INTO role_permission (role_id, permission_id) VALUES (?, ?)",
+                   (role_permission[0], role_permission[1]))
+    db.commit()
+
+
 def get_roles():
     db = get_db()
-    roles_tbl = db.execute("SELECT role_name, "
+    roles_tbl = db.execute("SELECT role_id, "
+                           "role_name, "
+                           "IFNULL(GROUP_CONCAT(permission_id), '') AS permission_ids ,"
                            "IFNULL(GROUP_CONCAT(permission_name), '') AS permissions, "
                            "IFNULL(GROUP_CONCAT(assigned), '') AS assigned "
-                           "FROM (SELECT role_name,"
-                           "permission_name,"
-                           "CASE WHEN role_id ISNULL THEN 0 ELSE 1 END AS assigned "
+                           "FROM (SELECT role.id AS role_id, "
+                           "permission.id AS permission_id, "                           
+                           "role.role_name,"
+                           "permission.permission_name,"
+                           "CASE WHEN role_permission.role_id ISNULL THEN 0 ELSE 1 END AS assigned "
                            "FROM role "
                            "CROSS JOIN permission "
                            "LEFT JOIN role_permission ON role.id = role_permission.role_id "
                            "AND permission.id = role_permission.permission_id "
-                           "ORDER BY role_name, permission_name) "
-                           "GROUP BY role_name "
-                           "ORDER BY role_name, permission_name").fetchall()
+                           "ORDER BY role.role_name, permission.permission_name) "
+                           "GROUP BY role_id, role_name "
+                           "ORDER BY role_name").fetchall()
 
-    return [{"role_name": role["role_name"],
-             "permissions": role["permissions"].split(","),
-             "assigned": role["assigned"].split(",")} for role in roles_tbl]
+    return [{"role_id": str(role["role_id"]),
+             "role_name": role["role_name"],
+             "permissions": list(zip(role["permission_ids"].split(","),
+                                     role["permissions"].split(","),
+                                     role["assigned"].split(",")))} for role in roles_tbl]
 
 
 if __name__ == "__main__":
