@@ -99,19 +99,15 @@ INSERT INTO role(id, role_name) VALUES
 INSERT INTO role_permission(role_id, permission_id) VALUES
 (0, 20),
 (1, 0),
-(1, 1),
-(1, 2),
 (1, 3),
-(1, 4),
 (1, 5),
 (1, 8),
 (1, 10),
+(1, 13),
 (1, 15),
 (1, 16),
-(2, 0),
 (2, 1),
 (2, 2),
-(2, 3),
 (2, 4),
 (2, 6),
 (2, 9),
@@ -124,20 +120,7 @@ INSERT INTO role_permission(role_id, permission_id) VALUES
 (3, 1),
 (3, 2),
 (3, 3),
-(3, 4),
-(3, 5),
-(3, 6),
-(3, 8),
-(3, 9),
-(3, 10),
-(3, 11),
-(3, 13),
-(3, 14),
-(3, 15),
-(3, 16),
-(3, 17),
-(3, 18),
-(3, 19);
+(3, 4);
 
 
 INSERT INTO user_role(user_id, role_id) VALUES

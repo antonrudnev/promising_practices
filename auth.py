@@ -1,6 +1,6 @@
 import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
-from db import get_db
+from db import get_db, get_mentions
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -24,6 +24,8 @@ def permission_required(permission, rule=None):
         @functools.wraps(view)
         def wrapped_view(**kwargs):
             if rule == "status_based":
+                if len([0 for x in get_mentions(g.user["id"]) if g.document["id_int"] == x["document_id"]]) > 0:
+                    g.permissions.append("VIEW_{}".format(g.document["status"]))
                 p = permission + "_" + g.document["status"]
             elif rule == "action_based":
                 action = request.form["action"].upper()
