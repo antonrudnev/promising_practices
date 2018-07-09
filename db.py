@@ -162,7 +162,7 @@ def update_users_roles(assigned, enabled):
                "SELECT user.id, role.id FROM user "
                "JOIN role ON user_name = 'admin' "
                "AND role_name = 'administrator'")
-    db.execute("UPDATE user SET is_enabled = 0 WHERE user_name != 'admin'")
+    db.execute("UPDATE user SET is_enabled = 0 WHERE id != ?", (g.user["id"],))
     for a in assigned:
         user_role = a.split(",")
         db.execute("INSERT INTO user_role (user_id, role_id) VALUES (?, ?)", (user_role[0], user_role[1]))
