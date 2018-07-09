@@ -131,7 +131,7 @@
     {% endfor %}
     <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
         <textarea class="form-control" rows="3" name="comment" placeholder="Type your comments here"></textarea>
-        <input class="btn btn-outline-info mt-2" type="submit" value="Comment"/>
+        <input class="btn btn-outline-info btn-sm mt-3 ml-2" type="submit" value="Comment"/>
     </form>
 
     <hr class="my-4"/>

@@ -44,12 +44,6 @@
                 </div>
             </div>
         </div>
-        {% elif url_for(request.endpoint) == url_for("auth.login") %}
-            <div class="navbar-nav mr-auto"></div>
-            <a class="btn btn-outline-primary mr-2" href="{{ url_for('auth.register') }}">Register</a>
-        {% elif url_for(request.endpoint) == url_for("auth.register") %}
-            <div class="navbar-nav mr-auto"></div>
-            <a class="btn btn-outline-primary mr-2" href="{{ url_for('auth.login') }}">Sign in</a>
         {% endif %}
     </nav>
     {% for message in get_flashed_messages() %}

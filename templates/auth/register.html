@@ -6,7 +6,7 @@
     <form class="needs-validation" method="post" novalidate>
         <div class="card my-2">
             <div class="card-header">
-                Create a new account
+                Create new account
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="fullname">Full Name</label>
+                    <label for="fullname">Full name</label>
                     <input class="form-control" name="fullname" id="fullname" placeholder="Enter full name" required>
                     <div class="invalid-feedback">
                         Please provide a full name.
@@ -31,13 +31,16 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password">Confirm Password</label>
+                    <label for="password">Confirm password</label>
                     <input type="password" class="form-control" name="password" id="confirm_password" placeholder=" Confirm password" required>
                     <div class="invalid-feedback">
                         Passwords don't match.
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <small class="ml-2"> or <a href="{{ url_for('auth.login') }}">sign in</a> to existing account</small>
+                </div>
             </div>
         </div>
     </form>
