@@ -111,28 +111,30 @@
 
     <hr class="my-4"/>
 
-    <h6>Changelog:</h6>
-    {% if comments|length == 0 %}
-    <div class="mx-4 text-muted">
-        Nothing did happen here so far
-    </div>
-    {% endif %}
-    {% for comment in comments %}
-        <div class="mb-4 mx-4">
-            <div class="d-flex justify-content-between text-muted">
-                <div class="d-flex justify-content-start">
-                    <div class="font-weight-bold small {{ "text-info" if comment["user_id"] == g.user["id"] }}">{{ comment.full_name }}</div>
-                    <div class="font-weight-bold small ml-2">(@{{ comment.user_name }})</div>
-                </div>
-                <div><small>{{ comment.created_on }}</small></div>
-            </div>
-            <div class="bg-light">{{ comment.comment|safe }}</div>
+    <div class="mx-2">
+        <h6>Changelog:</h6>
+        {% if comments|length == 0 %}
+        <div class="mx-4 text-muted">
+            Nothing did happen here so far
         </div>
-    {% endfor %}
-    <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
-        <textarea class="form-control" rows="3" name="comment" placeholder="Type your comments here"></textarea>
-        <input class="btn btn-outline-info btn-sm mt-3 ml-2" type="submit" value="Comment"/>
-    </form>
+        {% endif %}
+        {% for comment in comments %}
+            <div class="mb-4 mx-4">
+                <div class="d-flex justify-content-between text-muted">
+                    <div class="d-flex justify-content-start">
+                        <div class="font-weight-bold small {{ "text-info" if comment["user_id"] == g.user["id"] }}">{{ comment.full_name }}</div>
+                        <div class="font-weight-bold small ml-2">(@{{ comment.user_name }})</div>
+                    </div>
+                    <div><small>{{ comment.created_on }}</small></div>
+                </div>
+                <div class="bg-light">{{ comment.comment|safe }}</div>
+            </div>
+        {% endfor %}
+        <form class="my-4" action="{{ url_for("practice.comment", id=practice.id, query=query, page=page) }}" method="post">
+            <textarea class="form-control" rows="3" name="comment" placeholder="Type your comments here"></textarea>
+            <input class="btn btn-outline-info btn-sm mt-3" type="submit" value="Comment"/>
+        </form>
+    </div>
 
     <hr class="my-4"/>
 
