@@ -14,19 +14,17 @@
         </thead>
         <tbody>
             {% for user in users %}
-                {% if user["is_enabled"] == 1 %}
-                    <tr>
-                        <th scope="row">{{ user.user_name }}</th>
-                        <td>{{ user.full_name }}</td>
-                        <td>
-                            {% for _, role_name, assigned in user.roles %}
-                                {% if assigned == "1" %}
-                                    <div>{{ role_name }}</div>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endif %}
+                <tr>
+                    <th scope="row">{{ user.user_name }}</th>
+                    <td>{{ user.full_name }}</td>
+                    <td>
+                        {% for _, role_name, assigned in user.roles %}
+                            {% if assigned == "1" %}
+                                <div>{{ role_name }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

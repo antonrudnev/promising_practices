@@ -28,16 +28,18 @@
             <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle mr-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ g.user["full_name"] }}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% if "SECURITY_ADMIN" in g.permissions %}
-                        <a class="dropdown-item" href="{{ url_for('workspace.threads') }}">My threads</a>
-                        <a class="dropdown-item" href="{{ url_for('workspace.workflow') }}">Workflow</a>
+                    <a class="dropdown-item" href="{{ url_for('workspace.threads') }}">My threads</a>
+                    <a class="dropdown-item" href="{{ url_for('workspace.team') }}">My team</a>
+                    <a class="dropdown-item" href="{{ url_for('workspace.workflow') }}">Workflow</a>
+                    {% if "ADMIN_SECURITY" in g.permissions %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url_for('admin.users') }}">Users</a>
                         <a class="dropdown-item" href="{{ url_for('admin.roles') }}">Roles</a>
-                    {% else %}
-                        <a class="dropdown-item" href="{{ url_for('workspace.threads') }}">My threads</a>
-                        <a class="dropdown-item" href="{{ url_for('workspace.team') }}">My team</a>
-                        <a class="dropdown-item" href="{{ url_for('workspace.workflow') }}">Workflow</a>
+                    {% endif %}
+                    {% if "ADMIN_CONTENT" in g.permissions %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item">Export to...</a>
+                        <a class="dropdown-item">Import from...</a>
                     {% endif %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sign out</a>

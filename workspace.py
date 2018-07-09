@@ -25,7 +25,7 @@ def workflow():
 @bp.route("/team", methods=["GET"])
 @login_required
 def team():
-    users = get_users()
+    users = [x for x in get_users() if x["is_enabled"] == 1]
     return render_template("workspace/team.html", users=users)
 
 

@@ -88,7 +88,8 @@ INSERT INTO permission(id, permission_name) VALUES
 (17, "ACTION_APPROVE"),
 (18, "ACTION_REJECT"),
 (19, "ACTION_REVOKE"),
-(20, "SECURITY_ADMIN");
+(20, "ADMIN_SECURITY"),
+(21, "ADMIN_CONTENT");
 
 INSERT INTO role(id, role_name) VALUES
 (0, "administrator"),
@@ -98,6 +99,7 @@ INSERT INTO role(id, role_name) VALUES
 
 INSERT INTO role_permission(role_id, permission_id) VALUES
 (0, 20),
+(0, 21),
 (1, 0),
 (1, 3),
 (1, 5),

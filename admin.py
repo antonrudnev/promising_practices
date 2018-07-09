@@ -1,5 +1,5 @@
 from auth import login_required, permission_required
-from db import get_db, get_roles, get_users, update_users_roles, update_roles_permissions
+from db import get_roles, get_users, update_users_roles, update_roles_permissions
 from flask import Blueprint, flash, render_template, request
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -7,7 +7,7 @@ bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 @bp.route("/users", methods=["GET", "POST"])
 @login_required
-@permission_required("SECURITY_ADMIN")
+@permission_required("ADMIN_SECURITY")
 def users():
     if request.method == "POST":
         assigned = request.form.getlist("assigned")
@@ -20,7 +20,7 @@ def users():
 
 @bp.route("/roles", methods=["GET", "POST"])
 @login_required
-@permission_required("SECURITY_ADMIN")
+@permission_required("ADMIN_SECURITY")
 def roles():
     if request.method == "POST":
         assigned = request.form.getlist("assigned")

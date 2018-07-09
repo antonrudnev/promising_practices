@@ -177,7 +177,7 @@ def update_roles_permissions(assigned):
     db.execute("INSERT INTO role_permission (role_id, permission_id) "
                "SELECT role.id, permission.id FROM role "
                "JOIN permission ON role_name = 'administrator' "
-               "AND permission_name LIKE '%_ADMIN'")
+               "AND permission_name LIKE 'ADMIN_%'")
     for a in assigned:
         role_permission = a.split(",")
         db.execute("INSERT INTO role_permission (role_id, permission_id) VALUES (?, ?)",
