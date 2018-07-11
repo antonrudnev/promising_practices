@@ -33,7 +33,7 @@
                                 <div><input type="checkbox" name="assigned" {{ "checked" if assigned == "1" }} {{ "disabled" if user.user_name == "admin" and role_name == "administrator" }} value="{{ ",".join([user.user_id, role_id]) }}"/></div>
                             {% endfor %}
                         </td>
-                        <td>{{ user.last_login }}</td>
+                        <td id="t{{ loop.index0 }}">{{ user.last_login }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -45,6 +45,10 @@
             </div>
         </div>
     </form>
+
+    <script>
+        convertTimeDateToLocal({{ users|length }});
+    </script>
 {% endblock %}
 
 

@@ -125,7 +125,7 @@
                         <div class="font-weight-bold small {{ "text-info" if comment["user_id"] == g.user["id"] }}">{{ comment.full_name }}</div>
                         <div class="font-weight-bold small ml-2">(@{{ comment.user_name }})</div>
                     </div>
-                    <div><small>{{ comment.created_on }}</small></div>
+                    <div><small id="t{{ loop.index0 }}">{{ comment.created_on }}</small></div>
                 </div>
                 <div class="bg-light">{{ comment.comment|safe }}</div>
             </div>
@@ -149,4 +149,8 @@
             <a class="btn btn-outline-danger d-inline float-right" style="width: 90px;" href="{{ url_for('practice.delete', id=practice.id, title=practice.title, page=page, query=query) }}">Delete</a>
         {% endif %}
     </div>
+
+    <script>
+        convertTimeDateToLocal({{ comments|length }});
+    </script>
 {% endblock %}
