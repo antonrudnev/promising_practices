@@ -12,14 +12,14 @@
         {% endif %}
         {% for mention in mentions %}
             <div class="row m-2 {{ "font-weight-bold" if not mention.was_read else "text-muted"}}">
-                <div class="col-0">{{ '<i class="far fa-envelope"></i>'|safe if not mention.was_read else '<i class="far fa-envelope-open"></i>'|safe }}</div>
-                <div class="col">{{ mention.comment|safe }}<br/><small>Document #{{ mention.document_id }}</small></div>
-                <div class="col-3 text-nowrap">{{ mention.full_name }}<br/>
-                    <small>on</small>
-                    <small id="t{{ loop.index0 }}">on {{ mention.created_on }}</small>
+                <div class="col-0"><a {{ "class=text-muted" if mention.was_read else "style=color:black" }} href="{{ url_for("practice.details", id=mention.document_id) }}">{{ '<i class="far fa-envelope"></i>'|safe if not mention.was_read else '<i class="far fa-envelope-open"></i>'|safe }}</a></div>
+                <div class="col">
+                    <div><a {{ "class=text-muted" if mention.was_read else "style=color:black" }} href="{{ url_for("practice.details", id=mention.document_id) }}">{{ mention.comment|safe }}</a></div>
+                    <div><a {{ "class=text-muted" if mention.was_read else "style=color:black" }} href="{{ url_for("practice.details", id=mention.document_id) }}"><small>Document #{{ mention.document_id }}</small></a></div>
                 </div>
-                <div class="col-1 text-nowrap">
-                    <a class="{{ "text-muted" if mention.was_read }}" href="{{ url_for("practice.details", id=mention.document_id) }}">Details</a>
+                <div class="col-3 text-nowrap">
+                    <div><a {{ "class=text-muted" if mention.was_read else "style=color:black" }} href="{{ url_for("practice.details", id=mention.document_id) }}">{{ mention.full_name }}</a></div>
+                    <div><a {{ "class=text-muted" if mention.was_read else "style=color:black" }} href="{{ url_for("practice.details", id=mention.document_id) }}"><small id="t{{ loop.index0 }}">{{ mention.created_on }}</small></a></div>
                 </div>
                 <div class="col-1 text-nowrap">
                     <a class="text-muted" href="{{ url_for("workspace.dismiss", id=mention.document_id) }}">Dismiss</a>
