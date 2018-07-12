@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema name="default-config" version="1.6">
+
+    <uniqueKey>id</uniqueKey>
+
+    <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
+    <field name="title" type="text_en" multiValued="false" indexed="true" stored="true"/>
+    <field name="intervention_name" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="summary" type="text_en" multiValued="false" indexed="true" stored="true"/>
+    <field name="link" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="citation" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="program_success" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="city" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="geography" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="region" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="source_type" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="race" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="intervention_goal" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="implementers" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="scale" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="country" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="program_components" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="population" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="status" type="string" default="DRAFT" multiValued="false" indexed="true" stored="true"/>
+
+    <field name="_id_int" type="pint" multiValued="false" indexed="true" stored="false"/>
+    <field name="_root_" type="string" docValues="false" indexed="true" stored="false"/>
+    <field name="_text_" type="text_en" multiValued="true" indexed="true" stored="false"/>
+    <field name="_version_" type="plong" indexed="false" stored="false"/>
+
+    <copyField source="id" dest="_id_int"/>
+    <copyField source="title" dest="_text_"/>
+    <copyField source="summary" dest="_text_"/>
+    <copyField source="city" dest="_text_"/>
+
+    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true"/>
+    <fieldType name="strings" class="solr.StrField" sortMissingLast="true" docValues="true" multiValued="true"/>
+    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.StopFilterFactory" words="lang/stopwords_en.txt" ignoreCase="true"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+            <filter class="solr.PorterStemFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.SynonymGraphFilterFactory" expand="true" ignoreCase="true" synonyms="synonyms.txt"/>
+            <filter class="solr.StopFilterFactory" words="lang/stopwords_en.txt" ignoreCase="true"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+            <filter class="solr.PorterStemFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+</schema>
