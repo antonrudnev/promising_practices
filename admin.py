@@ -3,6 +3,7 @@ import datetime
 from db import get_roles, get_users, update_users_roles, update_roles_permissions
 from flask import Blueprint, flash, redirect, render_template, request, Response, url_for
 import json
+from os import path, mkdir
 import pandas as pd
 from settings import ALL_FIELDS, MULTIVALUED_FIELDS, SOLR
 from pysolr import Solr
@@ -41,7 +42,7 @@ def roles():
 @login_required
 @permission_required("ADMIN_CONTENT")
 def download():
-    file_name = "opioid_collection {}.csv".format(datetime.datetime.now().replace(microsecond=0))
+    file_name = "opioid_interventions {}.csv".format(datetime.datetime.now().replace(microsecond=0))
     hits = solr.search("*:*", **{"rows": "0"}).hits
     documents = solr.search("*:*", **{"rows": hits}).docs
     for document in documents:
@@ -52,6 +53,7 @@ def download():
     docs_json = json.dumps(documents)
     df = pd.read_json(docs_json, orient='records').sort_values(by=["id_int"])
     df.drop(columns=[c for c in df.columns.values if c not in ALL_FIELDS], inplace=True)
+
     return Response(
         df.reindex(columns=ALL_FIELDS).to_csv(index=False),
         mimetype="text/csv",
@@ -63,7 +65,9 @@ def download():
 @permission_required("ADMIN_CONTENT")
 def upload():
     file = request.files["file"]
-    file_name = secure_filename(file.filename)
+    if not path.exists("files"):
+        mkdir("files")
+    file_name = path.join("files", secure_filename(file.filename))
     file.save(file_name)
     df = pd.read_csv(file_name)
     documents = json.loads(df.to_json(orient="records"))
