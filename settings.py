@@ -3,6 +3,10 @@ DIRECTORY_DATABASE = "directory.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
+# MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population"]
+ALL_FIELDS = ["id", "title", "abstract", "citation", "county", "evaluation", "fips",  "implementers", "intervention_goal", "location", "name_of_intervention", "population", "program_components", "state", "summary", "target_population", "status"]
+MULTIVALUED_FIELDS = ["state","implementers", "intervention_goal", "population", "program_components"]
+
 STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY",
           "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH",
           "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
