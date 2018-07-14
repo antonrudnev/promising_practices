@@ -35,42 +35,62 @@
                 <td>{{ practice.title }}</td>
             </tr>
             <tr>
-                <th scope="row">Name of Intervention</th>
-                <td>{{ practice.name_of_intervention }}</td>
+                <th scope="row">Intervention name</th>
+                <td>{{ practice.intervention_name }}</td>
             </tr>
             <tr>
                 <th scope="row">Summary</th>
                 <td>{{ practice.summary }}</td>
             </tr>
             <tr>
-                <th scope="row">Target Population</th>
-                <td>{{ practice.target_population }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Location</th>
-                <td>{{ practice.location }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Evaluation</th>
-                <td>{{ practice.evaluation }}</td>
-            </tr>
-            <tr>
-                <th scope="row">State</th>
-                <td>
-                {% for state in practice.state %}
-                    <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
-                {% endfor %}
-                </td>
+                <th scope="row">Link</th>
+                <td><a href="{{ practice.link }}">{{ practice.link }}</a></td>
             </tr>
             <tr>
                 <th scope="row">Citation</th>
                 <td>{{ practice.citation }}</td>
             </tr>
             <tr>
-                <th scope="row">Intervention Goal</th>
+                <th scope="row">Program success</th>
+                <td>{{ practice.program_success }}</td>
+            </tr>
+            <tr>
+                <th scope="row">City</th>
+                <td>{{ practice.city }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Geography</th>
                 <td>
-                {% for goal in practice.intervention_goal %}
-                    <span class="badge {% if goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ goal }}</span>
+                {% for state in practice.geography %}
+                    <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Region</th>
+                <td>
+                {% for region in practice.region %}
+                    <span class="badge {% if region in regions %}badge-info{% else %}badge-danger{% endif %}">{{ region }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Source type</th>
+                <td>{{ practice.source_type }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Race</th>
+                <td>
+                {% for race in practice.race %}
+                    <span class="badge {% if race in races %}badge-info{% else %}badge-danger{% endif %}">{{ race }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Intervention goal</th>
+                <td>
+                {% for intervention_goal in practice.intervention_goal %}
+                    <span class="badge {% if intervention_goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ intervention_goal }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -83,18 +103,25 @@
                 </td>
             </tr>
             <tr>
-                <th scope="row">County</th>
-                <td>{{ practice.county }}</td>
-            </tr>
-            <tr>
-                <th scope="row">FIPS</th>
-                <td>{{ practice.fips }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Program Components</th>
+                <th scope="row">Scale</th>
                 <td>
-                {% for component in practice.program_components %}
-                    <span class="badge {% if component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ component }}</span>
+                {% for scale in practice.scale %}
+                    <span class="badge {% if scale in scales %}badge-info{% else %}badge-danger{% endif %}">{{ scale }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Country</th>
+                <td>
+                {% for country in practice.country %}
+                    <span class="badge {% if country in countries %}badge-info{% else %}badge-danger{% endif %}">{{ country }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <th scope="row">Program components</th>
+                <td>
+                {% for program_component in practice.program_components %}
+                    <span class="badge {% if program_component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ program_component }}</span>
                 {% endfor %}
                 </td>
             </tr>

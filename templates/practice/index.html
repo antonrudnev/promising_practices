@@ -6,10 +6,9 @@
     <table class="table my-2">
     <thead class="thead-light">
         <tr>
-            <th class="align-middle" scope="col">ID</th>
-            <th class="align-middle" scope="col" style="width: 60%">Title</th>
-            <th class="align-middle" scope="col" style="width: 40%">Intervention</th>
-            <th class="align-middle text-center" scope="col">
+            <th class="align-middle" scope="col" style="width: 70px;">ID</th>
+            <th class="align-middle" scope="col">Title</th>
+            <th class="align-middle text-center" scope="col" style="width: 100px;">
                 {% if "ACTION_CREATE" in g.permissions %}
                     <a class="btn btn-success" href="{{ url_for('practice.create', page=page, query=query) }}" style="width: 100px;">Create</a>
                 {% else %}
@@ -23,8 +22,7 @@
             <tr>
                 <th scope="row">{{ practice.id }}</th>
                 <td>{{ practice.title }}</td>
-                <td>{{ practice.name_of_intervention }}</td>
-                <td>
+                <td class="align-middle text-center">
                     <a class="btn {{ styles[practice.status] }}" href="{{ url_for("practice.details", id=practice.id, page=page, query=query) }}" style="width: 100px;">{{ practice.status|capitalize }}</a>
                 </td>
             </tr>

@@ -30,9 +30,16 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Name of Intervention</th>
+                    <th scope="row">Intervention name</th>
                     <td>
-                        <textarea class="form-control" name="name_of_intervention">{{ practice.name_of_intervention }}</textarea>
+                        <select class="custom-select" name="intervention_name">
+                            {% for intervention_name in intervention_names %}
+                                <option {% if intervention_name == practice.intervention_name %}selected{% else %}{% endif %} value="{{ intervention_name }}">{{ intervention_name }}</option>
+                            {% endfor %}
+                            {% if practice.intervention_name not in intervention_names %}
+                                <option class="text-danger" selected value="{{ practice.intervention_name }}">{{ practice.intervention_name }}</option>
+                            {% endif %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
@@ -42,34 +49,9 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Target Population</th>
+                    <th scope="row">Link</th>
                     <td>
-                        <textarea class="form-control" name="target_population">{{ practice.target_population }}</textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Location</th>
-                    <td>
-                        <textarea class="form-control" rows="1" name="location">{{ practice.location }}</textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Evaluation</th>
-                    <td>
-                        <textarea class="form-control" rows="5" name="evaluation">{{ practice.evaluation }}</textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">State</th>
-                    <td>
-                        <select class="custom-select" multiple name="state">
-                            {% for state in states %}
-                                <option {% if state in practice.state %}selected{% else %}{% endif %} value="{{ state }}">{{ state }}</option>
-                            {% endfor %}
-                            {% for state in (practice.state | reject('in', states)) %}
-                                <option class="text-danger" selected value="{{ state }}">{{ state }}</option>
-                            {% endfor %}
-                        </select>
+                        <input class="form-control" type="url" name="link" value="{{ practice.link }}">
                     </td>
                 </tr>
                 <tr >
@@ -79,69 +61,140 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Intervention Goal</th>
+                    <th scope="row">Program success</th>
                     <td>
-                        <select class="custom-select" multiple name="intervention_goal">
-                            {% for goal in intervention_goals %}
-                                <option {% if goal in practice.intervention_goal %}selected{% else %}{% endif %} value="{{ goal }}">{{ goal }}</option>
+                        <select class="custom-select" name="program_success">
+                            {% for program_success in program_successes %}
+                                <option {% if program_success == practice.program_success %}selected{% else %}{% endif %} value="{{ program_success }}">{{ program_success }}</option>
                             {% endfor %}
-                            {% for goal in (practice.intervention_goal | reject('in', intervention_goals)) %}
-                                <option class="text-danger" selected value="{{ goal }}">{{ goal }}</option>
+                            {% if practice.program_success not in program_successes %}
+                                <option class="text-danger" selected value="{{ practice.program_success }}">{{ practice.program_success }}</option>
+                            {% endif %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">City</th>
+                    <td>
+                        <input class="form-control" name="city" value="{{ practice.city }}">
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Geography</th>
+                    <td>
+                        <select class="custom-select" multiple name="geography">
+                            {% for state in states %}
+                                <option {% if state in practice.geography %}selected{% else %}{% endif %} value="{{ state }}">{{ state }}</option>
+                            {% endfor %}
+                            {% for state in (practice.geography | reject('in', states)) %}
+                                <option class="text-danger" selected value="{{ state }}">{{ state }}</option>
                             {% endfor %}
                         </select>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Implementers</th>
+                    <th scope="row">Region</th>
                     <td>
-                        <select class="custom-select" multiple name="implementers">
-                            {% for implementer in implementers %}
-                                <option {% if implementer in practice.implementers %}selected{% else %}{% endif %} value="{{ implementer }}">{{ implementer }}</option>
+                        <select class="custom-select" multiple name="region">
+                            {% for region in regions %}
+                                <option {% if region in practice.region %}selected{% else %}{% endif %} value="{{ region }}">{{ region }}</option>
                             {% endfor %}
-                            {% for implementer in (practice.implementers | reject('in', implementers)) %}
-                                <option class="text-danger" selected value="{{ implementer }}">{{ implementer }}</option>
+                            {% for region in (practice.region | reject('in', regions)) %}
+                                <option class="text-danger" selected value="{{ region }}">{{ region }}</option>
                             {% endfor %}
                         </select>
                     </td>
                 </tr>
-                <tr >
-                    <th scope="row">County</th>
-                    <td>
-                        <textarea class="form-control" rows="1" name="county">{{ practice.county }}</textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">FIPS</th>
-                    <td>
-                        <textarea class="form-control" rows="1" name="fips">{{ practice.fips }}</textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Program Components</th>
-                    <td>
-                        <select class="custom-select" multiple name="program_components">
-                            {% for component in program_components %}
-                                <option {% if component in practice.program_components %}selected{% else %}{% endif %} value="{{ component }}">{{ component }}</option>
-                            {% endfor %}
-                            {% for component in (practice.program_components | reject('in', program_components)) %}
-                                <option class="text-danger" selected value="{{ component }}">{{ component }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Population</th>
-                    <td>
-                        <select class="custom-select" multiple name="population">
-                            {% for population in populations %}
-                                <option {% if population in practice.population %}selected{% else %}{% endif %} value="{{ population }}">{{ population }}</option>
-                            {% endfor %}
-                            {% for population in (practice.population | reject('in', populations)) %}
-                                <option class="text-danger" selected value="{{ population }}">{{ population }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
+
+{#                <tr >#}
+{#                    <th scope="row">Target Population</th>#}
+{#                    <td>#}
+{#                        <textarea class="form-control" name="target_population">{{ practice.target_population }}</textarea>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">Location</th>#}
+{#                    <td>#}
+{#                        <textarea class="form-control" rows="1" name="location">{{ practice.location }}</textarea>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">Evaluation</th>#}
+{#                    <td>#}
+{#                        <textarea class="form-control" rows="5" name="evaluation">{{ practice.evaluation }}</textarea>#}
+{#                    </td>#}
+{#                </tr>#}
+
+{#                <tr >#}
+{#                    <th scope="row">Citation</th>#}
+{#                    <td>#}
+{#                        <textarea class="form-control" name="citation">{{ practice.citation }}</textarea>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">Intervention Goal</th>#}
+{#                    <td>#}
+{#                        <select class="custom-select" multiple name="intervention_goal">#}
+{#                            {% for goal in intervention_goals %}#}
+{#                                <option {% if goal in practice.intervention_goal %}selected{% else %}{% endif %} value="{{ goal }}">{{ goal }}</option>#}
+{#                            {% endfor %}#}
+{#                            {% for goal in (practice.intervention_goal | reject('in', intervention_goals)) %}#}
+{#                                <option class="text-danger" selected value="{{ goal }}">{{ goal }}</option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">Implementers</th>#}
+{#                    <td>#}
+{#                        <select class="custom-select" multiple name="implementers">#}
+{#                            {% for implementer in implementers %}#}
+{#                                <option {% if implementer in practice.implementers %}selected{% else %}{% endif %} value="{{ implementer }}">{{ implementer }}</option>#}
+{#                            {% endfor %}#}
+{#                            {% for implementer in (practice.implementers | reject('in', implementers)) %}#}
+{#                                <option class="text-danger" selected value="{{ implementer }}">{{ implementer }}</option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">County</th>#}
+{#                    <td>#}
+{#                        <textarea class="form-control" rows="1" name="county">{{ practice.county }}</textarea>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">FIPS</th>#}
+{#                    <td>#}
+{#                        <textarea class="form-control" rows="1" name="fips">{{ practice.fips }}</textarea>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">Program Components</th>#}
+{#                    <td>#}
+{#                        <select class="custom-select" multiple name="program_components">#}
+{#                            {% for component in program_components %}#}
+{#                                <option {% if component in practice.program_components %}selected{% else %}{% endif %} value="{{ component }}">{{ component }}</option>#}
+{#                            {% endfor %}#}
+{#                            {% for component in (practice.program_components | reject('in', program_components)) %}#}
+{#                                <option class="text-danger" selected value="{{ component }}">{{ component }}</option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </td>#}
+{#                </tr>#}
+{#                <tr >#}
+{#                    <th scope="row">Population</th>#}
+{#                    <td>#}
+{#                        <select class="custom-select" multiple name="population">#}
+{#                            {% for population in populations %}#}
+{#                                <option {% if population in practice.population %}selected{% else %}{% endif %} value="{{ population }}">{{ population }}</option>#}
+{#                            {% endfor %}#}
+{#                            {% for population in (practice.population | reject('in', populations)) %}#}
+{#                                <option class="text-danger" selected value="{{ population }}">{{ population }}</option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </td>#}
+{#                </tr>#}
             </tbody>
         </table>
         <div class="btn-toolbar my-4" role="toolbar">

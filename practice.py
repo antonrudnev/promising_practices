@@ -5,7 +5,8 @@ import functools
 from math import ceil
 from pysolr import Solr, SolrError
 from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_BADGE_STYLE, STATUS_STYLE_INDEX
-from settings import IMPLEMENTERS, INTERVENTION_GOALS, POPULATIONS, PROGRAM_COMPONENTS, STATES
+from settings import (COUNTRIES, IMPLEMENTERS, INTERVENTION_GOALS, INTERVENTION_NAMES, POPULATIONS, PROGRAM_COMPONENTS,
+                      PROGRAM_SUCCESSES, RACES, REGIONS, SCALES, SOURCE_TYPES, STATES)
 from workspace import push_mentions
 
 bp = Blueprint('practice', __name__, url_prefix="/practice")
@@ -40,16 +41,16 @@ def index():
     fq = "status:({})".format(" OR ".join(view_permissions)) if view_permissions else "status:none"
     try:
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
-                                         "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
+                                         "sort": "_id_int asc", "wt": "json", "fq": fq})
     except SolrError as e:
         flash({"status": "alert-danger", "text": "Invalid query string. Check the Solr query syntax reference guide."})
         return redirect(url_for("practice.index", page=0, query="*:*"))
 
-    max_page = max(int(ceil(response["response"]["numFound"] / ITEMS_PER_PAGE) - 1), 0)
+    max_page = max(int(ceil(response.hits / ITEMS_PER_PAGE) - 1), 0)
     if request.args.get("go_to_last_page", False):
         page = max_page
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
-                                         "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
+                                         "sort": "_id_int asc", "wt": "json", "fq": fq})
     pager = [p for p in range(page - PAGER_RANGE, page + PAGER_RANGE + 1) if 0 <= p <= max_page]
     if pager[0] > 1:
         pager.insert(0, "...")
@@ -59,8 +60,8 @@ def index():
         pager.append("...")
     if pager[-1] != max_page:
         pager.append(max_page)
-    return render_template("practice/index.html", practices=response["response"]["docs"],
-                           page=page, pager=pager, query=query, styles=STATUS_STYLE_INDEX)
+    return render_template("practice/index.html", practices=response.docs, page=page, pager=pager, query=query,
+                           styles=STATUS_STYLE_INDEX)
 
 
 @bp.route("/create", methods=["GET", "POST"])
@@ -72,9 +73,9 @@ def create():
     query = query if query else "*:*"
 
     if request.method == "POST":
-        docs = solr.search("*:*", **{"sort": "id_int desc", "rows": 1,
-                                     "fl": "id_int", "wt": "json"}).raw_response["response"]["docs"]
-        max_id = docs[0]["id_int"] if len(docs) > 0 else 1
+        docs = solr.search("*:*", **{"sort": "_id_int desc", "rows": 1,
+                                     "fl": "_id_int", "wt": "json"}).docs
+        max_id = docs[0]["_id_int"] if len(docs) > 0 else 0
         doc = request.form.to_dict(flat=False)
         doc["id"] = max_id + 1
         solr.add([doc], commit=False, softCommit=True)
@@ -83,8 +84,10 @@ def create():
         return redirect(url_for("practice.index", go_to_last_page=True))
 
     return render_template("practice/create.html", page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS)
+                           countries=COUNTRIES, implementers=IMPLEMENTERS, intervention_goals=INTERVENTION_GOALS,
+                           intervention_names=INTERVENTION_NAMES, populations=POPULATIONS,
+                           program_components=PROGRAM_COMPONENTS, program_successes=PROGRAM_SUCCESSES, races=RACES,
+                           regions=REGIONS, scales=SCALES, source_types=SOURCE_TYPES, states=STATES)
 
 
 @bp.route("/<int:id>", methods=["GET"])
@@ -98,8 +101,10 @@ def details(id):
     comments = get_comments(id)
     read_mention(g.user["id"], id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
+                           countries=COUNTRIES, implementers=IMPLEMENTERS, intervention_goals=INTERVENTION_GOALS,
+                           intervention_names=INTERVENTION_NAMES, populations=POPULATIONS,
+                           program_components=PROGRAM_COMPONENTS, program_successes=PROGRAM_SUCCESSES, races=RACES,
+                           regions=REGIONS, scales=SCALES, source_types=SOURCE_TYPES, states=STATES,
                            actions=get_next_state(g.document["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
 
 
@@ -156,8 +161,11 @@ def edit(id):
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
     return render_template("practice/edit.html", practice=g.document, page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS, styles=STATUS_BADGE_STYLE)
+                           countries=COUNTRIES, implementers=IMPLEMENTERS, intervention_goals=INTERVENTION_GOALS,
+                           intervention_names=INTERVENTION_NAMES, populations=POPULATIONS,
+                           program_components=PROGRAM_COMPONENTS, program_successes=PROGRAM_SUCCESSES, races=RACES,
+                           regions=REGIONS, scales=SCALES, source_types=SOURCE_TYPES, states=STATES,
+                           styles=STATUS_BADGE_STYLE)
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])

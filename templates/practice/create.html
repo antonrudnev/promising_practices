@@ -23,13 +23,17 @@
                 <tr >
                     <th scope="row">Title</th>
                     <td>
-                        <textarea class="form-control" name="title"></textarea>
+                        <textarea class="form-control" name="title" required></textarea>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Name of Intervention</th>
+                    <th scope="row">Intervention name</th>
                     <td>
-                        <textarea class="form-control" name="name_of_intervention"></textarea>
+                        <select class="custom-select" name="intervention_name">
+                            {% for intervention_name in intervention_names %}
+                                <option value="{{ intervention_name }}">{{ intervention_name }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
@@ -39,31 +43,9 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Target Population</th>
+                    <th scope="row">Link</th>
                     <td>
-                        <textarea class="form-control" name="target_population"></textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Location</th>
-                    <td>
-                        <textarea class="form-control" rows="1" name="location"></textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Evaluation</th>
-                    <td>
-                        <textarea class="form-control" rows="5" name="evaluation"></textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">State</th>
-                    <td>
-                        <select class="custom-select" multiple name="state">
-                            {% for state in states %}
-                                <option value="{{ state }}">{{ state }}</option>
-                            {% endfor %}
-                        </select>
+                        <input class="form-control" type="url" name="link"></input>
                     </td>
                 </tr>
                 <tr >
@@ -73,7 +55,63 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Intervention Goal</th>
+                    <th scope="row">Program success</th>
+                    <td>
+                        <select class="custom-select" name="program_success">
+                            {% for program_success in program_successes %}
+                                <option value="{{ program_success }}">{{ program_success }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">City</th>
+                    <td>
+                        <input class="form-control" name="city"></input>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Geography</th>
+                    <td>
+                        <select class="custom-select" multiple name="geography">
+                            {% for state in states %}
+                                <option value="{{ state }}">{{ state }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Region</th>
+                    <td>
+                        <select class="custom-select" multiple name="region">
+                            {% for region in regions %}
+                                <option value="{{ region }}">{{ region }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Source type</th>
+                    <td>
+                        <select class="custom-select" name="source_type">
+                            {% for source_type in source_types %}
+                                <option value="{{ source_type }}">{{ source_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Race</th>
+                    <td>
+                        <select class="custom-select" multiple name="race">
+                            {% for race in races %}
+                                <option value="{{ race }}">{{ race }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                 <tr >
+                    <th scope="row">Intervention goal</th>
                     <td>
                         <select class="custom-select" multiple name="intervention_goal">
                             {% for goal in intervention_goals %}
@@ -93,19 +131,27 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">County</th>
+                    <th scope="row">Scale</th>
                     <td>
-                        <textarea class="form-control" rows="1" name="county"></textarea>
+                        <select class="custom-select" multiple name="scale">
+                            {% for scale in scales %}
+                                <option value="{{ scale }}">{{ scale }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">FIPS</th>
+                    <th scope="row">Country</th>
                     <td>
-                        <textarea class="form-control" rows="1" name="fips"></textarea>
+                        <select class="custom-select" multiple name="country">
+                            {% for country in countries %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Program Components</th>
+                    <th scope="row">Program components</th>
                     <td>
                         <select class="custom-select" multiple name="program_components">
                             {% for component in program_components %}
