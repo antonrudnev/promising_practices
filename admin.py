@@ -7,6 +7,7 @@ from os import path, mkdir
 import pandas as pd
 from settings import ALL_FIELDS, MULTIVALUED_FIELDS, SOLR
 from pysolr import Solr
+import re
 from werkzeug.utils import secure_filename
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -42,7 +43,8 @@ def roles():
 @login_required
 @permission_required("ADMIN_CONTENT")
 def download():
-    file_name = "opioid_interventions {}.csv".format(datetime.datetime.now().replace(microsecond=0))
+    timestamp = re.sub(r"\D", "", str(datetime.datetime.now().replace(microsecond=0)))
+    file_name = "opioid_interventions_{}.csv".format(timestamp)
     hits = solr.search("*:*", **{"rows": "0"}).hits
     documents = solr.search("*:*", **{"rows": hits}).docs
     for document in documents:
@@ -51,7 +53,7 @@ def download():
                 document[key] = ",".join(document[key])
 
     docs_json = json.dumps(documents)
-    df = pd.read_json(docs_json, orient='records').sort_values(by=["id_int"])
+    df = pd.read_json(docs_json, orient="records", dtype="category").sort_values(by=["id_int"])
     df.drop(columns=[c for c in df.columns.values if c not in ALL_FIELDS], inplace=True)
 
     return Response(
@@ -69,7 +71,7 @@ def upload():
         mkdir("files")
     file_name = path.join("files", secure_filename(file.filename))
     file.save(file_name)
-    df = pd.read_csv(file_name)
+    df = pd.read_csv(file_name, dtype="category")
     documents = json.loads(df.to_json(orient="records"))
     for document in documents:
         for key in document.keys():
@@ -78,5 +80,6 @@ def upload():
                 if value:
                     document[key] = value.split(",")
     solr.add(documents)
+    flash({"status": "alert-success", "text": "File has been successfully uploaded."})
 
     return redirect(url_for("practice.index"))
