@@ -4,6 +4,7 @@ ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
 ALL_FIELDS = ["id", "title", "abstract", "citation", "county", "evaluation", "fips",  "implementers", "intervention_goal", "location", "name_of_intervention", "population", "program_components", "state", "summary", "target_population", "status"]
+# ALL_FIELDS = ["id", "title", "intervention_name", "summary", "link", "citation", "program_success", "city", "geography", "region", "source_type", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population", "status"]
 MULTIVALUED_FIELDS = ["state","implementers", "intervention_goal", "population", "program_components"]
 # MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population"]
 
