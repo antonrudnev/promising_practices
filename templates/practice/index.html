@@ -23,7 +23,7 @@
                 <th scope="row">{{ practice.id }}</th>
                 <td>{{ practice.title }}</td>
                 <td class="align-middle text-center">
-                    <a class="btn {{ styles[practice.status] }}" href="{{ url_for("practice.details", id=practice.id, page=page, query=query) }}" style="width: 100px;">{{ practice.status|capitalize }}</a>
+                    <a class="btn {{ config.STATUS_INDEX_STYLE[practice.status] }}" href="{{ url_for("practice.details", id=practice.id, page=page, query=query) }}" style="width: 100px;">{{ practice.status|capitalize }}</a>
                 </td>
             </tr>
         {% endfor %}

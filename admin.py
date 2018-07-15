@@ -5,13 +5,13 @@ from flask import Blueprint, flash, redirect, render_template, request, Response
 import json
 from os import path, mkdir
 import pandas as pd
-from settings import ALL_FIELDS, MULTIVALUED_FIELDS, SOLR
+from settings import ALL_FIELDS, MULTIVALUED_FIELDS, SOLR_COLLECTION
 from pysolr import Solr
 import re
 from werkzeug.utils import secure_filename
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
-solr = Solr(SOLR)
+solr = Solr(SOLR_COLLECTION)
 
 
 @bp.route("/users", methods=["GET", "POST"])
@@ -53,7 +53,7 @@ def download():
                 document[key] = ",".join(document[key])
 
     docs_json = json.dumps(documents)
-    df = pd.read_json(docs_json, orient="records", dtype="category").sort_values(by=["id_int"])
+    df = pd.read_json(docs_json, orient="records", dtype="category").sort_values(by=["_id_int"])
     df.drop(columns=[c for c in df.columns.values if c not in ALL_FIELDS], inplace=True)
 
     return Response(

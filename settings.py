@@ -1,12 +1,14 @@
-SOLR = "http://54.173.176.161:8983/solr/promising_practices3"
+SOLR_COLLECTION = "http://54.173.176.161:8983/solr/promising_practices3"
+DASHBOARD_URL = "http://54.173.176.161:8983/solr/banana/promising_practices_tst/index.html"
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
-# ALL_FIELDS = ["id", "title", "abstract", "citation", "county", "evaluation", "fips",  "implementers", "intervention_goal", "location", "name_of_intervention", "population", "program_components", "state", "summary", "target_population", "status"]
-ALL_FIELDS = ["id", "title", "intervention_name", "summary", "link", "citation", "program_success", "city", "geography", "region", "source_type", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population", "status"]
-# MULTIVALUED_FIELDS = ["state","implementers", "intervention_goal", "population", "program_components"]
-MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population"]
+ALL_FIELDS = ["id", "title", "intervention_name", "summary", "link", "citation", "program_success", "city", "geography",
+              "region", "source_type", "race", "intervention_goal", "implementers", "scale", "country",
+              "program_components", "population", "status"]
+MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country",
+                      "program_components", "population"]
 
 
 COUNTRIES = ["Domestic", "International"]
@@ -81,7 +83,7 @@ STATUS_BADGE_STYLE = {"DRAFT": "secondary",
                       "APPROVED": "success",
                       "REVOKED": "warning"}
 
-STATUS_STYLE_INDEX = {"DRAFT": "btn-outline-secondary",
+STATUS_INDEX_STYLE = {"DRAFT": "btn-outline-secondary",
                       "SUBMITTED": "btn-primary",
                       "REJECTED": "btn-secondary",
                       "APPROVED": "btn-outline-success",

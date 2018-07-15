@@ -13,6 +13,7 @@ app.register_blueprint(workspace.bp)
 app.register_blueprint(practice.bp)
 app.add_url_rule("/", endpoint="practice", view_func=practice.index)
 app.config.from_mapping(SECRET_KEY="dev")
+app.config.from_pyfile("settings.py")
 app.teardown_appcontext(close_db)
 
 

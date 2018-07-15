@@ -19,11 +19,11 @@
                 <th class="align-middle" scope="row">Status</th>
                 <th class="align-middle" scope="row">
                     <div class="btn-toolbar justify-content-between">
-                        <h5 class="mt-1"><span class="mt-1 badge {{ "badge-" + styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
+                        <h5 class="mt-1"><span class="mt-1 badge {{ "badge-" + config.STATUS_BADGE_STYLE[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
                         <form action="{{ url_for("practice.action", id=practice.id, query=query, page=page) }}" method="post">
                         {% for action in actions %}
                             {% if "ACTION_" + action["action"] in g.permissions %}
-                                <input class="btn {{ styles[action["action"]] }}" style="width: 90px;" name="action" type="submit" value="{{ action["action"]|capitalize }}"/>
+                                <input class="btn {{ config.ACTION_STYLE    [action["action"]] }}" style="width: 90px;" name="action" type="submit" value="{{ action["action"]|capitalize }}"/>
                             {% endif %}
                         {% endfor %}
                         </form>
@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <th scope="row">Intervention name</th>
-                <td>{{ practice.intervention_name }}</td>
+                <td class="d-flex"><span {% if practice.intervention_name not in config.INTERVENTION_NAMES %}class="flex-fill bg-warning" {% endif %}>{{ practice.intervention_name }}</span></td>
             </tr>
             <tr>
                 <th scope="row">Summary</th>
@@ -52,7 +52,7 @@
             </tr>
             <tr>
                 <th scope="row">Program success</th>
-                <td>{{ practice.program_success }}</td>
+                <td class="d-flex"><span {% if practice.program_success not in config.PROGRAM_SUCCESSES %}class="flex-fill bg-warning" {% endif %}>{{ practice.program_success }}</span></td>
             </tr>
             <tr>
                 <th scope="row">City</th>
@@ -62,7 +62,7 @@
                 <th scope="row">Geography</th>
                 <td>
                 {% for state in practice.geography %}
-                    <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
+                    <span class="badge {% if state in config.STATES %}badge-info{% else %}badge-warning{% endif %}">{{ state }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -70,19 +70,19 @@
                 <th scope="row">Region</th>
                 <td>
                 {% for region in practice.region %}
-                    <span class="badge {% if region in regions %}badge-info{% else %}badge-danger{% endif %}">{{ region }}</span>
+                    <span class="badge {% if region in config.REGIONS %}badge-info{% else %}badge-warning{% endif %}">{{ region }}</span>
                 {% endfor %}
                 </td>
             </tr>
             <tr>
                 <th scope="row">Source type</th>
-                <td>{{ practice.source_type }}</td>
+                <td class="d-flex"><span {% if practice.source_type not in config.SOURCE_TYPES %}class="flex-fill bg-warning" {% endif %}>{{ practice.source_type }}</span></td>
             </tr>
             <tr>
                 <th scope="row">Race</th>
                 <td>
                 {% for race in practice.race %}
-                    <span class="badge {% if race in races %}badge-info{% else %}badge-danger{% endif %}">{{ race }}</span>
+                    <span class="badge {% if race in config.RACES %}badge-info{% else %}badge-warning{% endif %}">{{ race }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -90,7 +90,7 @@
                 <th scope="row">Intervention goal</th>
                 <td>
                 {% for intervention_goal in practice.intervention_goal %}
-                    <span class="badge {% if intervention_goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ intervention_goal }}</span>
+                    <span class="badge {% if intervention_goal in config.INTERVENTION_GOALS %}badge-info{% else %}badge-warning{% endif %}">{{ intervention_goal }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -98,7 +98,7 @@
                 <th scope="row">Implementers</th>
                 <td>
                 {% for implementer in practice.implementers %}
-                    <span class="badge {% if implementer in implementers %}badge-info{% else %}badge-danger{% endif %}">{{ implementer }}</span>
+                    <span class="badge {% if implementer in config.IMPLEMENTERS %}badge-info{% else %}badge-warning{% endif %}">{{ implementer }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -106,7 +106,7 @@
                 <th scope="row">Scale</th>
                 <td>
                 {% for scale in practice.scale %}
-                    <span class="badge {% if scale in scales %}badge-info{% else %}badge-danger{% endif %}">{{ scale }}</span>
+                    <span class="badge {% if scale in config.SCALES %}badge-info{% else %}badge-warning{% endif %}">{{ scale }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -114,14 +114,14 @@
                 <th scope="row">Country</th>
                 <td>
                 {% for country in practice.country %}
-                    <span class="badge {% if country in countries %}badge-info{% else %}badge-danger{% endif %}">{{ country }}</span>
+                    <span class="badge {% if country in config.COUNTRIES %}badge-info{% else %}badge-warning{% endif %}">{{ country }}</span>
                 {% endfor %}
                 </td>
             </tr>
             <th scope="row">Program components</th>
                 <td>
                 {% for program_component in practice.program_components %}
-                    <span class="badge {% if program_component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ program_component }}</span>
+                    <span class="badge {% if program_component in config.PROGRAM_COMPONENTS %}badge-info{% else %}badge-warning{% endif %}">{{ program_component }}</span>
                 {% endfor %}
                 </td>
             </tr>
@@ -129,7 +129,7 @@
                 <th scope="row">Population</th>
                 <td>
                 {% for population in practice.population %}
-                    <span class="badge {% if population in populations %}badge-info{% else %}badge-danger{% endif %}">{{ population }}</span>
+                    <span class="badge {% if population in config.POPULATIONS %}badge-info{% else %}badge-warning{% endif %}">{{ population }}</span>
                 {% endfor %}
                 </td>
             </tr>

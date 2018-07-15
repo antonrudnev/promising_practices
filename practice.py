@@ -4,13 +4,11 @@ from flask import Blueprint, flash, g, redirect, render_template, request, url_f
 import functools
 from math import ceil
 from pysolr import Solr, SolrError
-from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_BADGE_STYLE, STATUS_STYLE_INDEX
-from settings import (COUNTRIES, IMPLEMENTERS, INTERVENTION_GOALS, INTERVENTION_NAMES, POPULATIONS, PROGRAM_COMPONENTS,
-                      PROGRAM_SUCCESSES, RACES, REGIONS, SCALES, SOURCE_TYPES, STATES)
+from settings import SOLR_COLLECTION, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, STATUS_BADGE_STYLE
 from workspace import push_mentions
 
 bp = Blueprint('practice', __name__, url_prefix="/practice")
-solr = Solr(SOLR)
+solr = Solr(SOLR_COLLECTION)
 
 
 def get_next_state(current, action=None):
@@ -42,7 +40,7 @@ def index():
     try:
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
                                          "sort": "_id_int asc", "wt": "json", "fq": fq})
-    except SolrError as e:
+    except SolrError:
         flash({"status": "alert-danger", "text": "Invalid query string. Check the Solr query syntax reference guide."})
         return redirect(url_for("practice.index", page=0, query="*:*"))
 
@@ -60,8 +58,7 @@ def index():
         pager.append("...")
     if pager[-1] != max_page:
         pager.append(max_page)
-    return render_template("practice/index.html", practices=response.docs, page=page, pager=pager, query=query,
-                           styles=STATUS_STYLE_INDEX)
+    return render_template("practice/index.html", practices=response.docs, page=page, pager=pager, query=query)
 
 
 @bp.route("/create", methods=["GET", "POST"])
@@ -83,11 +80,7 @@ def create():
         insert_comment(doc["id"], g.user["id"], "Document has been <mark>created</mark>.")
         return redirect(url_for("practice.index", go_to_last_page=True))
 
-    return render_template("practice/create.html", page=page, query=query,
-                           countries=COUNTRIES, implementers=IMPLEMENTERS, intervention_goals=INTERVENTION_GOALS,
-                           intervention_names=INTERVENTION_NAMES, populations=POPULATIONS,
-                           program_components=PROGRAM_COMPONENTS, program_successes=PROGRAM_SUCCESSES, races=RACES,
-                           regions=REGIONS, scales=SCALES, source_types=SOURCE_TYPES, states=STATES)
+    return render_template("practice/create.html", page=page, query=query)
 
 
 @bp.route("/<int:id>", methods=["GET"])
@@ -101,11 +94,7 @@ def details(id):
     comments = get_comments(id)
     read_mention(g.user["id"], id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
-                           countries=COUNTRIES, implementers=IMPLEMENTERS, intervention_goals=INTERVENTION_GOALS,
-                           intervention_names=INTERVENTION_NAMES, populations=POPULATIONS,
-                           program_components=PROGRAM_COMPONENTS, program_successes=PROGRAM_SUCCESSES, races=RACES,
-                           regions=REGIONS, scales=SCALES, source_types=SOURCE_TYPES, states=STATES,
-                           actions=get_next_state(g.document["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
+                           actions=get_next_state(g.document["status"]))
 
 
 @bp.route("/<int:id>/action", methods=["POST"])
@@ -156,16 +145,11 @@ def edit(id):
         try:
             solr.add([request.form.to_dict(flat=False)], commit=False, softCommit=True)
             flash({"status": "alert-success", "text": "Item {} has been successfully updated.".format(id)})
-        except SolrError as e:
+        except SolrError:
             flash({"status": "alert-danger", "text": "Item {} update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
-    return render_template("practice/edit.html", practice=g.document, page=page, query=query,
-                           countries=COUNTRIES, implementers=IMPLEMENTERS, intervention_goals=INTERVENTION_GOALS,
-                           intervention_names=INTERVENTION_NAMES, populations=POPULATIONS,
-                           program_components=PROGRAM_COMPONENTS, program_successes=PROGRAM_SUCCESSES, races=RACES,
-                           regions=REGIONS, scales=SCALES, source_types=SOURCE_TYPES, states=STATES,
-                           styles=STATUS_BADGE_STYLE)
+    return render_template("practice/edit.html", practice=g.document, page=page, query=query)
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])
