@@ -30,6 +30,7 @@
                     <th scope="row">Intervention name</th>
                     <td>
                         <select class="custom-select" name="intervention_name">
+                            <option value="Not selected">Not selected</option>
                             {% for intervention_name in config.INTERVENTION_NAMES %}
                                 <option value="{{ intervention_name }}">{{ intervention_name }}</option>
                             {% endfor %}
@@ -58,6 +59,7 @@
                     <th scope="row">Program success</th>
                     <td>
                         <select class="custom-select" name="program_success">
+                            <option value="Not selected" selected>Not selected</option>
                             {% for program_success in config.PROGRAM_SUCCESSES %}
                                 <option value="{{ program_success }}">{{ program_success }}</option>
                             {% endfor %}
@@ -94,6 +96,7 @@
                     <th scope="row">Source type</th>
                     <td>
                         <select class="custom-select" name="source_type">
+                            <option value="Not selected" selected>Not selected</option>
                             {% for source_type in config.SOURCE_TYPES %}
                                 <option value="{{ source_type }}">{{ source_type }}</option>
                             {% endfor %}

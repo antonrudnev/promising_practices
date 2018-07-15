@@ -37,7 +37,7 @@
                                 <option {% if intervention_name == practice.intervention_name %}selected{% else %}{% endif %} value="{{ intervention_name }}">{{ intervention_name }}</option>
                             {% endfor %}
                             {% if practice.intervention_name not in config.INTERVENTION_NAMES %}
-                                <option class="bg-warning" selected value="{{ practice.intervention_name }}">{{ practice.intervention_name }}</option>
+                                <option class="bg-danger text-white" selected value="{{ practice.intervention_name }}">{{ practice.intervention_name }}</option>
                             {% endif %}
                         </select>
                     </td>
@@ -68,7 +68,7 @@
                                 <option {% if program_success == practice.program_success %}selected{% else %}{% endif %} value="{{ program_success }}">{{ program_success }}</option>
                             {% endfor %}
                             {% if practice.program_success not in config.PROGRAM_SUCCESSES %}
-                                <option class="bg-warning" selected value="{{ practice.program_success }}">{{ practice.program_success }}</option>
+                                <option class="bg-danger text-white" selected value="{{ practice.program_success }}">{{ practice.program_success }}</option>
                             {% endif %}
                         </select>
                     </td>
@@ -87,7 +87,7 @@
                                 <option {% if state in practice.geography %}selected{% else %}{% endif %} value="{{ state }}">{{ state }}</option>
                             {% endfor %}
                             {% for state in (practice.geography | reject('in', config.STATES)) %}
-                                <option class="bg-warning" selected value="{{ state }}">{{ state }}</option>
+                                <option class="bg-danger text-white" selected value="{{ state }}">{{ state }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -100,7 +100,7 @@
                                 <option {% if region in practice.region %}selected{% else %}{% endif %} value="{{ region }}">{{ region }}</option>
                             {% endfor %}
                             {% for region in (practice.region | reject('in', config.REGIONS)) %}
-                                <option class="bg-warning" selected value="{{ region }}">{{ region }}</option>
+                                <option class="bg-danger text-white" selected value="{{ region }}">{{ region }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -113,7 +113,7 @@
                                 <option {% if source_type == practice.source_type %}selected{% else %}{% endif %} value="{{ source_type }}">{{ source_type }}</option>
                             {% endfor %}
                             {% if practice.source_type not in config.SOURCE_TYPES %}
-                                <option class="bg-warning" selected value="{{ practice.source_type }}">{{ practice.source_type }}</option>
+                                <option class="bg-danger text-white" selected value="{{ practice.source_type }}">{{ practice.source_type }}</option>
                             {% endif %}
                         </select>
                     </td>
@@ -126,7 +126,7 @@
                                 <option {% if race in practice.race %}selected{% else %}{% endif %} value="{{ race }}">{{ race }}</option>
                             {% endfor %}
                             {% for race in (practice.race | reject('in', config.RACES)) %}
-                                <option class="bg-warning" selected value="{{ race }}">{{ race }}</option>
+                                <option class="bg-danger text-white" selected value="{{ race }}">{{ race }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -139,7 +139,7 @@
                                 <option {% if intervention_goal in practice.intervention_goal %}selected{% else %}{% endif %} value="{{ intervention_goal }}">{{ intervention_goal }}</option>
                             {% endfor %}
                             {% for intervention_goal in (practice.intervention_goal | reject('in', config.INTERVENTION_GOALS)) %}
-                                <option class="bg-warning" selected value="{{ intervention_goal }}">{{ intervention_goal }}</option>
+                                <option class="bg-danger text-white" selected value="{{ intervention_goal }}">{{ intervention_goal }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -152,7 +152,7 @@
                                 <option {% if implementer in practice.implementers %}selected{% else %}{% endif %} value="{{ implementer }}">{{ implementer }}</option>
                             {% endfor %}
                             {% for implementer in (practice.implementers | reject('in', config.IMPLEMENTERS)) %}
-                                <option class="bg-warning" selected value="{{ implementer }}">{{ implementer }}</option>
+                                <option class="bg-danger text-white" selected value="{{ implementer }}">{{ implementer }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -165,7 +165,7 @@
                                 <option {% if scale in practice.scale %}selected{% else %}{% endif %} value="{{ scale }}">{{ scale }}</option>
                             {% endfor %}
                             {% for scale in (practice.scale | reject('in', config.SCALES)) %}
-                                <option class="bg-warning" selected value="{{ scale }}">{{ scale }}</option>
+                                <option class="bg-danger text-white" selected value="{{ scale }}">{{ scale }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -178,7 +178,7 @@
                                 <option {% if country in practice.country %}selected{% else %}{% endif %} value="{{ country }}">{{ country }}</option>
                             {% endfor %}
                             {% for country in (practice.country | reject('in', config.COUNTRIES)) %}
-                                <option class="bg-warning" selected value="{{ country }}">{{ country }}</option>
+                                <option class="bg-danger text-white" selected value="{{ country }}">{{ country }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -191,7 +191,7 @@
                                 <option {% if program_component in practice.program_components %}selected{% else %}{% endif %} value="{{ program_component }}">{{ program_component }}</option>
                             {% endfor %}
                             {% for program_component in (practice.program_components | reject('in', config.PROGRAM_COMPONENTS)) %}
-                                <option class="bg-warning" selected value="{{ program_component }}">{{ program_component }}</option>
+                                <option class="bg-danger text-white" selected value="{{ program_component }}">{{ program_component }}</option>
                             {% endfor %}
                         </select>
                     </td>
@@ -204,7 +204,7 @@
                                 <option {% if population in practice.population %}selected{% else %}{% endif %} value="{{ population }}">{{ population }}</option>
                             {% endfor %}
                             {% for population in (practice.population | reject('in', config.POPULATIONS)) %}
-                                <option class="bg-warning" selected value="{{ population }}">{{ population }}</option>
+                                <option class="bg-danger text-white" selected value="{{ population }}">{{ population }}</option>
                             {% endfor %}
                         </select>
                     </td>
