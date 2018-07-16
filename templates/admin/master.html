@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Master data{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <table class="table my-2">
+            <thead class="thead-light">
+                <tr>
+                    <th class="align-middle" scope="col" style="width: 25%">Category</th>
+                    <th class="align-middle" scope="col" style="width: 60%">Value</th>
+                    <th class="align-middle" scope="col" style="width: 10%">Order</th>
+                    <th class="align-middle text-center" scope="col" style="width: 5%">Delete</th>
+                </tr>
+            </thead>
+            <tbody id="master">
+                {% for value in master %}
+                    <tr>
+                        <input name="id" type="hidden" value="{{ value.id }}">
+                        <td scope="row"><input class="form-control" name="category" type="text" value="{{ value.category }}"></td>
+                        <td scope="row"><input class="form-control" name="value" type="text" value="{{ value.value }}"></td>
+                        <td scope="row"><input class="form-control" name="order_number" type="text" value="{{ value.order_number }}"></td>
+                        <td class="align-middle text-center"><input name="is_deleted" type="checkbox" value="{{ value.id }}"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="btn-toolbar my-4" role="toolbar">
+            <div role="group">
+                <a class="btn btn-sm btn-secondary mr-2" href="{{ url_for("practice.index") }}">Close</a>
+                <button class="btn btn-sm btn-danger mr-4" type="submit">Apply</button>
+                <button class="btn btn-sm btn-success" type="button" onclick="newMasterValue()">New</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        function deleteNewValue(newId) {
+            $("#" + newId).remove();
+        }
+
+        function newMasterValue() {
+            newId = Math.floor(Math.random() * 10000);
+            newRow = '<tr id="' + newId + '">' +
+                '<input name="id" type="hidden" value="_new">' +
+                '<td><input class="form-control" name="category" type="text" placeholder="Category" required></td>' +
+                '<td><input class="form-control" name="value" type="text" placeholder="Value" required></td>' +
+                '<td><input class="form-control" name="order_number" type="text" placeholder="Order#" required></td>' +
+                '<td><button class="btn btn-sm btn-danger align-middle text-center" type="button" onclick="deleteNewValue(' + newId + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+                '</tr>';
+            $("#master").append(newRow);
+        }
+    </script>
+{% endblock %}
+
+

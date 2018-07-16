@@ -1,5 +1,5 @@
 from auth import login_required, permission_required
-from db import get_comments, delete_comments, read_mention, insert_comment
+from db import get_comments, get_master_dictionary, delete_comments, read_mention, insert_comment
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 import functools
 from math import ceil
@@ -32,6 +32,7 @@ def exists_check(view):
 @login_required
 @push_mentions
 def index():
+    get_master_dictionary()
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
@@ -80,7 +81,7 @@ def create():
         insert_comment(doc["id"], g.user["id"], "Document has been <mark>created</mark>.")
         return redirect(url_for("practice.index", go_to_last_page=True))
 
-    return render_template("practice/create.html", page=page, query=query)
+    return render_template("practice/create.html", page=page, query=query, master=get_master_dictionary())
 
 
 @bp.route("/<int:id>", methods=["GET"])
@@ -94,7 +95,7 @@ def details(id):
     comments = get_comments(id)
     read_mention(g.user["id"], id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
-                           actions=get_next_state(g.document["status"]))
+                           master=get_master_dictionary(), actions=get_next_state(g.document["status"]))
 
 
 @bp.route("/<int:id>/action", methods=["POST"])
@@ -149,7 +150,8 @@ def edit(id):
             flash({"status": "alert-danger", "text": "Item {} update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
-    return render_template("practice/edit.html", practice=g.document, page=page, query=query)
+    return render_template("practice/edit.html", practice=g.document, page=page, query=query,
+                           master=get_master_dictionary())
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])

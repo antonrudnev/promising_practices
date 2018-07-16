@@ -21,7 +21,7 @@
                 <tr>
                     <input type="hidden" name="status" value="{{ practice.status }}">
                     <th scope="row">Status</th>
-                    <td><h5><span class="badge {{ "badge-" + config.STATUS_BADGE_STYLE[practice.status] }}">{{ practice.status|capitalize }}</span></h5></td>
+                    <td><h5><span class="badge {{ "badge-" +  config.STATUS_BADGE_STYLE[practice.status] }}">{{ practice.status|capitalize }}</span></h5></td>
                 </tr>
                 <tr >
                     <th scope="row">Title</th>
@@ -33,10 +33,10 @@
                     <th scope="row">Intervention name</th>
                     <td>
                         <select class="custom-select" name="intervention_name">
-                            {% for intervention_name in config.INTERVENTION_NAMES %}
+                            {% for intervention_name in  master["INTERVENTION_NAMES"] %}
                                 <option {% if intervention_name == practice.intervention_name %}selected{% else %}{% endif %} value="{{ intervention_name }}">{{ intervention_name }}</option>
                             {% endfor %}
-                            {% if practice.intervention_name not in config.INTERVENTION_NAMES %}
+                            {% if practice.intervention_name not in  master["INTERVENTION_NAMES"] %}
                                 <option class="bg-danger text-white" selected value="{{ practice.intervention_name }}">{{ practice.intervention_name }}</option>
                             {% endif %}
                         </select>
@@ -64,10 +64,10 @@
                     <th scope="row">Program success</th>
                     <td>
                         <select class="custom-select" name="program_success">
-                            {% for program_success in config.PROGRAM_SUCCESSES %}
+                            {% for program_success in  master["PROGRAM_SUCCESSES"] %}
                                 <option {% if program_success == practice.program_success %}selected{% else %}{% endif %} value="{{ program_success }}">{{ program_success }}</option>
                             {% endfor %}
-                            {% if practice.program_success not in config.PROGRAM_SUCCESSES %}
+                            {% if practice.program_success not in  master["PROGRAM_SUCCESSES"] %}
                                 <option class="bg-danger text-white" selected value="{{ practice.program_success }}">{{ practice.program_success }}</option>
                             {% endif %}
                         </select>
@@ -83,10 +83,10 @@
                     <th scope="row">Geography</th>
                     <td>
                         <select class="custom-select" multiple name="geography">
-                            {% for state in config.STATES %}
+                            {% for state in  master["STATES"] %}
                                 <option {% if state in practice.geography %}selected{% else %}{% endif %} value="{{ state }}">{{ state }}</option>
                             {% endfor %}
-                            {% for state in (practice.geography | reject('in', config.STATES)) %}
+                            {% for state in (practice.geography | reject('in',  master["STATES"])) %}
                                 <option class="bg-danger text-white" selected value="{{ state }}">{{ state }}</option>
                             {% endfor %}
                         </select>
@@ -96,10 +96,10 @@
                     <th scope="row">Region</th>
                     <td>
                         <select class="custom-select" multiple name="region">
-                            {% for region in config.REGIONS %}
+                            {% for region in  master["REGIONS"] %}
                                 <option {% if region in practice.region %}selected{% else %}{% endif %} value="{{ region }}">{{ region }}</option>
                             {% endfor %}
-                            {% for region in (practice.region | reject('in', config.REGIONS)) %}
+                            {% for region in (practice.region | reject('in',  master["REGIONS"])) %}
                                 <option class="bg-danger text-white" selected value="{{ region }}">{{ region }}</option>
                             {% endfor %}
                         </select>
@@ -109,10 +109,10 @@
                     <th scope="row">Source type</th>
                     <td>
                         <select class="custom-select" name="source_type">
-                            {% for source_type in config.SOURCE_TYPES %}
+                            {% for source_type in  master["SOURCE_TYPES"] %}
                                 <option {% if source_type == practice.source_type %}selected{% else %}{% endif %} value="{{ source_type }}">{{ source_type }}</option>
                             {% endfor %}
-                            {% if practice.source_type not in config.SOURCE_TYPES %}
+                            {% if practice.source_type not in  master["SOURCE_TYPES"] %}
                                 <option class="bg-danger text-white" selected value="{{ practice.source_type }}">{{ practice.source_type }}</option>
                             {% endif %}
                         </select>
@@ -122,10 +122,10 @@
                     <th scope="row">Race</th>
                     <td>
                         <select class="custom-select" multiple name="race">
-                            {% for race in config.RACES %}
+                            {% for race in  master["RACES"] %}
                                 <option {% if race in practice.race %}selected{% else %}{% endif %} value="{{ race }}">{{ race }}</option>
                             {% endfor %}
-                            {% for race in (practice.race | reject('in', config.RACES)) %}
+                            {% for race in (practice.race | reject('in',  master["RACES"])) %}
                                 <option class="bg-danger text-white" selected value="{{ race }}">{{ race }}</option>
                             {% endfor %}
                         </select>
@@ -135,10 +135,10 @@
                     <th scope="row">Intervention goal</th>
                     <td>
                         <select class="custom-select" multiple name="intervention_goal">
-                            {% for intervention_goal in config.INTERVENTION_GOALS %}
+                            {% for intervention_goal in  master["INTERVENTION_GOALS"] %}
                                 <option {% if intervention_goal in practice.intervention_goal %}selected{% else %}{% endif %} value="{{ intervention_goal }}">{{ intervention_goal }}</option>
                             {% endfor %}
-                            {% for intervention_goal in (practice.intervention_goal | reject('in', config.INTERVENTION_GOALS)) %}
+                            {% for intervention_goal in (practice.intervention_goal | reject('in',  master["INTERVENTION_GOALS"])) %}
                                 <option class="bg-danger text-white" selected value="{{ intervention_goal }}">{{ intervention_goal }}</option>
                             {% endfor %}
                         </select>
@@ -148,10 +148,10 @@
                     <th scope="row">Implementers</th>
                     <td>
                         <select class="custom-select" multiple name="implementers">
-                            {% for implementer in config.IMPLEMENTERS %}
+                            {% for implementer in  master["IMPLEMENTERS"] %}
                                 <option {% if implementer in practice.implementers %}selected{% else %}{% endif %} value="{{ implementer }}">{{ implementer }}</option>
                             {% endfor %}
-                            {% for implementer in (practice.implementers | reject('in', config.IMPLEMENTERS)) %}
+                            {% for implementer in (practice.implementers | reject('in',  master["IMPLEMENTERS"])) %}
                                 <option class="bg-danger text-white" selected value="{{ implementer }}">{{ implementer }}</option>
                             {% endfor %}
                         </select>
@@ -161,10 +161,10 @@
                     <th scope="row">Scale</th>
                     <td>
                         <select class="custom-select" multiple name="scale">
-                            {% for scale in config.SCALES %}
+                            {% for scale in  master["SCALES"] %}
                                 <option {% if scale in practice.scale %}selected{% else %}{% endif %} value="{{ scale }}">{{ scale }}</option>
                             {% endfor %}
-                            {% for scale in (practice.scale | reject('in', config.SCALES)) %}
+                            {% for scale in (practice.scale | reject('in',  master["SCALES"])) %}
                                 <option class="bg-danger text-white" selected value="{{ scale }}">{{ scale }}</option>
                             {% endfor %}
                         </select>
@@ -174,10 +174,10 @@
                     <th scope="row">Country</th>
                     <td>
                         <select class="custom-select" multiple name="country">
-                            {% for country in config.COUNTRIES %}
+                            {% for country in  master["COUNTRIES"] %}
                                 <option {% if country in practice.country %}selected{% else %}{% endif %} value="{{ country }}">{{ country }}</option>
                             {% endfor %}
-                            {% for country in (practice.country | reject('in', config.COUNTRIES)) %}
+                            {% for country in (practice.country | reject('in',  master["COUNTRIES"])) %}
                                 <option class="bg-danger text-white" selected value="{{ country }}">{{ country }}</option>
                             {% endfor %}
                         </select>
@@ -187,10 +187,10 @@
                     <th scope="row">Program components</th>
                     <td>
                         <select class="custom-select" multiple name="program_components">
-                            {% for program_component in config.PROGRAM_COMPONENTS %}
+                            {% for program_component in  master["PROGRAM_COMPONENTS"] %}
                                 <option {% if program_component in practice.program_components %}selected{% else %}{% endif %} value="{{ program_component }}">{{ program_component }}</option>
                             {% endfor %}
-                            {% for program_component in (practice.program_components | reject('in', config.PROGRAM_COMPONENTS)) %}
+                            {% for program_component in (practice.program_components | reject('in',  master["PROGRAM_COMPONENTS"])) %}
                                 <option class="bg-danger text-white" selected value="{{ program_component }}">{{ program_component }}</option>
                             {% endfor %}
                         </select>
@@ -200,10 +200,10 @@
                     <th scope="row">Population</th>
                     <td>
                         <select class="custom-select" multiple name="population">
-                            {% for population in config.POPULATIONS %}
+                            {% for population in  master["POPULATIONS"] %}
                                 <option {% if population in practice.population %}selected{% else %}{% endif %} value="{{ population }}">{{ population }}</option>
                             {% endfor %}
-                            {% for population in (practice.population | reject('in', config.POPULATIONS)) %}
+                            {% for population in (practice.population | reject('in',  master["POPULATIONS"])) %}
                                 <option class="bg-danger text-white" selected value="{{ population }}">{{ population }}</option>
                             {% endfor %}
                         </select>

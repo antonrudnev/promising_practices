@@ -76,6 +76,11 @@ def register():
         if error is None:
             db.execute("INSERT INTO user (user_name, full_name, password) VALUES (?, ?, ?)",
                        (username, fullname, generate_password_hash(password)))
+            db.execute("INSERT INTO role (role_name) VALUES (?)", ("user_role_{}".format(username),))
+            db.execute("INSERT INTO user_role (user_id, role_id) "
+                       "SELECT user.id, role.id FROM user "
+                       "JOIN role "
+                       "WHERE user.user_name = ? AND role.role_name = ?", (username, "user_role_{}".format(username),))
             db.commit()
             flash({"status": "alert-success", "text": "You have successfully registered."})
             return redirect(url_for("auth.login"))

@@ -52,6 +52,10 @@
                         <a class="dropdown-item" href="{{ url_for('admin.users') }}">Users</a>
                         <a class="dropdown-item" href="{{ url_for('admin.roles') }}">Roles</a>
                     {% endif %}
+                    {% if "ADMIN_MASTERDATA" in g.permissions %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('admin.master') }}">Master data</a>
+                    {% endif %}
                     {% if "ADMIN_CONTENT" in g.permissions %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url_for('admin.download') }}">Download all</a>

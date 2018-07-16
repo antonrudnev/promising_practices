@@ -1,6 +1,6 @@
 from auth import login_required, permission_required
 import datetime
-from db import get_roles, get_users, update_users_roles, update_roles_permissions
+from db import get_master_data, get_roles, get_users, update_master_data, update_users_roles, update_roles_permissions
 from flask import Blueprint, flash, redirect, render_template, request, Response, url_for
 import json
 from os import path, mkdir
@@ -83,3 +83,22 @@ def upload():
     flash({"status": "alert-success", "text": "File has been successfully uploaded."})
 
     return redirect(url_for("practice.index"))
+
+
+@bp.route("/master", methods=["GET", "POST"])
+@login_required
+@permission_required("ADMIN_MASTERDATA")
+def master():
+    if request.method == "POST":
+        ids = request.form.getlist("id")
+        categories = request.form.getlist("category")
+        values = request.form.getlist("value")
+        orders = request.form.getlist("order_number")
+        deleted_ids = request.form.getlist("is_deleted")
+        master_data = ({"category": category.strip(), "value": value.strip(), "order_number": order_number}
+                       for id, category, value, order_number in zip(ids, categories, values, orders)
+                       if id not in deleted_ids)
+        update_master_data(master_data)
+        flash({"status": "alert-success", "text": "Master data values have been successfully updated."})
+    master_data = get_master_data()
+    return render_template("admin/master.html", master=master_data)
