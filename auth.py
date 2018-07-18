@@ -82,8 +82,11 @@ def register():
                        "JOIN role "
                        "WHERE user.user_name = ? AND role.role_name = ?", (username, "user_role_{}".format(username),))
             db.commit()
+            user = db.execute("SELECT * FROM user WHERE user_name = ?", (username,)).fetchone()
+            session.clear()
+            session["user_id"] = user["id"]
             flash({"status": "alert-success", "text": "You have successfully registered."})
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("practice.index"))
 
         flash({"status": "alert-danger", "text": error})
 
