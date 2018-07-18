@@ -1,5 +1,5 @@
-SOLR_COLLECTION = "http://54.173.176.161:8983/solr/promising_practices3"
-DASHBOARD_URL = "http://54.173.176.161:8983/solr/banana/promising_practices_tst/index.html"
+SOLR_COLLECTION = "http://54.242.41.222:8983/solr/promising_practices"
+DASHBOARD_URL = "http://54.242.41.222:8983/solr/banana/promising_practices/index.html"
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
