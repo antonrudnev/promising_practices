@@ -71,7 +71,7 @@ def upload():
         mkdir("files")
     file_name = path.join("files", secure_filename(file.filename))
     file.save(file_name)
-    df = pd.read_csv(file_name, dtype="category")
+    df = pd.read_csv(file_name, dtype="category", encoding="ISO-8859-1")
     documents = json.loads(df.to_json(orient="records"))
     for document in documents:
         for key in document.keys():
