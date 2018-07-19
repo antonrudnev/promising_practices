@@ -1,15 +1,14 @@
 from auth import login_required, permission_required
-from db import get_comments, delete_comments, read_mention, insert_comment
+from db import get_comments, get_master_dictionary, delete_comments, read_mention, insert_comment
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 import functools
 from math import ceil
 from pysolr import Solr, SolrError
-from settings import SOLR, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, ACTION_STYLE, STATUS_BADGE_STYLE, STATUS_STYLE_INDEX
-from settings import IMPLEMENTERS, INTERVENTION_GOALS, POPULATIONS, PROGRAM_COMPONENTS, STATES
+from settings import SOLR_COLLECTION, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, STATUS_BADGE_STYLE
 from workspace import push_mentions
 
 bp = Blueprint('practice', __name__, url_prefix="/practice")
-solr = Solr(SOLR)
+solr = Solr(SOLR_COLLECTION)
 
 
 def get_next_state(current, action=None):
@@ -33,6 +32,7 @@ def exists_check(view):
 @login_required
 @push_mentions
 def index():
+    get_master_dictionary()
     page = int(request.args.get("page", 0))
     query = request.args.get("query", "").strip()
     query = query if query else "*:*"
@@ -40,16 +40,16 @@ def index():
     fq = "status:({})".format(" OR ".join(view_permissions)) if view_permissions else "status:none"
     try:
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
-                                         "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
-    except SolrError as e:
+                                         "sort": "_id_int asc", "wt": "json", "fq": fq})
+    except SolrError:
         flash({"status": "alert-danger", "text": "Invalid query string. Check the Solr query syntax reference guide."})
         return redirect(url_for("practice.index", page=0, query="*:*"))
 
-    max_page = max(int(ceil(response["response"]["numFound"] / ITEMS_PER_PAGE) - 1), 0)
+    max_page = max(int(ceil(response.hits / ITEMS_PER_PAGE) - 1), 0)
     if request.args.get("go_to_last_page", False):
         page = max_page
         response = solr.search(query, **{"start": page * ITEMS_PER_PAGE, "rows": ITEMS_PER_PAGE,
-                                         "sort": "id_int asc", "wt": "json", "fq": fq}).raw_response
+                                         "sort": "_id_int asc", "wt": "json", "fq": fq})
     pager = [p for p in range(page - PAGER_RANGE, page + PAGER_RANGE + 1) if 0 <= p <= max_page]
     if pager[0] > 1:
         pager.insert(0, "...")
@@ -59,8 +59,7 @@ def index():
         pager.append("...")
     if pager[-1] != max_page:
         pager.append(max_page)
-    return render_template("practice/index.html", practices=response["response"]["docs"],
-                           page=page, pager=pager, query=query, styles=STATUS_STYLE_INDEX)
+    return render_template("practice/index.html", practices=response.docs, page=page, pager=pager, query=query)
 
 
 @bp.route("/create", methods=["GET", "POST"])
@@ -72,9 +71,9 @@ def create():
     query = query if query else "*:*"
 
     if request.method == "POST":
-        docs = solr.search("*:*", **{"sort": "id_int desc", "rows": 1,
-                                     "fl": "id_int", "wt": "json"}).raw_response["response"]["docs"]
-        max_id = docs[0]["id_int"] if len(docs) > 0 else 1
+        docs = solr.search("*:*", **{"sort": "_id_int desc", "rows": 1,
+                                     "fl": "_id_int", "wt": "json"}).docs
+        max_id = docs[0]["_id_int"] if len(docs) > 0 else 0
         doc = request.form.to_dict(flat=False)
         doc["id"] = max_id + 1
         solr.add([doc], commit=False, softCommit=True)
@@ -82,9 +81,7 @@ def create():
         insert_comment(doc["id"], g.user["id"], "Document has been <mark>created</mark>.")
         return redirect(url_for("practice.index", go_to_last_page=True))
 
-    return render_template("practice/create.html", page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS)
+    return render_template("practice/create.html", page=page, query=query, master=get_master_dictionary())
 
 
 @bp.route("/<int:id>", methods=["GET"])
@@ -98,9 +95,7 @@ def details(id):
     comments = get_comments(id)
     read_mention(g.user["id"], id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS,
-                           actions=get_next_state(g.document["status"]), styles={**ACTION_STYLE, **STATUS_BADGE_STYLE})
+                           master=get_master_dictionary(), actions=get_next_state(g.document["status"]))
 
 
 @bp.route("/<int:id>/action", methods=["POST"])
@@ -151,13 +146,12 @@ def edit(id):
         try:
             solr.add([request.form.to_dict(flat=False)], commit=False, softCommit=True)
             flash({"status": "alert-success", "text": "Item {} has been successfully updated.".format(id)})
-        except SolrError as e:
+        except SolrError:
             flash({"status": "alert-danger", "text": "Item {} update failure due to version conflict.".format(id)})
         return redirect(url_for("practice.details", id=id, page=page, query=query))
 
     return render_template("practice/edit.html", practice=g.document, page=page, query=query,
-                           states=STATES, intervention_goals=INTERVENTION_GOALS, implementers=IMPLEMENTERS,
-                           program_components=PROGRAM_COMPONENTS, populations=POPULATIONS, styles=STATUS_BADGE_STYLE)
+                           master=get_master_dictionary())
 
 
 @bp.route("/<int:id>/delete", methods=["GET", "POST"])

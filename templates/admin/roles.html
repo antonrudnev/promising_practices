@@ -15,7 +15,7 @@
             <tbody>
                 {% for role in roles %}
                     <tr>
-                        <th scope="row">{{ role.role_name }}</th>
+                        <th scope="row" {{ "class=font-weight-normal" if role.role_name.startswith("user_role_") }}>{{ role.role_name }}</th>
                         <td>
                             {% for _, permission, _ in role.permissions %}
                                 <div>{{ permission }}</div>

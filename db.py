@@ -17,7 +17,7 @@ def close_db(e=None):
         db.close()
 
 
-def init_db():
+def init_db(admin_password):
     with sqlite3.connect(SYSTEM_DATABASE, detect_types=sqlite3.PARSE_DECLTYPES) as db:
         db.row_factory = sqlite3.Row
         with open("schema.sql") as f:
@@ -26,8 +26,32 @@ def init_db():
         for user in db.execute("SELECT id, password FROM user"):
             db.execute("UPDATE user SET password = ? WHERE id = ?",
                        (generate_password_hash(user["password"]), user["id"]))
+        db.execute("UPDATE user SET password = ? WHERE user_name = 'admin'", (generate_password_hash(admin_password),))
         db.commit()
         print("Initialized the content.")
+
+
+def insert_comment(document_id, user_id, comment):
+    if not comment.strip():
+        return
+    db = get_db()
+    cur = db.cursor()
+    users = cur.execute("SELECT id, user_name FROM user").fetchall()
+    mentions = [g.user["id"]]
+    for user in users:
+        if "@" + user["user_name"] in comment:
+            comment = comment.replace("@" + user["user_name"], "<mark>@" + user["user_name"] + "</mark>")
+            if user["id"] != g.user["id"]:
+                mentions.append(user["id"])
+    comment = comment.replace("\n", "<br>")
+    cur.execute("INSERT INTO user_comment (document_id, user_id, comment) VALUES (?, ?, ?)",
+                (document_id, user_id, comment))
+    comment_id = cur.lastrowid
+
+    for user_id in mentions:
+        cur.execute("INSERT INTO user_mention (user_id, user_comment_id, was_read) VALUES (?, ?, ?)",
+                    (user_id, comment_id, user_id == g.user["id"]))
+    db.commit()
 
 
 def get_comments(document_id):
@@ -93,29 +117,6 @@ def delete_mention(user_id, document_id):
     db.commit()
 
 
-def insert_comment(document_id, user_id, comment):
-    if not comment.strip():
-        return
-    db = get_db()
-    cur = db.cursor()
-    users = cur.execute("SELECT id, user_name FROM user").fetchall()
-    mentions = [g.user["id"]]
-    for user in users:
-        if "@" + user["user_name"] in comment:
-            comment = comment.replace("@" + user["user_name"], "<mark>@" + user["user_name"] + "</mark>")
-            if user["id"] != g.user["id"]:
-                mentions.append(user["id"])
-    comment = comment.replace("\n", "<br>")
-    cur.execute("INSERT INTO user_comment (document_id, user_id, comment) VALUES (?, ?, ?)",
-                (document_id, user_id, comment))
-    comment_id = cur.lastrowid
-
-    for user_id in mentions:
-        cur.execute("INSERT INTO user_mention (user_id, user_comment_id, was_read) VALUES (?, ?, ?)",
-                    (user_id, comment_id, user_id == g.user["id"]))
-    db.commit()
-
-
 def get_users():
     db = get_db()
     users_tbl = db.execute("SELECT user_id, "
@@ -140,6 +141,7 @@ def get_users():
                            "CROSS JOIN role "
                            "LEFT JOIN user_role ON user.id = user_role.user_id "
                            "AND role.id = user_role.role_id "
+                           "WHERE role.role_name NOT LIKE 'user/_role/_%' ESCAPE '/' "
                            "ORDER BY user.user_name, role.role_name)"
                            "GROUP BY user_id, user_name, full_name, is_enabled, created_on, last_login "
                            "ORDER BY user_name").fetchall()
@@ -160,28 +162,14 @@ def update_users_roles(assigned, enabled):
     db.execute("DELETE FROM user_role")
     db.execute("INSERT INTO user_role (user_id, role_id) "
                "SELECT user.id, role.id FROM user "
-               "JOIN role ON user_name = 'admin' "
-               "AND role_name = 'administrator'")
+               "JOIN role ON (user.user_name = 'admin' AND role.role_name = 'administrator') "
+               "OR role.role_name = 'user_role_' || user.user_name")
     db.execute("UPDATE user SET is_enabled = 0 WHERE id != ?", (g.user["id"],))
     for a in assigned:
         user_role = a.split(",")
         db.execute("INSERT INTO user_role (user_id, role_id) VALUES (?, ?)", (user_role[0], user_role[1]))
     for e in enabled:
         db.execute("UPDATE user SET is_enabled = 1 WHERE id = ?", (e,))
-    db.commit()
-
-
-def update_roles_permissions(assigned):
-    db = get_db()
-    db.execute("DELETE FROM role_permission")
-    db.execute("INSERT INTO role_permission (role_id, permission_id) "
-               "SELECT role.id, permission.id FROM role "
-               "JOIN permission ON role_name = 'administrator' "
-               "AND permission_name LIKE 'ADMIN_%'")
-    for a in assigned:
-        role_permission = a.split(",")
-        db.execute("INSERT INTO role_permission (role_id, permission_id) VALUES (?, ?)",
-                   (role_permission[0], role_permission[1]))
     db.commit()
 
 
@@ -212,5 +200,62 @@ def get_roles():
                                      role["assigned"].split(",")))} for role in roles_tbl]
 
 
+def update_roles_permissions(assigned):
+    db = get_db()
+    db.execute("DELETE FROM role_permission")
+    db.execute("INSERT INTO role_permission (role_id, permission_id) "
+               "SELECT role.id, permission.id FROM role "
+               "JOIN permission ON role_name = 'administrator' "
+               "AND permission_name LIKE 'ADMIN_%'")
+    for a in assigned:
+        role_permission = a.split(",")
+        db.execute("INSERT INTO role_permission (role_id, permission_id) VALUES (?, ?)",
+                   (role_permission[0], role_permission[1]))
+    db.commit()
+
+
+def get_master_dictionary():
+    db = get_db()
+    master_tbl = db.execute("SELECT category,"
+                            "GROUP_CONCAT(value) AS 'values' "
+                            "FROM (SELECT category, value "
+                            "FROM master_data "
+                            "ORDER BY order_number) "
+                            "GROUP BY category").fetchall()
+
+    master_dictionary = dict()
+    for category in master_tbl:
+        master_dictionary[category["category"]] = category["values"].split(",")
+
+    return master_dictionary
+
+
+def get_master_data():
+    db = get_db()
+    master_tbl = db.execute("SELECT id, "
+                            "category, "
+                            "value, "
+                            "order_number "
+                            "FROM master_data "
+                            "ORDER BY category, order_number").fetchall()
+
+    return master_tbl
+
+
+def update_master_data(master_data):
+    db = get_db()
+    db.execute("DELETE FROM master_data")
+    for value in master_data:
+        db.execute("INSERT INTO master_data (category, value, order_number) VALUES (?, ?, ?)",
+                   (value["category"], value["value"], value["order_number"]))
+    db.commit()
+
+
 if __name__ == "__main__":
-    init_db()
+    import getpass
+    admin_password1 = getpass.getpass("Input admin password:")
+    admin_password2 = getpass.getpass("Confirm admin password:")
+    if admin_password1 == admin_password2:
+        init_db(admin_password1)
+    else:
+        print("Password doesn't match.")

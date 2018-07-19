@@ -19,11 +19,11 @@
                 <th class="align-middle" scope="row">Status</th>
                 <th class="align-middle" scope="row">
                     <div class="btn-toolbar justify-content-between">
-                        <h5 class="mt-1"><span class="mt-1 badge {{ "badge-" + styles[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
+                        <h5 class="mt-1"><span class="mt-1 badge {{ "badge-" +  config.STATUS_BADGE_STYLE[practice.status] }}">{{ practice.status|capitalize }}</span></h5>
                         <form action="{{ url_for("practice.action", id=practice.id, query=query, page=page) }}" method="post">
                         {% for action in actions %}
                             {% if "ACTION_" + action["action"] in g.permissions %}
-                                <input class="btn {{ styles[action["action"]] }}" style="width: 90px;" name="action" type="submit" value="{{ action["action"]|capitalize }}"/>
+                                <input class="btn {{  config.ACTION_STYLE[action["action"]] }}" style="width: 90px;" name="action" type="submit" value="{{ action["action"]|capitalize }}"/>
                             {% endif %}
                         {% endfor %}
                         </form>
@@ -35,74 +35,101 @@
                 <td>{{ practice.title }}</td>
             </tr>
             <tr>
-                <th scope="row">Name of Intervention</th>
-                <td>{{ practice.name_of_intervention }}</td>
+                <th scope="row" class="d-flex"><span {% if practice.intervention_name not in  master["INTERVENTION_NAMES"] %}class="flex-fill bg-warning" {% endif %}>Intervention name</span></th>
+                <td>{{ practice.intervention_name }}</td>
             </tr>
             <tr>
                 <th scope="row">Summary</th>
                 <td>{{ practice.summary }}</td>
             </tr>
             <tr>
-                <th scope="row">Target Population</th>
-                <td>{{ practice.target_population }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Location</th>
-                <td>{{ practice.location }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Evaluation</th>
-                <td>{{ practice.evaluation }}</td>
-            </tr>
-            <tr>
-                <th scope="row">State</th>
-                <td>
-                {% for state in practice.state %}
-                    <span class="badge {% if state in states %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
-                {% endfor %}
-                </td>
+                <th scope="row">Link</th>
+                <td><a href="{{ practice.link }}">{{ practice.link }}</a></td>
             </tr>
             <tr>
                 <th scope="row">Citation</th>
                 <td>{{ practice.citation }}</td>
             </tr>
             <tr>
-                <th scope="row">Intervention Goal</th>
+                <th scope="row" class="d-flex"><span {% if practice.program_success not in  master["PROGRAM_SUCCESSES"] %}class="flex-fill bg-warning" {% endif %}>Program success</span></th>
+                <td>{{ practice.program_success }}</td>
+            </tr>
+            <tr>
+                <th scope="row">City</th>
+                <td>{{ practice.city }}</td>
+            </tr>
+            <tr>
+                <th scope="row" class="d-flex"><span {% if practice.geography | reject("in",  master["STATES"]) | first %}class="flex-fill bg-warning" {% endif %}>Geography</span></th>
                 <td>
-                {% for goal in practice.intervention_goal %}
-                    <span class="badge {% if goal in intervention_goals %}badge-info{% else %}badge-danger{% endif %}">{{ goal }}</span>
+                {% for state in practice.geography %}
+                    <span class="badge {% if state in  master["STATES"] %}badge-info{% else %}badge-danger{% endif %}">{{ state }}</span>
                 {% endfor %}
                 </td>
             </tr>
             <tr>
-                <th scope="row">Implementers</th>
+                <th scope="row" class="d-flex"><span {% if practice.region | reject("in",  master["REGIONS"]) | first %}class="flex-fill bg-warning" {% endif %}>Region</span></th>
+                <td>
+                {% for region in practice.region %}
+                    <span class="badge {% if region in  master["REGIONS"] %}badge-info{% else %}badge-danger{% endif %}">{{ region }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="d-flex"><span {% if practice.source_type not in  master["SOURCE_TYPES"] %}class="flex-fill bg-warning" {% endif %}>Source type</span></th>
+                <td>{{ practice.source_type }}</td>
+            </tr>
+            <tr>
+                <th scope="row" class="d-flex"><span {% if practice.race | reject("in",  master["RACES"]) | first %}class="flex-fill bg-warning" {% endif %}>Race</span></th>
+                <td>
+                {% for race in practice.race %}
+                    <span class="badge {% if race in  master["RACES"] %}badge-info{% else %}badge-danger{% endif %}">{{ race }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="d-flex"><span {% if practice.intervention_goal | reject("in",  master["INTERVENTION_GOALS"]) | first %}class="flex-fill bg-warning" {% endif %}>Intervention goal</span></th>
+                <td>
+                {% for intervention_goal in practice.intervention_goal %}
+                    <span class="badge {% if intervention_goal in  master["INTERVENTION_GOALS"] %}badge-info{% else %}badge-danger{% endif %}">{{ intervention_goal }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="d-flex"><span {% if practice.implementers | reject("in",  master["IMPLEMENTERS"]) | first %}class="flex-fill bg-warning" {% endif %}>Implementers</span></th>
                 <td>
                 {% for implementer in practice.implementers %}
-                    <span class="badge {% if implementer in implementers %}badge-info{% else %}badge-danger{% endif %}">{{ implementer }}</span>
+                    <span class="badge {% if implementer in  master["IMPLEMENTERS"] %}badge-info{% else %}badge-danger{% endif %}">{{ implementer }}</span>
                 {% endfor %}
                 </td>
             </tr>
             <tr>
-                <th scope="row">County</th>
-                <td>{{ practice.county }}</td>
-            </tr>
-            <tr>
-                <th scope="row">FIPS</th>
-                <td>{{ practice.fips }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Program Components</th>
+                <th scope="row" class="d-flex"><span {% if practice.scale | reject("in",  master["SCALES"]) | first %}class="flex-fill bg-warning" {% endif %}>Scale</span></th>
                 <td>
-                {% for component in practice.program_components %}
-                    <span class="badge {% if component in program_components %}badge-info{% else %}badge-danger{% endif %}">{{ component }}</span>
+                {% for scale in practice.scale %}
+                    <span class="badge {% if scale in  master["SCALES"] %}badge-info{% else %}badge-danger{% endif %}">{{ scale }}</span>
                 {% endfor %}
                 </td>
             </tr>
             <tr>
-                <th scope="row">Population</th>
+                <th scope="row" class="d-flex"><span {% if practice.country | reject("in",  master["COUNTRIES"]) | first %}class="flex-fill bg-warning" {% endif %}>Country</span></th>
+                <td>
+                {% for country in practice.country %}
+                    <span class="badge {% if country in  master["COUNTRIES"] %}badge-info{% else %}badge-danger{% endif %}">{{ country }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <th scope="row" class="d-flex"><span {% if practice.program_components | reject("in",  master["PROGRAM_COMPONENTS"]) | first %}class="flex-fill bg-warning" {% endif %}>Program components</span></th>
+                <td>
+                {% for program_component in practice.program_components %}
+                    <span class="badge {% if program_component in  master["PROGRAM_COMPONENTS"] %}badge-info{% else %}badge-danger{% endif %}">{{ program_component }}</span>
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="d-flex"><span {% if practice.population | reject("in",  master["POPULATIONS"]) | first %}class="flex-fill bg-warning" {% endif %}>Population</span></th>
                 <td>
                 {% for population in practice.population %}
-                    <span class="badge {% if population in populations %}badge-info{% else %}badge-danger{% endif %}">{{ population }}</span>
+                    <span class="badge {% if population in  master["POPULATIONS"] %}badge-info{% else %}badge-danger{% endif %}">{{ population }}</span>
                 {% endfor %}
                 </td>
             </tr>

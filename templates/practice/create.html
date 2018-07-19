@@ -23,13 +23,18 @@
                 <tr >
                     <th scope="row">Title</th>
                     <td>
-                        <textarea class="form-control" name="title"></textarea>
+                        <textarea class="form-control" name="title" required></textarea>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Name of Intervention</th>
+                    <th scope="row">Intervention name</th>
                     <td>
-                        <textarea class="form-control" name="name_of_intervention"></textarea>
+                        <select class="custom-select" name="intervention_name">
+                            <option value="Not selected">Not selected</option>
+                            {% for intervention_name in  master["INTERVENTION_NAMES"] %}
+                                <option value="{{ intervention_name }}">{{ intervention_name }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
@@ -39,31 +44,9 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Target Population</th>
+                    <th scope="row">Link</th>
                     <td>
-                        <textarea class="form-control" name="target_population"></textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Location</th>
-                    <td>
-                        <textarea class="form-control" rows="1" name="location"></textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">Evaluation</th>
-                    <td>
-                        <textarea class="form-control" rows="5" name="evaluation"></textarea>
-                    </td>
-                </tr>
-                <tr >
-                    <th scope="row">State</th>
-                    <td>
-                        <select class="custom-select" multiple name="state">
-                            {% for state in states %}
-                                <option value="{{ state }}">{{ state }}</option>
-                            {% endfor %}
-                        </select>
+                        <input class="form-control" type="url" name="link"></input>
                     </td>
                 </tr>
                 <tr >
@@ -73,10 +56,68 @@
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Intervention Goal</th>
+                    <th scope="row">Program success</th>
+                    <td>
+                        <select class="custom-select" name="program_success">
+                            <option value="Not selected" selected>Not selected</option>
+                            {% for program_success in  master["PROGRAM_SUCCESSES"] %}
+                                <option value="{{ program_success }}">{{ program_success }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">City</th>
+                    <td>
+                        <input class="form-control" name="city"></input>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Geography</th>
+                    <td>
+                        <select class="custom-select" multiple name="geography">
+                            {% for state in  master["STATES"] %}
+                                <option value="{{ state }}">{{ state }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Region</th>
+                    <td>
+                        <select class="custom-select" multiple name="region">
+                            {% for region in  master["REGIONS"] %}
+                                <option value="{{ region }}">{{ region }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Source type</th>
+                    <td>
+                        <select class="custom-select" name="source_type">
+                            <option value="Not selected" selected>Not selected</option>
+                            {% for source_type in  master["SOURCE_TYPES"] %}
+                                <option value="{{ source_type }}">{{ source_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <th scope="row">Race</th>
+                    <td>
+                        <select class="custom-select" multiple name="race">
+                            {% for race in  master["RACES"] %}
+                                <option value="{{ race }}">{{ race }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                 <tr >
+                    <th scope="row">Intervention goal</th>
                     <td>
                         <select class="custom-select" multiple name="intervention_goal">
-                            {% for goal in intervention_goals %}
+                            {% for goal in  master["INTERVENTION_GOALS"] %}
                                 <option value="{{ goal }}">{{ goal }}</option>
                             {% endfor %}
                         </select>
@@ -86,29 +127,37 @@
                     <th scope="row">Implementers</th>
                     <td>
                         <select class="custom-select" multiple name="implementers">
-                            {% for implementer in implementers %}
+                            {% for implementer in  master["IMPLEMENTERS"] %}
                                 <option value="{{ implementer }}">{{ implementer }}</option>
                             {% endfor %}
                         </select>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">County</th>
+                    <th scope="row">Scale</th>
                     <td>
-                        <textarea class="form-control" rows="1" name="county"></textarea>
+                        <select class="custom-select" multiple name="scale">
+                            {% for scale in  master["SCALES"] %}
+                                <option value="{{ scale }}">{{ scale }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">FIPS</th>
+                    <th scope="row">Country</th>
                     <td>
-                        <textarea class="form-control" rows="1" name="fips"></textarea>
+                        <select class="custom-select" multiple name="country">
+                            {% for country in  master["COUNTRIES"] %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr >
-                    <th scope="row">Program Components</th>
+                    <th scope="row">Program components</th>
                     <td>
                         <select class="custom-select" multiple name="program_components">
-                            {% for component in program_components %}
+                            {% for component in  master["PROGRAM_COMPONENTS"] %}
                                 <option value="{{ component }}">{{ component }}</option>
                             {% endfor %}
                         </select>
@@ -118,7 +167,7 @@
                     <th scope="row">Population</th>
                     <td>
                         <select class="custom-select" multiple name="population">
-                            {% for population in populations %}
+                            {% for population in  master["POPULATIONS"] %}
                                 <option value="{{ population }}">{{ population }}</option>
                             {% endfor %}
                         </select>

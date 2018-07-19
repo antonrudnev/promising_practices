@@ -1,27 +1,16 @@
-SOLR = "http://54.173.176.161:8983/solr/promising_practices2"
+SOLR_COLLECTION = "http://54.242.41.222:8983/solr/promising_practices"
+DASHBOARD_URL = "http://54.242.41.222:8983/solr/banana/promising_practices/index.html"
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
-ALL_FIELDS = ["id", "title", "abstract", "citation", "county", "evaluation", "fips",  "implementers", "intervention_goal", "location", "name_of_intervention", "population", "program_components", "state", "summary", "target_population", "status"]
-# ALL_FIELDS = ["id", "title", "intervention_name", "summary", "link", "citation", "program_success", "city", "geography", "region", "source_type", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population", "status"]
-MULTIVALUED_FIELDS = ["state","implementers", "intervention_goal", "population", "program_components"]
-# MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country", "program_components", "population"]
+ALL_FIELDS = ["id", "title", "intervention_name", "summary", "link", "citation", "program_success", "city", "geography",
+              "region", "source_type", "race", "intervention_goal", "implementers", "scale", "country",
+              "program_components", "population", "status"]
 
-STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY",
-          "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH",
-          "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country",
+                      "program_components", "population"]
 
-INTERVENTION_GOALS = ["Harm Reduction", "Prevention", "Recovery", "Treatment"]
-
-IMPLEMENTERS = ["Community", "County", "Faith Communities", "Health Care", "National", "Police", "Prisons/Jails",
-                "Schools", "State"]
-
-PROGRAM_COMPONENTS = ["Behavioral", "Communication", "Lock In", "MAT", "Mental Health", "Monitoring", "Naloxone",
-                      "Opioid Disposal", "Opioid Storage", "PDMP", "Policy", "Recovery Program", "Remote",
-                      "Supervised Consumption Sites", "Syringe Services", "Training"]
-
-POPULATIONS = ["Adults", "General", "Neonates", "Pregnant Women", "Youth"]
 
 WORKFLOW = [{"current": "DRAFT", "next": "SUBMITTED", "action": "SUBMIT"},
             {"current": "SUBMITTED", "next": "REJECTED", "action": "REJECT"},
@@ -42,7 +31,7 @@ STATUS_BADGE_STYLE = {"DRAFT": "secondary",
                       "APPROVED": "success",
                       "REVOKED": "warning"}
 
-STATUS_STYLE_INDEX = {"DRAFT": "btn-outline-secondary",
+STATUS_INDEX_STYLE = {"DRAFT": "btn-outline-secondary",
                       "SUBMITTED": "btn-primary",
                       "REJECTED": "btn-secondary",
                       "APPROVED": "btn-outline-success",

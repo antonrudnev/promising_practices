@@ -24,7 +24,7 @@ def permission_required(permission, rule=None):
         @functools.wraps(view)
         def wrapped_view(**kwargs):
             if rule == "status_based":
-                if len([0 for x in get_mentions(g.user["id"]) if g.document["id_int"] == x["document_id"]]) > 0:
+                if len([0 for x in get_mentions(g.user["id"]) if int(g.document["id"]) == x["document_id"]]) > 0:
                     g.permissions.append("VIEW_{}".format(g.document["status"]))
                 p = permission + "_" + g.document["status"]
             elif rule == "action_based":
@@ -76,13 +76,53 @@ def register():
         if error is None:
             db.execute("INSERT INTO user (user_name, full_name, password) VALUES (?, ?, ?)",
                        (username, fullname, generate_password_hash(password)))
+            db.execute("INSERT INTO role (role_name) VALUES (?)", ("user_role_{}".format(username),))
+            db.execute("INSERT INTO user_role (user_id, role_id) "
+                       "SELECT user.id, role.id FROM user "
+                       "JOIN role "
+                       "WHERE user.user_name = ? AND role.role_name = ?", (username, "user_role_{}".format(username),))
             db.commit()
+            user = db.execute("SELECT * FROM user WHERE user_name = ?", (username,)).fetchone()
+            session.clear()
+            session["user_id"] = user["id"]
             flash({"status": "alert-success", "text": "You have successfully registered."})
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("practice.index"))
 
         flash({"status": "alert-danger", "text": error})
 
     return render_template("auth/register.html")
+
+
+@login_required
+@bp.route("/password", methods=["GET", "POST"])
+def password():
+    if request.method == "POST":
+        username = g.user["user_name"]
+        current_password = request.form["current_password"]
+        password = request.form["password"]
+        db = get_db()
+        user = db.execute("SELECT * FROM user WHERE user_name = ?", (username,)).fetchone()
+        error = None
+
+        if not password:
+            error = "Password is required."
+        elif user is None:
+            error = "User {0} doesn't exist.".format(username)
+        elif not user["is_enabled"]:
+            error = "User {0} is disabled.".format(username)
+        elif not check_password_hash(user["password"], current_password):
+            error = "Your current password doesn't match."
+
+        if error is None:
+            db.execute("UPDATE user SET password = ? WHERE user_name = ?",
+                       (generate_password_hash(password), username))
+            db.commit()
+            flash({"status": "alert-success", "text": "You have successfully changed your password."})
+            return redirect(url_for("practice.index"))
+
+        flash({"status": "alert-danger", "text": error})
+
+    return render_template("auth/password.html")
 
 
 @bp.route("/login", methods=["GET", "POST"])
