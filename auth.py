@@ -93,6 +93,38 @@ def register():
     return render_template("auth/register.html")
 
 
+@login_required
+@bp.route("/password", methods=["GET", "POST"])
+def password():
+    if request.method == "POST":
+        username = g.user["user_name"]
+        current_password = request.form["current_password"]
+        password = request.form["password"]
+        db = get_db()
+        user = db.execute("SELECT * FROM user WHERE user_name = ?", (username,)).fetchone()
+        error = None
+
+        if not password:
+            error = "Password is required."
+        elif user is None:
+            error = "User {0} doesn't exist.".format(username)
+        elif not user["is_enabled"]:
+            error = "User {0} is disabled.".format(username)
+        elif not check_password_hash(user["password"], current_password):
+            error = "Your current password doesn't match."
+
+        if error is None:
+            db.execute("UPDATE user SET password = ? WHERE user_name = ?",
+                       (generate_password_hash(password), username))
+            db.commit()
+            flash({"status": "alert-success", "text": "You have successfully changed your password."})
+            return redirect(url_for("practice.index"))
+
+        flash({"status": "alert-danger", "text": error})
+
+    return render_template("auth/password.html")
+
+
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":

@@ -80,9 +80,7 @@ CREATE TABLE user_mention (
 
 
 INSERT INTO user (id, user_name, full_name, password) VALUES
-(0, 'admin', 'Administrator', 'admin'),
-(1, 'data', 'Data Operator', 'data'),
-(2, 'qa', 'Validation Engineer', 'qa');
+(0, 'admin', 'Administrator', 'admin');
 
 
 INSERT INTO permission(id, permission_name) VALUES
@@ -148,9 +146,7 @@ INSERT INTO role_permission(role_id, permission_id) VALUES
 
 INSERT INTO user_role(user_id, role_id) VALUES
 (0, 0),
-(0, 3),
-(1, 1),
-(2, 2);
+(0, 3);
 
 
 INSERT INTO master_data(category, value) VALUES

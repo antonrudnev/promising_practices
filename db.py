@@ -17,7 +17,7 @@ def close_db(e=None):
         db.close()
 
 
-def init_db():
+def init_db(admin_password):
     with sqlite3.connect(SYSTEM_DATABASE, detect_types=sqlite3.PARSE_DECLTYPES) as db:
         db.row_factory = sqlite3.Row
         with open("schema.sql") as f:
@@ -26,6 +26,7 @@ def init_db():
         for user in db.execute("SELECT id, password FROM user"):
             db.execute("UPDATE user SET password = ? WHERE id = ?",
                        (generate_password_hash(user["password"]), user["id"]))
+        db.execute("UPDATE user SET password = ? WHERE user_name = 'admin'", (generate_password_hash(admin_password),))
         db.commit()
         print("Initialized the content.")
 
@@ -251,4 +252,10 @@ def update_master_data(master_data):
 
 
 if __name__ == "__main__":
-    init_db()
+    import getpass
+    admin_password1 = getpass.getpass("Input admin password:")
+    admin_password2 = getpass.getpass("Confirm admin password:")
+    if admin_password1 == admin_password2:
+        init_db(admin_password1)
+    else:
+        print("Password doesn't match.")
