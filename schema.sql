@@ -80,7 +80,7 @@ CREATE TABLE user_mention (
 
 
 INSERT INTO user (id, user_name, full_name, password) VALUES
-(0, 'admin', 'Administrator', 'admin');
+(0, 'admin', 'Administrator', '');
 
 
 INSERT INTO permission(id, permission_name) VALUES
