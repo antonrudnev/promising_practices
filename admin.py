@@ -78,7 +78,7 @@ def upload():
             if key in MULTIVALUED_FIELDS:
                 value = document[key]
                 if value:
-                    document[key] = value.split(",")
+                    document[key] = [x.strip() for x in value.split(",")]
     solr.add(documents)
     flash({"status": "alert-success", "text": "File has been successfully uploaded."})
 
