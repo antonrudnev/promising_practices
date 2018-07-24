@@ -1,4 +1,6 @@
+import click
 from flask import g
+from flask.cli import with_appcontext
 from settings import SYSTEM_DATABASE
 import sqlite3
 from werkzeug.security import generate_password_hash
@@ -251,7 +253,9 @@ def update_master_data(master_data):
     db.commit()
 
 
-if __name__ == "__main__":
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
     import getpass
     admin_password1 = getpass.getpass("Input admin password:")
     admin_password2 = getpass.getpass("Confirm admin password:")
@@ -259,3 +263,8 @@ if __name__ == "__main__":
         init_db(admin_password1)
     else:
         print("Password doesn't match.")
+
+
+def init_app(app):
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
