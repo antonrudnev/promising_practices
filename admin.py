@@ -53,7 +53,7 @@ def download():
                 document[key] = ",".join(document[key])
 
     docs_json = json.dumps(documents)
-    df = pd.read_json(docs_json, orient="records", dtype="category").sort_values(by=["_id_int"])
+    df = pd.read_json(docs_json, orient="records", dtype="category", encoding="utf-8").sort_values(by=["_id_int"])
     df.drop(columns=[c for c in df.columns.values if c not in ALL_FIELDS], inplace=True)
 
     return Response(
@@ -71,7 +71,7 @@ def upload():
         mkdir("files")
     file_name = path.join("files", secure_filename(file.filename))
     file.save(file_name)
-    df = pd.read_csv(file_name, dtype="category", encoding="ISO-8859-1")
+    df = pd.read_csv(file_name, dtype="category", encoding="utf-8")
     documents = json.loads(df.to_json(orient="records"))
     for document in documents:
         for key in document.keys():

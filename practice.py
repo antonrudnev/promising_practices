@@ -99,9 +99,10 @@ def details(id):
     query = query if query else "*:*"
     comments = get_comments(id)
     read_mention(g.user["id"], id)
+    view_permissions = [p[5:] for p in g.permissions if p.startswith("VIEW_")]
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
                            master=get_master_dictionary(), actions=get_next_state(g.document["status"]),
-                           more_like_this=g.more_like_this)
+                           more_like_this=g.more_like_this, view_permissions=view_permissions)
 
 
 @bp.route("/<int:id>/action", methods=["POST"])

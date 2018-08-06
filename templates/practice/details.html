@@ -142,9 +142,12 @@
             <div class="list-group">
                 <small class="list-group-item list-group-item-action flex-column align-items-start bg-secondary bg-light">More like this:</small>
                 {% for document in more_like_this %}
-                        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ url_for('practice.details', id=document.id, page=page, query=query) }}">
+                        <a class="list-group-item {% if document.status in view_permissions %}list-group-item-action{% endif %} flex-column align-items-start" {% if document.status in view_permissions %}href="{{ url_for('practice.details', id=document.id, page=page, query=query) }}"{% endif %}>
                             <p>{{ document.title }}</p>
-                            <small class="mt-1 badge {{ "badge-" +  config.STATUS_BADGE_STYLE[document.status] }}">{{ document.status|capitalize }}</small>
+                            <div class="d-flex w-100 justify-content-between">
+                                <small class="badge {{ "badge-" +  config.STATUS_BADGE_STYLE[document.status] }}">{{ document.status|capitalize }}</small>
+                                <small>Document #{{ document.id }}</small>
+                            </div>
                         </a>
                 {%  endfor %}
             </div>
