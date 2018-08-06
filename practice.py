@@ -19,12 +19,17 @@ def exists_check(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         id = kwargs["id"]
-        docs = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json"}).raw_response["response"]["docs"]
+        response = solr.search("id:{}".format(id), **{"rows": 1, "wt": "json",
+                                                      "mlt": "true", "mlt.fl": "summary",
+                                                      "mlt.mintf": 1, "mlt.mindf": 1})
+        docs = response.docs
         if len(docs) == 0:
             flash({"status": "alert-danger", "text": "Item {} doesn't exist.".format(id)})
             return redirect(url_for("practice.index"))
         g.document = docs[0]
+        g.more_like_this = response.raw_response["moreLikeThis"][str(id)]["docs"]
         return view(**kwargs)
+
     return wrapped_view
 
 
@@ -95,7 +100,8 @@ def details(id):
     comments = get_comments(id)
     read_mention(g.user["id"], id)
     return render_template("practice/details.html", practice=g.document, comments=comments, page=page, query=query,
-                           master=get_master_dictionary(), actions=get_next_state(g.document["status"]))
+                           master=get_master_dictionary(), actions=get_next_state(g.document["status"]),
+                           more_like_this=g.more_like_this)
 
 
 @bp.route("/<int:id>/action", methods=["POST"])
