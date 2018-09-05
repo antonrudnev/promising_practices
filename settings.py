@@ -1,4 +1,4 @@
-SOLR_COLLECTION = "http://127.0.0.1:8983/solr/promising_practices"
+SOLR_COLLECTION = "http://10.0.15.138:8983/solr/promising_practices"
 DASHBOARD_URL = "http://54.242.41.222:8983/solr/banana/promising_practices/index.html"
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15

@@ -127,6 +127,9 @@ def password():
 
 @bp.route("/login", methods=["GET", "POST"])
 def login():
+    if g.user is not None:
+        return redirect(url_for("practice.index"))
+
     if request.method == "POST":
         username = request.form.get("username", "").strip().lower()
         password = request.form["password"]
@@ -154,4 +157,4 @@ def login():
 @bp.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("practice.index"))
+    return redirect(url_for("auth.login"))
