@@ -7,6 +7,7 @@
     <field name="title" type="text_en" multiValued="false" indexed="true" stored="true"/>
     <field name="intervention_name" type="string" indexed="true" stored="true"/>
     <field name="summary" type="text_en" multiValued="false" indexed="true" stored="true" termVectors="true"/>
+    <field name="public_summary" type="text_en" multiValued="false" indexed="true" stored="true" termVectors="true"/>
     <field name="link" type="string" indexed="true" stored="true"/>
     <field name="citation" type="string" indexed="true" stored="true"/>
     <field name="program_success" type="string"  indexed="true" stored="true"/>
@@ -31,6 +32,7 @@
     <copyField source="id" dest="_id_int"/>
     <copyField source="title" dest="_text_"/>
     <copyField source="summary" dest="_text_"/>
+    <copyField source="public_summary" dest="_text_"/>
     <copyField source="city" dest="_text_"/>
 
     <fieldType name="pint" class="solr.IntPointField" docValues="true" multiValued="false"/>

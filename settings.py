@@ -4,9 +4,9 @@ SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
-ALL_FIELDS = ["id", "title", "intervention_name", "summary", "link", "citation", "program_success", "city", "geography",
-              "region", "source_type", "race", "intervention_goal", "implementers", "scale", "country",
-              "program_components", "population", "status"]
+ALL_FIELDS = ["id", "title", "intervention_name", "summary", "public_summary", "link", "citation", "program_success",
+              "city", "geography", "region", "source_type", "race", "intervention_goal", "implementers", "scale",
+              "country", "program_components", "population", "status"]
 
 MULTIVALUED_FIELDS = ["geography", "region", "race", "intervention_goal", "implementers", "scale", "country",
                       "program_components", "population"]
