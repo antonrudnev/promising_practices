@@ -50,7 +50,7 @@
             "ids": [
               0
             ],
-            "query": "q=*&fq=status:DRAFT&stats=true&stats.field=id&wt=json&rows=0\n",
+            "query": "q=*&fq=status:APPROVED&stats=true&stats.field=id&wt=json&rows=0\n",
             "basic_query": "",
             "custom": ""
           },
@@ -72,7 +72,7 @@
               "field": "id",
               "decimalDigits": 0,
               "label": "",
-              "value": "3"
+              "value": "162"
             }
           ],
           "refresh": {
@@ -138,8 +138,8 @@
                 "ids": [
                   0
                 ],
-                "query": "q=*&fq=status:DRAFT&facet=true&facet.field=intervention_name&facet.field=program_success&facet.field=region&facet.field=source_type&facet.field=race&facet.field=intervention_goal&facet.field=implementers&facet.field=scale&facet.field=country&facet.field=program_components&facet.field=population&wt=json",
-                "basic_query": "q=*&fq=status:DRAFT&facet=true&facet.field=intervention_name&facet.field=program_success&facet.field=region&facet.field=source_type&facet.field=race&facet.field=intervention_goal&facet.field=implementers&facet.field=scale&facet.field=country&facet.field=program_components&facet.field=population",
+                "query": "q=*&fq=status:APPROVED&facet=true&facet.field=intervention_name&facet.field=program_success&facet.field=region&facet.field=source_type&facet.field=race&facet.field=intervention_goal&facet.field=implementers&facet.field=scale&facet.field=country&facet.field=program_components&facet.field=population&wt=json",
+                "basic_query": "q=*&fq=status:APPROVED&facet=true&facet.field=intervention_name&facet.field=program_success&facet.field=region&facet.field=source_type&facet.field=race&facet.field=intervention_goal&facet.field=implementers&facet.field=scale&facet.field=country&facet.field=program_components&facet.field=population",
                 "custom": ""
               },
               "group": "default",
@@ -182,7 +182,7 @@
                 "ids": [
                   0
                 ],
-                "query": "q=*&fq=status:DRAFT&wt=json&rows=0&facet=true&facet.field=geography&facet.limit=1000",
+                "query": "q=*&fq=status:APPROVED&wt=json&rows=0&facet=true&facet.field=geography&facet.limit=1000",
                 "custom": ""
               },
               "mode": "count",
@@ -209,7 +209,7 @@
               "field": "population",
               "queries": {
                 "mode": "all",
-                "query": "q=*&fq=status:DRAFT&wt=json&rows=0&facet=true&facet.field=population&facet.limit=10",
+                "query": "q=*&fq=status:APPROVED&wt=json&rows=0&facet=true&facet.field=population&facet.limit=10",
                 "custom": "",
                 "ids": [
                   0
@@ -231,7 +231,7 @@
               "field": "implementers",
               "queries": {
                 "mode": "all",
-                "query": "q=*&fq=status:DRAFT&wt=json&rows=0&facet=true&facet.field=implementers&facet.limit=20",
+                "query": "q=*&fq=status:APPROVED&wt=json&rows=0&facet=true&facet.field=implementers&facet.limit=20",
                 "custom": "",
                 "ids": [
                   0
@@ -255,7 +255,7 @@
                 "ids": [
                   0
                 ],
-                "query": "q=*&fq=status:DRAFT&wt=json&rows=0&facet=true&facet.field=program_components&facet.limit=50",
+                "query": "q=*&fq=status:APPROVED&wt=json&rows=0&facet=true&facet.field=program_components&facet.limit=50",
                 "custom": ""
               },
               "field": "program_components",
@@ -301,8 +301,8 @@
                 "ids": [
                   0
                 ],
-                "query": "q=*&fq=status:DRAFT&facet=true&wt=json&rows=1000&hl=true&hl.fl=summary",
-                "basic_query": "q=*&fq=status:DRAFT&facet=true",
+                "query": "q=*&fq=status:APPROVED&facet=true&wt=json&rows=1000&hl=true&hl.fl=public_summary",
+                "basic_query": "q=*&fq=status:APPROVED&facet=true",
                 "custom": ""
               },
               "size": 10,
@@ -330,7 +330,7 @@
               "foundResults": true,
               "show_queries": true,
               "header_field": "title",
-              "body_field": "summary",
+              "body_field": "public_summary",
               "url_field": "link"
             }
           ]
