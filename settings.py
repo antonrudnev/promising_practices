@@ -1,5 +1,5 @@
-SOLR_COLLECTION = "http://10.0.15.138:8983/solr/promising_practices"
-DASHBOARD_URL = "http://54.242.41.222:8983/solr/banana/opioid-dashboard/opioid-vagrant/src-host/index.html"
+SOLR_COLLECTION = "http://10.0.49.27:8983/solr/promising_practices"
+DASHBOARD_URL = "http://34.231.243.2:8983/solr/banana/opioid-dashboard/opioid-vagrant/src-host/index.html"
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
