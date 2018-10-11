@@ -51,8 +51,8 @@ def download():
         for key in document.keys():
             if key in MULTIVALUED_FIELDS:
                 document[key] = ",".join(document[key])
-            else:
-                document[key] = repr(document[key])[1:-1]
+            # else:
+            #     document[key] = repr(document[key])[1:-1]
 
     docs_json = json.dumps(documents)
     df = pd.read_json(docs_json, orient="records", dtype="category", encoding="utf-8").sort_values(by=["_id_int"])
