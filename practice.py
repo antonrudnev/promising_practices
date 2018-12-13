@@ -178,3 +178,8 @@ def delete(id):
 
     title = request.args.get("title")
     return render_template("practice/delete.html", id=id, title=title, page=page, query=query)
+
+
+@bp.route("/modal")
+def modal():
+    return render_template("modal.html")
