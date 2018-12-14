@@ -257,7 +257,7 @@ def get_demo_requests():
                           "was_read "
                           "FROM demo_request "
                           "WHERE was_deleted = 0 "
-                          "ORDER BY created_on DESC").fetchall()
+                          "ORDER BY was_read, created_on DESC").fetchall()
     return [{"id": r["id"],
              "request": json.loads(r["request"]),
              "created_on": r["created_on"],

@@ -20,9 +20,12 @@ def counter():
 
 @bp.route("/demorequest", methods=["POST"])
 def demo_request():
-    required_fields = ["first_name", "last_name", "organization_name", "email"]
-    request_details = request.json
-    if any(x not in request_details for x in required_fields):
-        return abort(400)
-    insert_demo_request(json.dumps(request_details))
-    return jsonify("Request received"), 201
+    try:
+        required_fields = ["first_name", "last_name", "organization_name", "email"]
+        request_details = request.json
+        if any(x not in request_details for x in required_fields):
+            return abort(400)
+        insert_demo_request(json.dumps(request_details))
+        return jsonify("Request received"), 201
+    except Exception:
+        return abort(500)
