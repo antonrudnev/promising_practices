@@ -7,6 +7,7 @@ import click
 import json
 import sqlite3
 
+
 def get_db():
     if "db" not in g:
         g.db = sqlite3.connect(SYSTEM_DATABASE, detect_types=sqlite3.PARSE_DECLTYPES)
@@ -251,30 +252,46 @@ def update_master_data(master_data):
 
 def get_demo_requests():
     db = get_db()
-    requests = db.execute("SELECT id, "
-                          "request, "
-                          "created_on ,"
-                          "was_read "
-                          "FROM demo_request "
-                          "WHERE was_deleted = 0 "
-                          "ORDER BY was_read, created_on DESC").fetchall()
+    demo_requests = db.execute("SELECT id, "
+                               "request, "
+                               "created_on ,"
+                               "was_read "
+                               "FROM demo_request "
+                               "WHERE was_deleted = 0 "
+                               "ORDER BY was_read, created_on DESC").fetchall()
     return [{"id": r["id"],
              "request": json.loads(r["request"]),
              "created_on": r["created_on"],
-             "was_read": r["was_read"]} for r in requests]
+             "was_read": r["was_read"]} for r in demo_requests]
 
 
-def insert_demo_request(request):
+def get_demo_request(demo_request_id):
     db = get_db()
-    db.execute("INSERT INTO demo_request (request) VALUES (?)", (request,))
+    demo_request = db.execute("SELECT id, "
+                              "request, "
+                              "created_on ,"
+                              "was_read, "
+                              "was_deleted "
+                              "FROM demo_request "
+                              "WHERE id = ?", (demo_request_id, )).fetchone()
+    return {"id": demo_request["id"],
+            "request": json.loads(demo_request["request"]),
+            "created_on": demo_request["created_on"],
+            "was_read": demo_request["was_read"],
+            "was_deleted": demo_request["was_deleted"]}
+
+
+def insert_demo_request(demo_request):
+    db = get_db()
+    db.execute("INSERT INTO demo_request (request) VALUES (?)", (demo_request,))
     db.commit()
 
 
-def delete_demo_request(request_id):
+def delete_demo_request(demo_request_id):
     db = get_db()
     db.execute("UPDATE demo_request "
                "SET was_deleted = 1 "
-               "WHERE id = ?", (request_id,))
+               "WHERE id = ?", (demo_request_id,))
     db.commit()
 
 

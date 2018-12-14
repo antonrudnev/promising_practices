@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Demo request{% endblock %}
+
+{% block content %}
+    <div class="my-2">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 15%">Field</th>
+                    <th scope="col" style="width: 85%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">ID</th>
+                    <td>{{ demo_request.id }}</td>
+                </tr>
+                {% if demo_request.was_deleted %}
+                <tr>
+                    <th class="align-middle" scope="row">Status</th>
+                    <th class="align-middle" scope="row">
+                        <h5 class="mt-1"><span class="mt-1 badge badge-warning">Deleted</span></h5>
+                    </th>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row">First name</th>
+                    <td>{{ demo_request.request["first_name"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Last name</th>
+                    <td>{{ demo_request.request["last_name"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Organization</th>
+                    <td>{{ demo_request.request["organization_name"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Type of organization</th>
+                    <td>{{ demo_request.request["organization_type"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Role in organization</th>
+                    <td>{{ demo_request.request["role"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Email address</th>
+                    <td><a href="mailto:{{ demo_request.request["email"] }}?Subject=AIR%20response%20in%20your%20CORRD%20demo%20request">{{ demo_request.request["email"] }}</a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Phone number</th>
+                    <td>{{ demo_request.request["phone"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Comments</th>
+                    <td>{{ demo_request.request["comments"] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr class="my-4"/>
+
+    <div class="btn-toolbar justify-content-between my-4" role="toolbar">
+        <div class="d-inline" role="group">
+            <a class="btn btn-secondary mr-2" style="width: 90px;" href="{{ url_for("demo.index") }}">Back</a>
+        </div>
+        <a class="btn btn-outline-danger d-inline float-right" style="width: 90px;" href="">Delete</a>
+    </div>
+
+    <script>
+        convertTimeDateToLocal(1);
+    </script>
+{% endblock %}

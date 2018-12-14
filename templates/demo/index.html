@@ -5,24 +5,29 @@
 {% block content %}
     <div class="my-4">
         <h5 class="mb-4">Demo requests:</h5>
-        {% if requests|length == 0 %}
+        {% if demo_requests|length == 0 %}
             <div class="ml-4 text-muted">
                 There aren't any demo requests received by this time
             </div>
         {% endif %}
-        {% for r in requests %}
+        {% for r in demo_requests %}
             <div class="row m-2 {{ "font-weight-bold" if not r.was_read else "text-muted"}}">
-                <div class="col-0"><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="">{{ '<i class="far fa-envelope"></i>'|safe if not r.was_read else '<i class="far fa-envelope-open"></i>'|safe }}</a></div>
-                <div class="col text-nowrap">
-                    <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="">{{ r.request.first_name }} {{ r.request.last_name }} ({{ r.request.organization_name }})</a></div>
-                    <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href=""><small id="t{{ loop.index0 }}">{{ r.created_on }}</small></a></div>
+                <div class="col-0"><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="{{ url_for("demo.details", demo_request_id=r.id) }}">{{ '<i class="far fa-envelope"></i>'|safe if not r.was_read else '<i class="far fa-envelope-open"></i>'|safe }}</a></div>
+                <div class="col-4">
+                    <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="{{ url_for("demo.details", demo_request_id=r.id) }}">{{ r.request.first_name }} {{ r.request.last_name }} </a></div>
+                    <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="mailto:{{ r.request.email }}?Subject=AIR%20response%20in%20your%20CORRD%20demo%20request"><small>{{ r.request.email }}</small></a></div>
+                    <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.phone }}</small></div>
                 </div>
                 <div class="col">
-                    <div><a {{ "class=text-muted" if request.was_read else "style=color:black" }} href="">{{ r.request.email }}</a></div>
-{#                    <div><a {{ "class=text-muted" if request.was_read else "style=color:black" }} href=""><small>Document #{{ request.document_id }}</small></a></div>#}
+                    <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="{{ url_for("demo.details", demo_request_id=r.id) }}">{{ r.request.organization_name }}</a></div>
                 </div>
-                <div class="col-1 text-nowrap">
-                    <a class="text-muted" href="">Dismiss</a>
+                <div class="col">
+                    <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.organization_type }}</small></div>
+                    <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.role }}</small></div>
+                </div>
+                <div class="col-2">
+                    <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>Requested on</small></div>
+                    <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }} id="t{{ loop.index0 }}">{{ r.created_on }}</small></div>
                 </div>
             </div>
             {{ "<hr/>"|safe if not loop.last }}
@@ -33,7 +38,7 @@
     </div>
 
     <script>
-        convertTimeDateToLocal({{ requests|length }});
+        convertTimeDateToLocal({{ demo_requests|length }});
     </script>
 {% endblock %}
 
