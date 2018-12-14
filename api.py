@@ -1,6 +1,9 @@
-from flask import Blueprint, jsonify, make_response, request
+from flask import abort, Blueprint, jsonify, request
+from db import insert_demo_request
 from settings import COUNTER_QUERIES, SOLR_COLLECTION
 from pysolr import Solr
+
+import json
 
 bp = Blueprint("api", __name__, url_prefix="/api/v1")
 solr = Solr(SOLR_COLLECTION)
@@ -15,8 +18,11 @@ def counter():
     return jsonify(counters)
 
 
-@bp.route("/demo", methods=["POST"])
+@bp.route("/demorequest", methods=["POST"])
 def demo_request():
-    request_details = request.json["firstName"]
-    print(request_details)
-    return make_response("", 201)
+    required_fields = ["first_name", "last_name", "organization_name", "email"]
+    request_details = request.json
+    if any(x not in request_details for x in required_fields):
+        return abort(400)
+    insert_demo_request(json.dumps(request_details))
+    return jsonify("Request received"), 201

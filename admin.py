@@ -1,14 +1,15 @@
 from auth import login_required, permission_required
-import datetime
 from db import get_master_data, get_roles, get_users, update_master_data, update_users_roles, update_roles_permissions
 from flask import Blueprint, flash, redirect, render_template, request, Response, url_for
-import json
 from os import path, mkdir
-import pandas as pd
-from settings import ALL_FIELDS, MULTIVALUED_FIELDS, SOLR_COLLECTION
 from pysolr import Solr
-import re
+from settings import ALL_FIELDS, MULTIVALUED_FIELDS, SOLR_COLLECTION
 from werkzeug.utils import secure_filename
+
+import datetime
+import json
+import pandas as pd
+import re
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 solr = Solr(SOLR_COLLECTION)

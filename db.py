@@ -1,10 +1,11 @@
-import click
 from flask import g
 from flask.cli import with_appcontext
 from settings import SYSTEM_DATABASE
-import sqlite3
 from werkzeug.security import generate_password_hash
 
+import click
+import json
+import sqlite3
 
 def get_db():
     if "db" not in g:
@@ -49,7 +50,6 @@ def insert_comment(document_id, user_id, comment):
     cur.execute("INSERT INTO user_comment (document_id, user_id, comment) VALUES (?, ?, ?)",
                 (document_id, user_id, comment))
     comment_id = cur.lastrowid
-
     for user_id in mentions:
         cur.execute("INSERT INTO user_mention (user_id, user_comment_id, was_read) VALUES (?, ?, ?)",
                     (user_id, comment_id, user_id == g.user["id"]))
@@ -194,7 +194,6 @@ def get_roles():
                            "ORDER BY role.role_name, permission.permission_name) "
                            "GROUP BY role_id, role_name "
                            "ORDER BY role_name").fetchall()
-
     return [{"role_id": str(role["role_id"]),
              "role_name": role["role_name"],
              "permissions": list(zip(role["permission_ids"].split(","),
@@ -224,11 +223,9 @@ def get_master_dictionary():
                             "FROM master_data "
                             "ORDER BY order_number) "
                             "GROUP BY category").fetchall()
-
     master_dictionary = dict()
     for category in master_tbl:
         master_dictionary[category["category"]] = category["values"].split(",")
-
     return master_dictionary
 
 
@@ -240,7 +237,6 @@ def get_master_data():
                             "order_number "
                             "FROM master_data "
                             "ORDER BY category, order_number").fetchall()
-
     return master_tbl
 
 
@@ -250,6 +246,35 @@ def update_master_data(master_data):
     for value in master_data:
         db.execute("INSERT INTO master_data (category, value, order_number) VALUES (?, ?, ?)",
                    (value["category"], value["value"], value["order_number"]))
+    db.commit()
+
+
+def get_demo_requests():
+    db = get_db()
+    requests = db.execute("SELECT id, "
+                          "request, "
+                          "created_on ,"
+                          "was_read "
+                          "FROM demo_request "
+                          "WHERE was_deleted = 0 "
+                          "ORDER BY created_on DESC").fetchall()
+    return [{"id": r["id"],
+             "request": json.loads(r["request"]),
+             "created_on": r["created_on"],
+             "was_read": r["was_read"]} for r in requests]
+
+
+def insert_demo_request(request):
+    db = get_db()
+    db.execute("INSERT INTO demo_request (request) VALUES (?)", (request,))
+    db.commit()
+
+
+def delete_demo_request(request_id):
+    db = get_db()
+    db.execute("UPDATE demo_request "
+               "SET was_deleted = 1 "
+               "WHERE id = ?", (request_id,))
     db.commit()
 
 

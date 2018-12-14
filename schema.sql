@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS master_data;
 DROP TABLE IF EXISTS user_comment;
 DROP TABLE IF EXISTS user_mention;
+DROP TABLE IF EXISTS demo_request;
 
 
 CREATE TABLE user (
@@ -79,6 +80,15 @@ CREATE TABLE user_mention (
 );
 
 
+CREATE TABLE demo_request (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  request TEXT NOT NULL,
+  created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  was_read INTEGER DEFAULT 0,
+  was_deleted INTEGER DEFAULT 0
+);
+
+
 INSERT INTO user (id, user_name, full_name, password) VALUES
 (0, 'admin', 'Administrator', '');
 
@@ -106,7 +116,8 @@ INSERT INTO permission(id, permission_name) VALUES
 (19, 'ACTION_REVOKE'),
 (20, 'ADMIN_SECURITY'),
 (21, 'ADMIN_CONTENT'),
-(22, 'ADMIN_MASTERDATA');
+(22, 'ADMIN_MASTERDATA'),
+(23, 'ADMIN_DEMOREQUESTS');
 
 INSERT INTO role(id, role_name) VALUES
 (0, 'administrator'),
@@ -119,6 +130,7 @@ INSERT INTO role_permission(role_id, permission_id) VALUES
 (0, 20),
 (0, 21),
 (0, 22),
+(0, 23),
 (1, 0),
 (1, 3),
 (1, 5),

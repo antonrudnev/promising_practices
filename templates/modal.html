@@ -28,11 +28,24 @@
                 event.preventDefault();
                 $.ajax({
                     type: "post",
-                    url: "http://127.0.0.1:5000/api/v1/demo",
-                    data: JSON.stringify({"firstName": $("#inputFirstName").val()}),
+                    url: "/api/v1/demorequest",
+                    data: JSON.stringify({
+                        "first_name": $("#inputFirstName").val(),
+                        "last_name": $("#inputLastName").val(),
+                        "organization_name": $("#inputOrganizationName").val(),
+                        "organization_type": $("#inputOrganizationType").val(),
+                        "role": $("#inputRoleInOrganization").val(),
+                        "email": $("#inputEmail").val(),
+                        "phone": $("#inputPhone").val(),
+                        "comments": $("#inputComments").val()
+                    }),
                     contentType: "application/json",
                     dataType: "json"
-                })
+                }).fail(function () {
+                    alert("Sorry, there was a problem with your request. Please try again later.");
+                });
+                $("#requestDemoModal").modal("toggle");
+                $("#frmDemoRequest").trigger("reset");
             })
         })
     </script>
@@ -76,7 +89,7 @@
                         <div class="col-4 ml-2">
                             <label for="inputOrganizationType">Type of organization</label>
                             <select class="form-control" id="inputOrganizationType">
-                                <option selected>Choose...</option>
+                                <option selected value="">Choose...</option>
                                 <option value="Federal Agency">Federal Agency</option>
                                 <option value="Sate">State</option>
                                 <option value="Advocacy">Advocacy</option>
@@ -86,8 +99,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputRole">Role in organization</label>
-                    <input type="text" class="form-control" id="inputRole">
+                    <label for="inputRoleInOrganization">Role in organization</label>
+                    <input type="text" class="form-control" id="inputRoleInOrganization">
                 </div>
                 <div class="form-group">
                     <div class="form-row">
@@ -107,7 +120,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCloseRequest">Close</button>
                 <button type="submit" class="btn btn-primary" id="btnDemoRequest">Send request</button>
             </div>
         </form>
