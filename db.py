@@ -295,6 +295,14 @@ def delete_demo_request(demo_request_id):
     db.commit()
 
 
+def read_demo_request(demo_request_id):
+    db = get_db()
+    db.execute("UPDATE demo_request "
+               "SET was_read = 1 "
+               "WHERE id = ?", (demo_request_id,))
+    db.commit()
+
+
 @click.command('init-db')
 @with_appcontext
 def init_db_command():

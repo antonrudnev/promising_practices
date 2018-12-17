@@ -13,7 +13,7 @@
         {% for r in demo_requests %}
             <div class="row m-2 {{ "font-weight-bold" if not r.was_read else "text-muted"}}">
                 <div class="col-0"><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="{{ url_for("demo.details", demo_request_id=r.id) }}">{{ '<i class="far fa-envelope"></i>'|safe if not r.was_read else '<i class="far fa-envelope-open"></i>'|safe }}</a></div>
-                <div class="col-4">
+                <div class="col">
                     <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="{{ url_for("demo.details", demo_request_id=r.id) }}">{{ r.request.first_name }} {{ r.request.last_name }} </a></div>
                     <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="mailto:{{ r.request.email }}?Subject=AIR%20response%20in%20your%20CORRD%20demo%20request"><small>{{ r.request.email }}</small></a></div>
                     <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.phone }}</small></div>
@@ -25,7 +25,7 @@
                     <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.organization_type }}</small></div>
                     <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.role }}</small></div>
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>Requested on</small></div>
                     <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }} id="t{{ loop.index0 }}">{{ r.created_on }}</small></div>
                 </div>
@@ -34,7 +34,7 @@
         {% endfor %}
     </div>
     <div class="btn-toolbar my-4" role="toolbar">
-        <a class="btn btn-secondary mr-2" href="{{ url_for("practice.index") }}">Close</a>
+        <a class="btn btn-secondary mr-2" href="{{ url_for("practice.index") }}" >Close</a>
     </div>
 
     <script>
