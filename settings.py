@@ -1,5 +1,6 @@
 SOLR_COLLECTION = "http://54.175.11.175:8983/solr/promising_practices"
 DASHBOARD_URL = "http://34.231.243.2:8983/solr/banana/opioid-dashboard/opioid-vagrant/src-host/index.html"
+CORRD_MANAGER_BOT = ""
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
