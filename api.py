@@ -4,7 +4,7 @@ from settings import COUNTER_QUERIES, SOLR_COLLECTION
 from pysolr import Solr
 from settings import CORRD_MANAGER_BOT
 from telegram import Bot
-from telegram.error import NetworkError
+from telegram.error import TelegramError
 
 import json
 
@@ -16,7 +16,7 @@ def push_notification(message):
     bot = Bot(CORRD_MANAGER_BOT)
     try:
         bot.sendMessage(chat_id=-1001347417582, text=message)
-    except NetworkError:
+    except TelegramError:
         pass
 
 
