@@ -20,6 +20,7 @@
                 </div>
                 <div class="col">
                     <div><a {{ "class=text-muted" if r.was_read else "style=color:black" }} href="{{ url_for("demo.details", demo_request_id=r.id) }}">{{ r.request.organization_name }}</a></div>
+                    <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.location }}</small></div>
                 </div>
                 <div class="col">
                     <div><small {{ "class=text-muted" if r.was_read else "style=color:black" }}>{{ r.request.organization_type }}</small></div>

@@ -36,6 +36,7 @@ def demo_request():
         request_details = request.json
         if any(x not in request_details for x in required_fields):
             return abort(400)
+        request_details["remote_addr"] = request.remote_addr
         insert_demo_request(json.dumps(request_details))
         push_notification(
             f'A new demo request from {request_details["first_name"]} {request_details["last_name"]} '

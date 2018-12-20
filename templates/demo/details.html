@@ -56,6 +56,14 @@
                     <th scope="row">Comments</th>
                     <td>{{ demo_request.request["comments"] }}</td>
                 </tr>
+                <tr>
+                    <th scope="row">Location</th>
+                    <td>{{ demo_request.request["location"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">IP address</th>
+                    <td><a target="_blank" href="http://geoiplookup.net/ip/{{ demo_request.request["remote_addr"] }}">{{ demo_request.request["remote_addr"] }}</a></td>
+                </tr>
             </tbody>
         </table>
     </div>
