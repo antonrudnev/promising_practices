@@ -1,4 +1,5 @@
 from flask import Flask
+from werkzeug.contrib.fixers import ProxyFix
 
 import admin
 import api
@@ -19,6 +20,7 @@ app.register_blueprint(demo.bp)
 app.add_url_rule("/", endpoint="practice", view_func=practice.index)
 app.config.from_mapping(SECRET_KEY="dev")
 app.config.from_pyfile("settings.py")
+app.wsgi_app = ProxyFix(app.wsgi_app)
 db.init_app(app)
 
 
