@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+
+  corrd:
+    image: corrd-solr
+    build: corrd/.
+    volumes:
+      - "corrd-data:/opt/solr/server/solr/mycores/promising-practices"
+    ports:
+      - "8983:8983"
+
+  eswat:
+    image: eswat
+    build: eswat/.
+    volumes:
+      - "./eswat/src/system.sqlite:/eswat/system.sqlite"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - "corrd"
+
+volumes:
+  corrd-data:
+

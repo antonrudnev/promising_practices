@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>16171F38-4706-4142-9066-B4273EE7D00E</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="All-pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Landing-Page-v3" transform="translate(-167.000000, -2402.000000)" stroke="#FFFFFF">
+            <g id="Play-video-circle" transform="translate(168.000000, 2403.000000)">
+                <circle id="Oval-5" fill="#FFCC01" cx="26" cy="26" r="26"></circle>
+                <path d="M39.3080357,26.5039062 L20.78125,36.7996652 C20.5673352,36.9205735 20.3836503,36.9345243 20.2301897,36.8415179 C20.0767291,36.7485114 20,36.5811024 20,36.3392857 L20,15.8035714 C20,15.5617547 20.0767291,15.3943457 20.2301897,15.3013393 C20.3836503,15.2083329 20.5673352,15.2222836 20.78125,15.343192 L39.3080357,25.6389509 C39.5219505,25.7598592 39.6289062,25.904017 39.6289062,26.0714286 C39.6289062,26.2388401 39.5219505,26.3829979 39.3080357,26.5039062 Z" id="play---FontAwesome" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>
