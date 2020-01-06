@@ -43,12 +43,6 @@ function (angular, _, config) {
             // So we'll keep using it for now before refactoring it to $scope.solr.
             // $scope.solr = $scope.solr || {};
 
-            // Don't need to create system_banana collection anymore, because we'll use Blob Store API instead.
-            // Create the system_banana collection for Fusion.
-            // if (config.USE_FUSION) {
-            //     dashboard.create_system_collection();
-            // }
-
             // Pagination
             $scope.loadMenu = {
                 currentPage: 1,    // Current active page in the pager.
@@ -91,6 +85,10 @@ function (angular, _, config) {
             if (type === 'share') {
                 return (_l.save_temp);
             }
+            if (type === 'home') {
+                return (dashboard.current.home || $scope.home);
+            }
+
             return false;
         };
 
@@ -206,7 +204,7 @@ function (angular, _, config) {
                         if ($scope.loadMenu.pages.length > 0) {
                           $scope.loadMenu.pages[0].state = 'active';
                         }
-                        
+
                         if ($scope.loadMenu.totalPages > $scope.loadMenu.maxShownPages) {
                             $scope.loadMenu.forwardButtonState = '';
                         } else {
@@ -249,7 +247,7 @@ function (angular, _, config) {
                 $scope.loadMenu.currentPage = pageNum;
             }
         };
-        
+
         $scope.getPrevSavedDashboard = function (event) {
             // To stop dropdown-menu from disappearing after click
             event.stopPropagation();
@@ -319,8 +317,8 @@ function (angular, _, config) {
             var docs = [];
             for (var i=0; i < dashboardList.length; i++) {
                 var doc = {};
-                if (config.USE_FUSION) {                
-                  // strip out the '/' prefix                  
+                if (config.USE_FUSION) {
+                  // strip out the '/' prefix
                   if (dashboardList[i].id.indexOf('/') !== -1) {
                     doc.id = dashboardList[i].id.substring(1);
                   } else {

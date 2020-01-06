@@ -73,6 +73,7 @@ function (angular, app, _, $, kbn) {
       lastColor : '',
       spyable     : true,
       show_queries:true,
+      bar_chart_arrangement: 'vertical',
       error : '',
       chartColors : querySrv.colors,
       refresh: {
@@ -132,7 +133,9 @@ function (angular, app, _, $, kbn) {
       } else {
         // if mode != 'count' then we need to use stats query
         // stats does not support something like facet.limit, so we have to sort and limit the results manually.
-        facet = '&stats=true&stats.facet=' + $scope.panel.field + '&stats.field=' + $scope.panel.stats_field + '&facet.missing=true';
+        // Combining stats with pivot
+        facet = '&stats=true&stats.field={!tag=piv1}' + $scope.panel.stats_field + '&facet=true&facet.pivot={!stats=piv1}' +
+                $scope.panel.field + '&facet.limit=' + $scope.panel.size + '&facet.missing=true';
       }
       facet += '&f.' + $scope.panel.field + '.facet.sort=' + ($scope.panel.sortBy || 'count');
 
@@ -282,8 +285,13 @@ function (angular, app, _, $, kbn) {
         } else {
           // In stats mode, set y-axis min to null so jquery.flot will set the scale automatically.
           $scope.yaxis_min = null;
-          _.each(results.stats.stats_fields[$scope.panel.stats_field].facets[$scope.panel.field], function(stats_obj,facet_field) {
-            var slice = { label:facet_field, data:[[k,stats_obj[$scope.panel.mode]]], actions: true };
+
+          _.each(results.facet_counts.facet_pivot[$scope.panel.field], function(pivot_obj) {
+            var slice = {
+              label: pivot_obj.value,
+              data: [[k, pivot_obj.stats.stats_fields[$scope.panel.stats_field][$scope.panel.mode]]],
+              actions: true
+            };
             $scope.data.push(slice);
           });
         }
@@ -367,6 +375,10 @@ function (angular, app, _, $, kbn) {
       return true;
     };
 
+    $scope.dataByAlignment = function(data) {
+      return ($scope.panel.chart === 'bar' && $scope.panel.bar_chart_arrangement === 'horizontal') ? data[0][0] : data[0][1];
+    };
+
   });
 
   module.directive('termsChart', function(querySrv,dashboard,filterSrv) {
@@ -411,13 +423,13 @@ function (angular, app, _, $, kbn) {
               // Add plot to scope so we can build out own legend
               if(scope.panel.chart === 'bar') {
 
-                var yAxisConfig = {
+                var labelAxisConfig = {
                   show: true,
                   min: scope.yaxis_min,
                   color: "#c8c8c8"
                 };
                 if (scope.panel.logAxis) {
-                  _.defaults(yAxisConfig, {
+                  _.defaults(labelAxisConfig, {
                     ticks: function (axis) {
                       var res = [], v, i = 1,
                         ticksNumber = 8,
@@ -431,23 +443,38 @@ function (angular, app, _, $, kbn) {
                       } while (v < max);
                       return res;
                     },
-                    transform: function (v) {
-                      return v === 0 ? 0 : Math.log(v); },
-                    inverseTransform: function (v) {
-                      return v === 0 ? 0 : Math.exp(v); }
+                    // transform: function (v) {
+                    //   return v === 0 ? 0 : Math.log(v); },
+                    // inverseTransform: function (v) {
+                    //   return v === 0 ? 0 : Math.exp(v); }
                   });
                 }
 
-                plot = $.plot(elem, chartData, {
+                var resultChartData;
+
+                if (scope.panel.bar_chart_arrangement === 'horizontal') {
+                  resultChartData = _.map(chartData, function(item){
+                    var result = _.clone(item);
+                    result.data = _.map(result.data, function(v) {
+                      return [v[1], v[0]];
+                    });
+
+                    return result;
+                  });
+                } else {
+                  resultChartData = chartData;
+                }
+
+                plot = $.plot(elem, resultChartData, {
                   legend: { show: false },
                   series: {
                     lines:  { show: false },
-                    bars:   { show: true,  fill: 1, barWidth: 0.8, horizontal: false },
+                    bars:   { show: true,  fill: 1, barWidth: 0.8, horizontal: scope.panel.bar_chart_arrangement === 'horizontal' },
                     shadowSize: 1
                   },
                   // yaxis: { show: true, min: 0, color: "#c8c8c8" },
-                  yaxis: yAxisConfig,
-                  xaxis: { show: false },
+                  yaxis: scope.panel.bar_chart_arrangement === 'horizontal' ? { show: false } : labelAxisConfig,
+                  xaxis: scope.panel.bar_chart_arrangement === 'horizontal' ? labelAxisConfig : { show: false },
                   grid: {
                     borderWidth: 0,
                     borderColor: '#eee',
@@ -531,16 +558,21 @@ function (angular, app, _, $, kbn) {
         var $tooltip = $('<div>');
         elem.bind("plothover", function (event, pos, item) {
           if (item) {
-            var value = scope.panel.chart === 'bar' ? item.datapoint[1] : item.datapoint[1][0][1];
+            var value = scope.panel.chart === 'bar' ? item.datapoint[scope.panel.bar_chart_arrangement === 'horizontal' ? 0 : 1] : item.datapoint[1][0][1];
             // if (scope.panel.mode === 'count') {
             //   value = value.toFixed(0);
             // } else {
             //   value = value.toFixed(scope.panel.decimal_points);
             // }
+
+            // Escape HTML tags to prevent the XSS or script injection attack
+            var escapedValue = dashboard.escapeHtml(
+              item.series.label + " (" + dashboard.numberWithCommas(value.toFixed(scope.panel.decimal_points)) + ")"
+            );
+
             $tooltip
               .html(
-                kbn.query_color_dot(item.series.color, 20) + ' ' +
-                item.series.label + " (" + dashboard.numberWithCommas(value.toFixed(scope.panel.decimal_points)) +")"
+                kbn.query_color_dot(item.series.color, 20) + ' ' + escapedValue
               )
               .place_tt(pos.pageX, pos.pageY);
           } else {

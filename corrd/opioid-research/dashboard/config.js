@@ -33,8 +33,8 @@ function (Settings) {
      */
 
     // Specify Solr server and core to store the data.
-    solr: "/api/apollo/query-pipelines/_system/collections/",
-    solr_core: "system_logs",
+    solr: "/solr/",
+    solr_core: "logs",
     timefield: "timestamp_tdt",
 
     /**
@@ -49,7 +49,7 @@ function (Settings) {
      * internal to banana.
      * @type {String}
      */
-    banana_index: "system_banana",
+    banana_index: "banana-int",
     // Uncomment the following line to specify the URL of Solr server that will be used to store and load saved dashboards.
     // If you specify a remote Solr server, then you need to enable CORS on it in order to allow dashboards to be saved or loaded.
     // Also, you need to uncomment this same line in src/app/components/settings.js to enable banana_server config.
@@ -63,7 +63,7 @@ function (Settings) {
      * USE_FUSION = true, mean that Banana will talk to Lucidworks Fusion APIs, instead of Solr.
      * This mainly affect the APIs used to get the list of collections and schemas (fields).
      */
-    USE_FUSION: true,
+    USE_FUSION: false,
     apollo: "/api/apollo",
     apollo_queryPipeline: "/api/apollo/query-pipelines/",
     apollo_indexPipeline: "/api/apollo/index-pipelines/",
@@ -125,7 +125,9 @@ function (Settings) {
       'tagcloud',
       'multiseries',
       'sunburst',
-      'docviewer'
+      'docviewer',
+      'sankey',
+      'force'
     ]
   });
 });
