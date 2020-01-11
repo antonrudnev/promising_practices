@@ -2,6 +2,8 @@ SOLR_COLLECTION = "http://corrd:8983/solr/promising-practices"
 DASHBOARD_URL = "/dashboard/index.html"
 CORRD_MANAGER_BOT = "727393066:AAHhy0Ie9_REDq4frpHvCGluIz9r5tns2VM"
 SYSTEM_DATABASE = "system.sqlite"
+SECRET_KEY = "secret"
+SESSION_COOKIE_NAME = "eswat"
 ITEMS_PER_PAGE = 15
 PAGER_RANGE = 2
 
