@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="475px" height="491px" viewBox="0 0 475 491" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>4242DAEF-E776-4EFB-B17B-88F806C497CD</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="All-pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Landing-Page-v3" transform="translate(-132.000000, -878.000000)">
+            <g id="chart" transform="translate(134.000000, 875.000000)">
+                <text id="Deaths-per-100,000" font-family="Roboto-Regular, Roboto" font-size="18" font-weight="normal" fill="#000000">
+                    <tspan x="0" y="17">Deaths per </tspan>
+                    <tspan x="0" y="38">100,000</tspan>
+                </text>
+                <text id="21" font-family="Roboto-Bold, Roboto" font-size="24" font-weight="bold" fill="#000000">
+                    <tspan x="333.230469" y="75">21</tspan>
+                </text>
+                <text id="12" font-family="Roboto-Bold, Roboto" font-size="24" font-weight="bold" fill="#000000">
+                    <tspan x="209.230469" y="270">12</tspan>
+                </text>
+                <text id="7" font-family="Roboto-Bold, Roboto" font-size="24" font-weight="bold" fill="#000000">
+                    <tspan x="76.1152344" y="355">7</tspan>
+                </text>
+                <text id="1999" font-family="Roboto-Regular, Roboto" font-size="18" font-weight="normal" fill="#000000">
+                    <tspan x="54" y="493">1999</tspan>
+                </text>
+                <text id="2006" font-family="Roboto-Regular, Roboto" font-size="18" font-weight="normal" fill="#000000">
+                    <tspan x="189" y="493">2006</tspan>
+                </text>
+                <text id="2016" font-family="Roboto-Regular, Roboto" font-size="18" font-weight="normal" fill="#000000">
+                    <tspan x="324" y="493">2016</tspan>
+                </text>
+                <rect id="Rectangle-11-Copy-2" fill-opacity="0.156957654" fill="#002248" x="47" y="367" width="85" height="103"></rect>
+                <rect id="Rectangle-11-Copy-3" fill-opacity="0.156957654" fill="#002248" x="177" y="283" width="85" height="187"></rect>
+                <rect id="Rectangle-11-Copy-4" fill-opacity="0.510275136" fill="#002248" x="307" y="96" width="85" height="374"></rect>
+                <polyline id="Path-2" stroke="#979797" stroke-width="2" points="2 57 2 470 469 470"></polyline>
+                <path id="Path-2-decoration-1" d="M-1,67.8 L2,57 L5,67.8" stroke="#979797" stroke-width="2"></path>
+                <path id="Path-2-decoration-2" d="M458.2,473 L469,470 L458.2,467" stroke="#979797" stroke-width="2"></path>
+            </g>
+        </g>
+    </g>
+</svg>

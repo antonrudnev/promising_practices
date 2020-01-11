@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+
+  corrd:
+    image: corrd-solr
+    build: corrd/.
+    volumes:
+      - "corrd-data:/opt/solr/server/solr/mycores/promising-practices"
+
+  eswat:
+    image: eswat
+    build: eswat/.
+    volumes:
+      - "./eswat/src/system.sqlite:/eswat/system.sqlite"
+      - "./eswat/src/files/:/eswat/files"
+
+  nginx:
+    image: nginx:1.17
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+
+volumes:
+  corrd-data:
+

@@ -1,0 +1,699 @@
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+h2 {
+    color: #005295;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 44px;
+}
+
+p {
+    color: #262626;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+li {
+    color: #262626;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+.nav-spacer {
+    height: 62px;
+}
+
+/* top navigation */
+
+.top-nav {
+    background-color: white;
+}
+
+.top-nav .nav-link {
+    color: #002248 !important;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+.top-nav .navbar-nav {
+    margin-left: auto;
+    margin-right: 0 !important;
+}
+
+.nav-item:not(:last-of-type) {
+    margin-right: 20px;
+}
+
+/* hero section */
+
+.hero-row {
+    padding: 40px 15px;
+    background: linear-gradient(88.22deg, #2CAFA4 0%, rgba(0, 34, 72, 0) 100%), url("img/Hero-image.png") no-repeat right top;
+    background-size: cover;
+    background-attachment: fixed;
+    color: white;
+}
+
+.hero-row .col-lg-12 {
+    max-width: 1440px;
+}
+
+.site-hero-text {
+    margin: 80px 0 40px 0;
+}
+
+.site-hero-text p {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    color: white;
+}
+
+.site-hero-text h2 {
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 48px;
+    margin-bottom: 25px;
+    color: white;
+}
+
+.header-buttons {
+    height: 115px;
+    width: 100%;
+    border: 1px solid #FFFFFF;
+    margin: auto;
+    padding-top: 25px;
+    display: block;
+    /* min-width: 322px; */
+}
+
+.header-buttons img {
+    transform: translateY(-21px);
+}
+
+.button-content {
+    text-align: center;
+}
+
+.button-text {
+    display: inline-block;
+    color: #FFFFFF;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 30px;
+    text-align: left;
+    margin-right: 20px;
+}
+
+.launch-button {
+    background-color: #1295FF;
+}
+
+.why-button {
+    background-color: #005295;
+}
+
+.how-button {
+    background-color: #2CAFA4;
+}
+
+/* problem and need section */
+
+.problem-need-row {
+    padding: 40px 15px;
+}
+
+.problem-need-row .col-lg-12 {
+    max-width: 1440px;
+}
+
+.problem-need-row img {
+    max-width: 100%;
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.problem-need-row h3 {
+    color: #002248;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 31px;
+    text-align: center;
+}
+
+.how-to-use-row h3 {
+    color: #002248;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 31px;
+    text-align: center;
+}
+
+.problem-need-row .chart-source-link {
+    font-size: 18px;
+    margin-left: 0;
+}
+
+.chart-heading {
+    margin-bottom: 40px;
+}
+
+.chart-source-link {
+    color: #007bff;
+    margin-left: 10px;
+    font-size: 0.8em;
+}
+
+.chart-source-link i {
+    margin-left: 5px;
+}
+
+/* dashboard introduction section */
+
+.introduction-row {
+    /* background-color: rgba(174, 176, 178, 0.16); */
+    padding: 40px 15px;
+}
+
+.introduction-row h2 {
+    margin: auto;
+    margin-bottom: 8px;
+}
+
+.introduction-row h3 {
+    margin: auto;
+    margin-bottom: 8px;
+    margin-top: 20px;
+    color: #333333;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 29px;
+}
+
+.introduction-content-cell {
+    text-align: center;
+    color: #000000;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 27px;
+}
+
+.introduction-content-cell img {
+    height: 75px;
+}
+
+/* how to use the dashboard section */
+
+.how-to-use-row {
+    padding: 40px 15px;
+    background-color: rgba(174, 176, 178, 0.16);
+}
+
+.how-to-use-row h2 {
+    margin: auto;
+    margin-bottom: 8px;
+}
+
+.video-container {
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    max-width: 470px;
+    margin: auto;
+}
+
+.video-cover-img {
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.video-info {
+    position: absolute;
+    width: 60%;
+    text-align: left;
+    top: 45%;
+    left: 10%;
+}
+
+.video-info img {
+    opacity: 0.8;
+}
+
+.video-info p {
+    color: white;
+    margin-top: 15px;
+}
+
+.expand-content {
+    background-color: rgba(18, 149, 255, 0.09);
+    padding: 10px 20px 15px 30px;
+    margin: 20px 0 10px 0;
+    display: none;
+}
+
+.expand-text {
+    max-height: 180px;
+    overflow: auto;
+    margin-bottom: 1rem;
+}
+
+.inbetween-dash-button {
+    display: inline-block;
+    height: 40px;
+    width: 278px;
+    border-radius: 5px;
+    background-color: #FFCC01;
+    color: #000000;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 21px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.small-inbetween {
+    color: #1295FF !important;
+    padding-left: 10px;
+    transform: translateY(1px);
+    font-size: 20px !important;
+}
+
+.close-expansion i {
+    color: #005295;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.box-with-arrow {
+    cursor: pointer;
+}
+
+.box-with-arrow::after {
+    content: " ";
+    position: absolute;
+    right: 30px;
+    bottom: -15px;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: none;
+}
+
+.arrow-blue::after {
+    border-top: 16px solid #1295FF;
+}
+
+.arrow-dark::after {
+    border-top: 16px solid #005295;
+}
+
+.arrow-green::after {
+    border-top: 16px solid #2CAFA4;
+}
+
+.button-name-cell {
+    color: #FFFFFF;
+    font-family: Lato;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 30px;
+    text-align: left;
+    padding-left: 3vw;
+}
+
+.toggle-arrow-cell {
+    padding-right: 20px;
+    text-align: right;
+}
+
+.toggle-arrow-cell i {
+    font-size: 40px;
+    color: #1295FF;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.width100 table {
+    width: 100%;
+}
+
+
+
+/* how can we help section */
+
+.how-we-help-row {
+    padding: 40px 15px;
+    background-color: #2CAFA4;
+}
+
+.how-we-help-row h2 {
+    margin: auto;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.how-we-help-row p {
+    color: white;
+}
+
+.how-we-help-row a {
+    color: white;
+    text-decoration: underline;
+}
+
+.how-we-help-row input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.message-field {
+    height: 80px;
+}
+
+.submit-note-button {
+    height: 40px;
+    width: 114px !important;
+    border-radius: 5px;
+    background-color: #FFCC01;
+}
+
+/* resources section */
+
+.resources-row {
+    padding: 40px 15px;
+    background-color: rgba(0, 34, 72, 0.04);
+}
+
+.resources-row ul {
+    list-style: none;
+}
+
+.resources-row span {
+    color: black;
+}
+
+.resources-row i {
+    font-size: 11px;
+    transform: translateY(-1px);
+    margin-left: 5px;
+}
+
+.resources-row h2 {
+    margin: auto;
+    margin-bottom: 8px;
+}
+
+/* bottom go to dashboard section */
+
+.bottom-go-to-dash-row {
+    padding: 40px 15px;
+    background-color: rgba(174, 176, 178, 0.16);
+}
+
+.go-to-dash-button,.demo-request-button {
+    height: 121px;
+    width: 411px;
+    border-radius: 16px;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 35px;
+    padding-top: 25px;
+    margin: auto;
+    text-align: center;
+    text-decoration: none;
+}
+
+.go-to-dash-button {
+    background-color: #FFCC01;
+    color: #002248;
+}
+
+.demo-request-button {
+    background-color: #A9B0BA;
+    color: #002248;
+}
+
+.go-to-dash-button span,.demo-request-button span {
+    display: inline-block;
+    text-align: left;
+    margin-right: 40px;
+}
+
+.go-to-dash-button i,.demo-request-button i {
+    transform: translateY(-10px);
+}
+
+.fa-arrow-circle-right {
+    color: #FFFFFF;
+    font-size: 48px;
+}
+
+.fa-envelope {
+    color: #FFFFFF;
+    font-size: 48px;
+}
+
+.back-to-top a {
+    margin-left: auto;
+    color: black;
+}
+
+.back-to-top p {
+    display: inline;
+}
+
+/* footer section */
+
+.footer {
+    padding: 40px 15px;
+    background-color: black;
+    font-size: 14px;
+}
+
+.footer ul {
+    list-style: none;
+    line-height: 2.2;
+}
+
+.footer a {
+    color: white;
+}
+
+.footer p {
+    color: white;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.footer img {
+    max-width: 100%;
+    margin-bottom: 15px;
+}
+
+.social p {
+    display: inline;
+    margin-right: 5px;
+}
+
+.social-icon {
+    border: 1px solid #979797;
+    border-radius: 20px;
+    background-color: #EEEEEE;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    line-height: 14px;
+}
+
+.youtube-icon i {
+    color: #FF0000;
+    transform: translate(2px, 5px);
+}
+
+.twitter-icon i {
+    color: #1CA1F2;
+    transform: translate(4px, 5px);
+}
+
+.facebook-icon i {
+    color: #3B5998;
+    transform: translate(8px, 5px);
+}
+
+.copyright-date {
+    color: #AAA5A5 !important;
+}
+
+/* media queries adjusting responsiveness */
+
+@media (min-width: 1200px) {
+    .top-nav {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .hero-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .problem-need-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .introduction-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .how-to-use-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .how-we-help-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .resources-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .bottom-go-to-dash-row {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .footer {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-row .col-lg-12 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .hero-row .col-lg-4 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .header-buttons {
+        width: 100%;
+    }
+
+    .hero-row {
+        padding-bottom: 0;
+        background-attachment: scroll;
+    }
+}
+
+@media (min-width:992px) and (max-width:1640px) {
+    .button-name-cell {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 450px) {
+    .video-info {
+        text-align: left;
+        top: 5%;
+        left: 10%;
+    }
+
+    .video-info p {
+        margin-top: 0;
+    }
+
+    .button-name-cell {
+        font-size: 15px;
+    }
+}
+
+/* all hover and active state */
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    background-color: transparent !important;
+    border: 1px solid #1295FF;
+    border-radius: 0;
+}
+
+.nav-link:hover {
+    background-color: rgba(0, 34, 72, 0.06);
+    border-radius: 0;
+}
+
+.header-buttons:hover {
+    background-color: #002248;
+}
+
+.go-to-dash-button:hover,.demo-request-button:hover {
+    background-color: #002248;
+    text-decoration: none;
+}
+
+.go-to-dash-button:hover span,.demo-request-button:hover span {
+    color: white;
+}
+
+.go-to-dash-button:active,.demo-request-button:active {
+    background-color: #A8A8A8;
+}
+
+.submit-note-button:hover {
+    background-color: #002248;
+    color: white;
+}
+
+.submit-note-button:active {
+    background-color: #A8A8A8;
+    color: #002248;
+}
+
+.video-info img:hover {
+    opacity: 1;
+}
+
+.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';
+    /* essential for enabling glyphicon */
+    content: "\e114";
+    /* adjust as needed, taken from bootstrap.css */
+    float: right;
+    /* adjust as needed */
+    color: grey;
+    /* adjust as needed */
+}
+
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080";
+    /* adjust as needed, taken from bootstrap.css */
+}
+
+.card-header {
+    overflow-x: scroll;
+}
+
+.reference-list li {
+    padding-left: 30px;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.reference-anchor {
+    margin-top: 15px;
+}
