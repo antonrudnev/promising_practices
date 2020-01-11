@@ -4,7 +4,7 @@ from db import get_db, get_mentions
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-bp = Blueprint("auth", __name__, url_prefix="/auth")
+bp = Blueprint("auth", __name__, url_prefix="/auth/")
 
 
 def login_required(view):
@@ -55,7 +55,7 @@ def load_logged_in_user():
         g.permissions = [p["permission_name"] for p in permissions]
 
 
-@bp.route("/register", methods=["GET", "POST"])
+@bp.route("/register/", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username", "").strip().lower()
@@ -94,7 +94,7 @@ def register():
 
 
 @login_required
-@bp.route("/password", methods=["GET", "POST"])
+@bp.route("/password/", methods=["GET", "POST"])
 def password():
     if request.method == "POST":
         username = g.user["user_name"]
@@ -125,7 +125,7 @@ def password():
     return render_template("auth/password.html")
 
 
-@bp.route("/login", methods=["GET", "POST"])
+@bp.route("/login/", methods=["GET", "POST"])
 def login():
     if g.user is not None:
         return redirect(url_for("practice.index"))
@@ -154,7 +154,7 @@ def login():
     return render_template("auth/login.html")
 
 
-@bp.route("/logout")
+@bp.route("/logout/")
 def logout():
     session.clear()
     return redirect(url_for("auth.login"))

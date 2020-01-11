@@ -1,6 +1,6 @@
 $( document ).ready(function() {
     $.ajax({
-        url: "api/v1/counter"
+        url: "eswat/api/v1/counter"
     }).done(function(data) {
         $('#legal_reforms_and_policies').text(JSON.stringify(data['legal_reforms_and_policies'])+' entries');
         $('#medication_assisted_treatment').text(JSON.stringify(data['medication_assisted_treatment'])+' entries');

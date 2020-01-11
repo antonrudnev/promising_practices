@@ -8,7 +8,7 @@ from telegram.error import TelegramError
 
 import json
 
-bp = Blueprint("api", __name__, url_prefix="/api/v1")
+bp = Blueprint("api", __name__, url_prefix="/api/v1/")
 solr = Solr(SOLR_COLLECTION)
 
 
@@ -20,7 +20,7 @@ def push_notification(message):
         pass
 
 
-@bp.route("/counter", methods=["GET"])
+@bp.route("/counter/", methods=["GET"])
 def counter():
     counters = dict()
     for counter_name in COUNTER_QUERIES.keys():
@@ -30,7 +30,7 @@ def counter():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@bp.route("/demorequest", methods=["POST"])
+@bp.route("/demorequest/", methods=["POST"])
 def demo_request():
     try:
         required_fields = ["first_name", "last_name", "organization_name", "email"]

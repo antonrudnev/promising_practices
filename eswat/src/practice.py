@@ -7,7 +7,7 @@ from pysolr import Solr, SolrError
 from settings import SOLR_COLLECTION, ITEMS_PER_PAGE, PAGER_RANGE, WORKFLOW, STATUS_BADGE_STYLE
 from workspace import push_mentions
 
-bp = Blueprint('practice', __name__, url_prefix="/practice")
+bp = Blueprint('practice', __name__, url_prefix="/practice/")
 solr = Solr(SOLR_COLLECTION)
 
 
@@ -33,7 +33,7 @@ def exists_check(view):
     return wrapped_view
 
 
-@bp.route("/")
+@bp.route("/index/")
 @login_required
 @push_mentions
 def index():
@@ -67,7 +67,7 @@ def index():
     return render_template("practice/index.html", practices=response.docs, page=page, pager=pager, query=query)
 
 
-@bp.route("/create", methods=["GET", "POST"])
+@bp.route("/create/", methods=["GET", "POST"])
 @login_required
 @permission_required("ACTION_CREATE")
 def create():
@@ -89,7 +89,7 @@ def create():
     return render_template("practice/create.html", page=page, query=query, master=get_master_dictionary())
 
 
-@bp.route("/<int:id>", methods=["GET"])
+@bp.route("/<int:id>/", methods=["GET"])
 @login_required
 @exists_check
 @permission_required("VIEW", rule="status_based")
@@ -106,7 +106,7 @@ def details(id):
                            more_like_this=g.more_like_this, view_permissions=view_permissions)
 
 
-@bp.route("/<int:id>/action", methods=["POST"])
+@bp.route("/<int:id>/action/", methods=["POST"])
 @login_required
 @exists_check
 @permission_required("ACTION", rule="action_based")
@@ -130,7 +130,7 @@ def action(id):
     return redirect(url_for("practice.index", page=page, query=query))
 
 
-@bp.route("/<int:id>/comment", methods=["POST"])
+@bp.route("/<int:id>/comment/", methods=["POST"])
 @login_required
 @exists_check
 def comment(id):
@@ -141,7 +141,7 @@ def comment(id):
     return redirect(url_for("practice.details", id=id, page=page, query=query))
 
 
-@bp.route("/<int:id>/edit", methods=["GET", "POST"])
+@bp.route("/<int:id>/edit/", methods=["GET", "POST"])
 @login_required
 @exists_check
 @permission_required("EDIT", rule="status_based")
@@ -162,7 +162,7 @@ def edit(id):
                            master=get_master_dictionary())
 
 
-@bp.route("/<int:id>/delete", methods=["GET", "POST"])
+@bp.route("/<int:id>/delete/", methods=["GET", "POST"])
 @login_required
 @exists_check
 @permission_required("DELETE", rule="status_based")

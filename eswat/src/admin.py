@@ -11,11 +11,11 @@ import json
 import pandas as pd
 import re
 
-bp = Blueprint("admin", __name__, url_prefix="/admin")
+bp = Blueprint("admin", __name__, url_prefix="/admin/")
 solr = Solr(SOLR_COLLECTION)
 
 
-@bp.route("/users", methods=["GET", "POST"])
+@bp.route("/users/", methods=["GET", "POST"])
 @login_required
 @permission_required("ADMIN_SECURITY")
 def users():
@@ -28,7 +28,7 @@ def users():
     return render_template("admin/users.html", users=users)
 
 
-@bp.route("/roles", methods=["GET", "POST"])
+@bp.route("/roles/", methods=["GET", "POST"])
 @login_required
 @permission_required("ADMIN_SECURITY")
 def roles():
@@ -40,7 +40,7 @@ def roles():
     return render_template("admin/roles.html", roles=roles)
 
 
-@bp.route("/download", methods=["GET"])
+@bp.route("/download/", methods=["GET"])
 @login_required
 @permission_required("ADMIN_CONTENT")
 def download():
@@ -65,7 +65,7 @@ def download():
         headers={"Content-disposition": "attachment; filename={}".format(file_name)})
 
 
-@bp.route("/upload", methods=["POST"])
+@bp.route("/upload/", methods=["POST"])
 @login_required
 @permission_required("ADMIN_CONTENT")
 def upload():
@@ -88,7 +88,7 @@ def upload():
     return redirect(url_for("practice.index"))
 
 
-@bp.route("/master", methods=["GET", "POST"])
+@bp.route("/master/", methods=["GET", "POST"])
 @login_required
 @permission_required("ADMIN_MASTERDATA")
 def master():
