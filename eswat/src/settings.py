@@ -1,5 +1,5 @@
 SOLR_COLLECTION = "http://corrd:8983/solr/promising-practices"
-DASHBOARD_URL = "http://localhost:8983/solr/opioid-research/dashboard/index.html"
+DASHBOARD_URL = "/dashboard/index.html"
 CORRD_MANAGER_BOT = "727393066:AAHhy0Ie9_REDq4frpHvCGluIz9r5tns2VM"
 SYSTEM_DATABASE = "system.sqlite"
 ITEMS_PER_PAGE = 15
