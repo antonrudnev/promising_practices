@@ -1,13 +1,7 @@
 from flask import Flask
-from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.middleware.proxy_fix import ProxyFix
 
-import admin
-import api
-import auth
-import db
-import demo
-import practice
-import workspace
+import admin, api, auth, db, demo, practice, workspace
 
 
 app = Flask(__name__)
