@@ -1516,7 +1516,7 @@
             event.preventDefault();
             $.ajax({
                 type: "post",
-                url: "/api/v1/demorequest",
+                url: "eswat/api/v1/demorequest",
                 data: JSON.stringify({
                     "first_name": $("#inputFirstName").val(),
                     "last_name": $("#inputLastName").val(),
@@ -1531,7 +1531,7 @@
                 contentType: "application/json",
                 dataType: "json"
             }).done(function () {
-                alert("Thank you for submitting your request. A representative will contact you within 3 business days to arrange a demonstration of the COORD");
+                alert("Thank you for submitting your request. A representative will contact you within 3 business days to arrange a demonstration of the COORD.");
             }).fail(function () {
                 alert("Sorry, there was a problem with your request. Please try again later.");
             });
