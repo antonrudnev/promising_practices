@@ -39,9 +39,9 @@ def demo_request():
             return abort(400)
         request_details["remote_addr"] = request.remote_addr
         insert_demo_request(json.dumps(request_details))
-#        push_notification(
-#            f'A new demo request from {request_details["first_name"]} {request_details["last_name"]} '
-#            f'({request_details["organization_name"]}) was received.')
+        push_notification(
+            f'A new demo request from {request_details["first_name"]} {request_details["last_name"]} '
+            f'({request_details["organization_name"]}) was received.')
         return jsonify("Request received"), 201
     except Exception:
         push_notification(
