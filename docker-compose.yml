@@ -2,10 +2,10 @@ version: "3.7"
 services:
 
   corrd:
-    image: corrd-solr
-    build: corrd/.
+    image: opioid-research-solr
+    build: opioid-research/.
     volumes:
-      - "corrd-data:/opt/solr/server/solr/mycores/promising-practices"
+      - "opioid-research-data:/opt/solr/server/solr/mycores/promising-practices"
 
   eswat:
     image: eswat
@@ -22,5 +22,5 @@ services:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
 
 volumes:
-  corrd-data:
+  opioid-research-data:
 
