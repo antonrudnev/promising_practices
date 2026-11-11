@@ -1,4 +1,4 @@
-# Promising Practices — Research Workflow & Literature Analytics Platform
+# Promising Practices - Research Workflow & Literature Analytics Platform
 
 > **Project Status & Disclaimer:** This repository contains the open-source **Proof of Concept (PoC)** version of the platform, published for portfolio and demonstration purposes. Following the successful validation of this prototype, the solution evolved into a full-scale proprietary production system at the **American Institutes for Research (AIR)**, which remains closed-source due to intellectual property and confidentiality agreements.
 
